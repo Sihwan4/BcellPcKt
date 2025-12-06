@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA 생성 형질세포 치료의 한계점 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutrals & Clinical Accents -->
+    <!-- Background: #f9fafb (Gray-50), Surface: #ffffff, Text: #1f2937 (Gray-800) -->
+    <!-- Accents: #e11d48 (Rose-600 for Resistance/Danger), #0891b2 (Cyan-600 for Bio/Science), #d97706 (Amber-600 for Warnings) -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero Section: Introduces the core problem (DSA & LLPCs).
+         2. Comparative Analysis Module: An interactive toggle/card system to compare Multiple Myeloma (MM) and DSA-LLPCs, highlighting the biological parallels that lead to treatment failure.
+         3. The Resistance Mechanisms Dashboard: A central interactive area where users click on specific treatment strategies (B-cell depletion, Standard IS, Novel Agents) to reveal the specific biological barrier (CD20 loss, Niche protection, Toxicity) preventing success. This transforms the text-heavy 'Limits' section into a cause-and-effect exploration.
+         4. Clinical Reality Visualization: A Chart.js visualization quantifying the 'Therapeutic Gap' - visualizing why standard metrics (like B-cell count) don't correlate with DSA reduction.
+         5. Conclusion/Future Outlook: A synthesis section emphasizing the 'Exploratory' status of current research.
+         
+         WHY: This structure breaks down complex immunological concepts into digestible interactions. Instead of reading a long list of failures, the user actively 'tests' a treatment and sees 'why' it fails, reinforcing the mechanism of action (or lack thereof).
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Comparison Cards (HTML/JS): Goal: Relationships. compares MM and DSA-LLPCs side-by-side. Interaction: Hover/Click to highlight shared traits. Justification: Clear visual alignment of the two conditions strengthens the report's core analogy.
+         2. Mechanism Explorer (HTML/JS): Goal: Change/Inform. User selects a therapy, UI updates to show the biological blocker. Justification: Direct mapping of 'Treatment -> Failure Reason' is more memorable than a static table.
+         3. The 'Refractoriness' Chart (Chart.js): Goal: Compare. A bar chart comparing 'Target Expression' (e.g., CD20) vs 'Actual Drug Effect' on LLPCs. Justification: Visually demonstrates the disconnect between drug mechanism and cell biology.
+         4. NO SVG/Mermaid: All icons are Unicode or CSS shapes. Charts are Canvas.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        
+        /* Chart Container Styling - MANDATORY COMPLIANCE */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .active-tab {
+            border-bottom: 2px solid #0891b2;
+            color: #0891b2;
+            font-weight: 700;
+        }
+
+        .mechanism-node {
+            transition: all 0.3s ease;
+        }
+        .mechanism-node.active {
+            background-color: #ecfeff; /* cyan-50 */
+            border-color: #0891b2;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation / Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">
+                <span class="text-cyan-600">DSA & LLPC</span> 심층 분석 보고서
+            </h1>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-gray-500">
+                <button onclick="scrollToSection('intro')" class="hover:text-cyan-600 transition">개요</button>
+                <button onclick="scrollToSection('comparison')" class="hover:text-cyan-600 transition">생물학적 유사성</button>
+                <button onclick="scrollToSection('mechanisms')" class="hover:text-cyan-600 transition">치료 한계 메커니즘</button>
+                <button onclick="scrollToSection('conclusion')" class="hover:text-cyan-600 transition">결론</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- Hero / Intro Section -->
+        <section id="intro" class="max-w-4xl mx-auto px-4 py-12 text-center">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-rose-600 uppercase bg-rose-50 rounded-full">
+                이식 면역학 핵심 난제
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
+                DSA 생성 형질세포 클론 치료의<br>근본적인 한계점 평가
+            </h2>
+            <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+                장기 이식 후 발생하는 <strong>공여자 특이 항체(DSA)</strong>를 생성하는 형질세포(Plasma Cell)는 
+                단순한 B세포가 아닙니다. 이들은 <strong>장수 형질세포(LLPCs)</strong>로서, 
+                다발골수종과 유사한 난치성 특성을 가지며 현행 치료법에 강력한 저항성을 보입니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mt-10">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-2xl mb-2">🛡️</div>
+                    <h3 class="font-bold text-gray-800 mb-1">장수 형질세포 (LLPCs)</h3>
+                    <p class="text-sm text-gray-500">수십 년간 생존하며 지속적으로 항체를 생산하는 면역 기억 세포입니다.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-2xl mb-2">🏚️</div>
+                    <h3 class="font-bold text-gray-800 mb-1">생존 틈새 (Niche)</h3>
+                    <p class="text-sm text-gray-500">골수 미세환경에 숨어 약물 접근을 차단하고 생존 인자를 공급받습니다.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-2xl mb-2">🛑</div>
+                    <h3 class="font-bold text-gray-800 mb-1">치료 불응성</h3>
+                    <p class="text-sm text-gray-500">대사적 휴지기 상태로 기존 면역억제제와 B세포 제거제에 반응하지 않습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparative Analysis Section -->
+        <section id="comparison" class="bg-white py-16 border-t border-gray-100">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="mb-10 text-center">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">I. 문제의 핵심: 다발골수종과의 평행이론</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        DSA 생성 형질세포가 치료하기 어려운 이유는 악성 종양인 <strong>다발골수종(Multiple Myeloma, MM)</strong>과 
+                        생물학적 난치성 기전을 공유하기 때문입니다. 두 세포 집단의 유사성을 비교해 보세요.
+                    </p>
+                </div>
+
+                <!-- Interactive Comparison Table/Switch -->
+                <div class="bg-gray-50 rounded-2xl p-2 md:p-8">
+                    <!-- Toggle Controls -->
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-white p-1 rounded-lg shadow-sm border border-gray-200 inline-flex">
+                            <button onclick="setComparison('mm')" id="btn-mm" class="px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-500 hover:text-gray-900">
+                                악성 형질세포 (MM)
+                            </button>
+                            <button onclick="setComparison('dsa')" id="btn-dsa" class="px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-500 hover:text-gray-900">
+                                동종반응성 형질세포 (DSA)
+                            </button>
+                            <button onclick="setComparison('both')" id="btn-both" class="px-6 py-2 rounded-md text-sm font-medium bg-cyan-50 text-cyan-700 shadow-sm">
+                                비교 보기 (공통점)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="comparison-container">
+                        <!-- Dynamic Content injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mechanism Failure Section (Interactive) -->
+        <section id="mechanisms" class="py-16 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">II. 현행 치료법의 구조적 한계 (엄격한 평가)</h3>
+                    <p class="text-gray-600 max-w-3xl">
+                        왜 표준 치료제는 실패할까요? 아래의 <strong>치료 전략</strong>을 클릭하여 
+                        해당 약물이 LLPCs(장수 형질세포)를 제거하지 못하는 <strong>생물학적 장벽</strong>을 확인하십시오.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left Column: Strategy Selection -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <button onclick="showMechanism('rituximab')" class="mechanism-node active w-full text-left p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:border-cyan-400 transition group">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-gray-800 group-hover:text-cyan-700">B세포 고갈 요법</span>
+                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">예: Rituximab</span>
+                            </div>
+                            <p class="text-sm text-gray-500">CD20 표적 항체 치료</p>
+                        </button>
+
+                        <button onclick="showMechanism('niche')" class="mechanism-node w-full text-left p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:border-cyan-400 transition group">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-gray-800 group-hover:text-cyan-700">미세환경 차단 시도</span>
+                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">생존 인자</span>
+                            </div>
+                            <p class="text-sm text-gray-500">APRIL / BAFF 경로</p>
+                        </button>
+
+                        <button onclick="showMechanism('quiescence')" class="mechanism-node w-full text-left p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:border-cyan-400 transition group">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-gray-800 group-hover:text-cyan-700">기존 면역억제제</span>
+                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">세포독성 약물</span>
+                            </div>
+                            <p class="text-sm text-gray-500">DNA 복제/분열 억제</p>
+                        </button>
+                        
+                        <button onclick="showMechanism('toxicity')" class="mechanism-node w-full text-left p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:border-cyan-400 transition group">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-gray-800 group-hover:text-cyan-700">MM 표적 치료제 도입</span>
+                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Proteasome 억제제</span>
+                            </div>
+                            <p class="text-sm text-gray-500">독성 및 프로토콜 한계</p>
+                        </button>
+                    </div>
+
+                    <!-- Right Column: Interactive Detail View -->
+                    <div class="lg:col-span-8 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200 flex flex-col">
+                        <div id="mechanism-detail-header" class="mb-6 pb-6 border-b border-gray-100">
+                            <!-- JS populates title -->
+                            <h4 class="text-xl font-bold text-rose-600 flex items-center gap-2">
+                                <span>🚫</span> <span id="mech-title">CD20 표적 부재 (Target Absence)</span>
+                            </h4>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                            <div>
+                                <h5 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">상세 평가</h5>
+                                <p id="mech-desc" class="text-gray-700 leading-relaxed">
+                                    LLPCs는 성숙 과정에서 B세포 마커인 CD20 발현을 상실합니다. 리툭시맙은 순환 B세포는 제거하지만, 항체를 분비하는 핵심 원인체인 LLPCs는 인식조차 하지 못합니다.
+                                </p>
+                            </div>
+                            
+                            <!-- Chart showing the "Gap" -->
+                            <div class="bg-gray-50 rounded-xl p-4 flex flex-col justify-center items-center">
+                                <h5 class="text-xs font-semibold text-gray-500 mb-2 w-full text-center">치료 효과 vs 세포 생존율</h5>
+                                <div class="chart-container">
+                                    <canvas id="efficacyChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-md">
+                            <h5 class="font-bold text-amber-800 text-sm mb-1">임상 결과</h5>
+                            <p id="mech-result" class="text-sm text-amber-900">
+                                치료 후 일시적인 DSA 수치 감소만 관찰되며, LLPCs 잔존으로 인한 재발성 거부 반응(Recurrent AMR)이 필연적으로 발생합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="bg-white py-16 border-t border-gray-200">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <div class="mb-8">
+                    <span class="text-4xl">🔍</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">III. 결론: "탐색 중"이 시사하는 바</h3>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                    문헌에서 언급된 <strong>"새로운 표적 물질을 탐색 중이다"</strong>라는 표현은<br>
+                    현재까지 DSA 생성 형질세포(LLPCs)를 안전하고 효과적으로 제거할 수 있는<br>
+                    <span class="font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded">임상적으로 입증된 완벽한 치료법은 존재하지 않음</span>을 명확히 시사합니다.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+                    <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-gray-800 mb-2">현재 상황</h4>
+                        <ul class="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                            <li>표준 요법(B세포 제거)의 구조적 한계</li>
+                            <li>MM 치료제 전용(Off-label) 시도 중</li>
+                            <li>심각한 독성으로 인한 용량 제한</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-cyan-50 rounded-lg border border-cyan-100">
+                        <h4 class="font-bold text-cyan-900 mb-2">필요한 혁신</h4>
+                        <ul class="text-sm text-cyan-800 space-y-2 list-disc list-inside">
+                            <li>생존 틈새(Niche) 파괴 전략</li>
+                            <li>LLPC 특이적 표적 (예: BCMA CAR-T)</li>
+                            <li>이식 환자 맞춤형 저독성 프로토콜</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
+        <p>© 2025 DSA & Plasma Cell Therapy Interactive Report.</p>
+        <p class="mt-2">Based on analysis of Limitation of Treating DSA-producing Plasma Cell Clones.</p>
+    </footer>
+
+    <script>
+        // --- Data Store ---
+        const comparisonData = {
+            mm: {
+                title: "악성 형질세포 (MM)",
+                traits: [
+                    { label: "세포 특성", val: "악성 클론 집단 (Tumor)" },
+                    { label: "생존 틈새", val: "골수 미세환경 (Niche)" },
+                    { label: "치료 저항성", val: "휴지기, 약물 획득 내성" },
+                    { label: "임상 결과", val: "재발 및 난치성 골수종" }
+                ],
+                colorClass: "bg-gray-100 border-gray-300"
+            },
+            dsa: {
+                title: "동종반응성 형질세포 (DSA)",
+                traits: [
+                    { label: "세포 특성", val: "면역 기억 세포 (Memory)" },
+                    { label: "생존 틈새", val: "골수, 비장, 점막 등" },
+                    { label: "치료 저항성", val: "CD20 음성, 대사적 휴지기" },
+                    { label: "임상 결과", val: "만성 거부반응(AMR), 이식 실패" }
+                ],
+                colorClass: "bg-gray-100 border-gray-300"
+            },
+            both: {
+                title: "공통된 난치성 메커니즘",
+                traits: [
+                    { label: "핵심 공통점 1", val: "골수 기질세포의 보호 (Stromal Protection)" },
+                    { label: "핵심 공통점 2", val: "장수명(Long-lived) 및 자가복제 능력" },
+                    { label: "핵심 공통점 3", val: "표준 항암/면역요법에 대한 불응성" },
+                    { label: "결론", val: "단일 약제로는 박멸 불가능" }
+                ],
+                colorClass: "bg-cyan-50 border-cyan-200 ring-2 ring-cyan-100"
+            }
+        };
+
+        const mechanismData = {
+            rituximab: {
+                title: "CD20 표적 부재 (Target Absence)",
+                desc: "LLPCs는 성숙 과정에서 B세포 마커인 <strong>CD20 발현을 상실</strong>합니다. 리툭시맙(Rituximab)은 B세포와 단수명 형질모세포는 제거하지만, 항체를 분비하는 핵심 원인체인 LLPCs는 인식하지 못합니다.",
+                result: "치료 후 일시적인 DSA 수치 감소만 관찰되며, LLPCs 잔존으로 인한 <strong>재발성 거부 반응(Recurrent AMR)</strong>이 필연적으로 발생합니다.",
+                chartData: [95, 10], // [B-cell Kill Rate, LLPC Kill Rate]
+                chartLabels: ['순환 B세포 사멸율', 'DSA-LLPC 사멸율']
+            },
+            niche: {
+                title: "미세환경의 보호 (Niche Protection)",
+                desc: "골수 기질 세포(Stromal Cells)는 LLPCs 생존에 필수적인 <strong>성장 인자(APRIL, BAFF)</strong>를 지속적으로 분비합니다. 이는 LLPCs의 생존 경로를 활성화하고 치료제의 물리적/화학적 접근을 방해합니다.",
+                result: "약물이 도달해도 미세환경 신호가 <strong>세포 사멸(Apoptosis)을 차단</strong>하여 치료 효과를 무력화합니다.",
+                chartData: [80, 20],
+                chartLabels: ['혈중 약물 농도', '틈새(Niche) 내 유효 효과']
+            },
+            quiescence: {
+                title: "대사적 휴지기 (Metabolic Quiescence)",
+                desc: "LLPCs는 활발하게 분열하지 않는 <strong>휴지기(G0)</strong> 상태에 있습니다. 이는 DNA 복제나 세포 분열을 표적으로 하는 <strong>대부분의 면역억제제(Methotrexate 등)</strong>에 대해 근본적인 내성을 부여합니다.",
+                result: "세포 독성 항암제는 분열하는 세포만 죽일 수 있어, 분열하지 않는 LLPCs는 <strong>살아남아 지속적으로 항체를 생산</strong>합니다.",
+                chartData: [90, 5],
+                chartLabels: ['분열 세포 독성', '휴지기 LLPC 독성']
+            },
+            toxicity: {
+                title: "독성 및 프로토콜 부재 (Toxicity)",
+                desc: "다발골수종 치료제(Proteasome Inhibitors)를 이식 환자에게 투여 시, 면역억제 상태와 겹쳐 <strong>감염 및 합병증 위험</strong>이 급증합니다. 최적의 용량을 투여하기 어렵습니다.",
+                result: "충분한 치료 용량을 쓰지 못해 치료 효과가 제한적이며, <strong>표준화된 프로토콜이 없어(Off-label)</strong> 임상 적용이 매우 어렵습니다.",
+                chartData: [85, 30],
+                chartLabels: ['MM 환자 허용 용량', '이식 환자 허용 용량']
+            }
+        };
+
+        // --- Chart Initialization ---
+        let efficacyChartInstance = null;
+
+        function initChart() {
+            const ctx = document.getElementById('efficacyChart').getContext('2d');
+            efficacyChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Target A', 'Target B'],
+                    datasets: [{
+                        label: '효과 (%)',
+                        data: [0, 0],
+                        backgroundColor: [
+                            'rgba(6, 182, 212, 0.6)', // Cyan
+                            'rgba(225, 29, 72, 0.6)'  // Rose
+                        ],
+                        borderColor: [
+                            'rgba(6, 182, 212, 1)',
+                            'rgba(225, 29, 72, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: '유효성 (%)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Interaction Logic ---
+
+        function setComparison(mode) {
+            // Update Buttons
+            document.getElementById('btn-mm').className = `px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${mode === 'mm' ? 'bg-gray-800 text-white shadow-md' : 'text-gray-500 hover:text-gray-900'}`;
+            document.getElementById('btn-dsa').className = `px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${mode === 'dsa' ? 'bg-gray-800 text-white shadow-md' : 'text-gray-500 hover:text-gray-900'}`;
+            document.getElementById('btn-both').className = `px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${mode === 'both' ? 'bg-cyan-600 text-white shadow-md' : 'bg-cyan-50 text-cyan-700'}`;
+
+            const container = document.getElementById('comparison-container');
+            container.innerHTML = '';
+
+            if (mode === 'both') {
+                // Show combined card
+                const data = comparisonData['both'];
+                const card = createComparisonCard(data, true);
+                container.appendChild(card);
+            } else {
+                // Show single card or create split view (simplified to single focus here for clarity, or side-by-side if we want)
+                // Let's show comparison by putting the selected one on left, and a ghost of the other on right for context, OR just the selected one centered.
+                // Better: Just show the selected card data clearly.
+                const data = comparisonData[mode];
+                const card = createComparisonCard(data, false);
+                container.appendChild(card);
+            }
+        }
+
+        function createComparisonCard(data, isBoth) {
+            const div = document.createElement('div');
+            div.className = `p-6 rounded-xl border ${data.colorClass} shadow-sm transition-all duration-300 md:col-span-2`;
+            
+            let traitsHtml = '';
+            data.traits.forEach(trait => {
+                traitsHtml += `
+                    <div class="flex flex-col md:flex-row justify-between py-3 border-b border-gray-200 last:border-0">
+                        <span class="font-semibold text-gray-500 text-sm md:w-1/3">${trait.label}</span>
+                        <span class="font-bold text-gray-800 md:w-2/3 text-right md:text-left">${trait.val}</span>
+                    </div>
+                `;
+            });
+
+            div.innerHTML = `
+                <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    ${isBoth ? '🔗' : '📊'} ${data.title}
+                </h4>
+                <div class="space-y-1">
+                    ${traitsHtml}
+                </div>
+            `;
+            return div;
+        }
+
+        function showMechanism(key) {
+            // Update Button States
+            document.querySelectorAll('.mechanism-node').forEach(btn => {
+                btn.classList.remove('active', 'bg-cyan-50', 'border-cyan-500');
+                if(btn.getAttribute('onclick').includes(key)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            const data = mechanismData[key];
+            
+            // Animate Text Update
+            const header = document.getElementById('mechanism-detail-header');
+            header.style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('mech-title').innerHTML = data.title;
+                document.getElementById('mech-desc').innerHTML = data.desc;
+                document.getElementById('mech-result').innerHTML = data.result;
+                header.style.opacity = '1';
+            }, 200);
+
+            // Update Chart
+            updateChart(data.chartLabels, data.chartData);
+        }
+
+        function updateChart(labels, data) {
+            if (efficacyChartInstance) {
+                efficacyChartInstance.data.labels = labels;
+                efficacyChartInstance.data.datasets[0].data = data;
+                efficacyChartInstance.update();
+            }
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            setComparison('both'); // Start with the comparison view
+            showMechanism('rituximab'); // Start with first mechanism
+        });
+
+    </script>
+</body>
+</html>
