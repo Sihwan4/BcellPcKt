@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory B Cells in Transplant Rejection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            height: 400px; 
+            max-height: 400px;
+        }
+        .concept-card { transition: all 0.3s ease; }
+        .concept-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .sim-cell { transition: all 0.5s ease; }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Stone/Warm Gray) with Medical Blue and Alert Red accents. -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Hook regarding the "Hidden Enemy".
+         2. Foundations: Interactive cards defining ABMR, DSA, and the Immune System.
+         3. The Mechanism (Chart): Comparing Naive vs. Memory response speeds (The "Speed Problem").
+         4. The Pathway: Vertical flow showing B-cell differentiation.
+         5. The Challenge (Simulation): An interactive game/model demonstrating why Plasmapheresis fails to cure ABMR (The "Removal Problem").
+         6. Conclusion: Summary of needed future therapies.
+         Rationale: This structure moves from 'What' to 'How' to 'Why it's hard', ending with active experimentation to reinforce the learning.
+    -->
+    <!-- Visualization & Content Choices:
+         - Concept Cards: Textual report content -> Inform -> Cards -> Interaction (Hover/Expand) -> Organized definitions.
+         - Response Kinetics Chart: Report data on reaction speed -> Compare -> Line Chart (Chart.js) -> Toggle datasets -> Shows the "Anamnestic Response" visually.
+         - Therapy Simulator: Report section on treatment limitations -> Relate/Simulate -> Custom JS Game -> Buttons trigger logic updates -> Demonstrates the "Factory" concept effectively.
+         - NO SVG/Mermaid used. All visuals are CSS shapes or Canvas.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-stone-700">Immunology<span class="text-blue-600">Insight</span></span>
+                </div>
+                <div class="hidden sm:flex space-x-8 items-center">
+                    <a href="#basics" class="text-stone-500 hover:text-stone-900 px-3 py-2 rounded-md text-sm font-medium">Basics</a>
+                    <a href="#mechanism" class="text-stone-500 hover:text-stone-900 px-3 py-2 rounded-md text-sm font-medium">Mechanism</a>
+                    <a href="#simulation" class="text-stone-500 hover:text-stone-900 px-3 py-2 rounded-md text-sm font-medium text-blue-600">Therapy Sim</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-stone-200">
+        <div class="max-w-5xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-extrabold text-stone-900 sm:text-5xl mb-6">
+                The Hidden Challenge in <span class="text-blue-600">Transplant Survival</span>
+            </h1>
+            <p class="text-xl text-stone-600 max-w-3xl mx-auto mb-8">
+                Why Antibody-Mediated Rejection (ABMR) persists despite treatment. Understanding the critical role of <strong>Memory B Cells</strong> as the immune system's "Sleeper Agents".
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#basics" class="bg-stone-800 text-white px-6 py-3 rounded-full font-medium hover:bg-stone-700 transition">Explore the Science</a>
+                <a href="#simulation" class="bg-white text-stone-800 border border-stone-300 px-6 py-3 rounded-full font-medium hover:bg-stone-50 transition">Try the Simulation</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: The Basics -->
+    <section id="basics" class="py-16 bg-stone-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900">Core Concepts</h2>
+                <p class="mt-4 text-stone-600 max-w-2xl mx-auto">
+                    Before diving into the challenges, let's understand the key players in the immune rejection process.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="concept-card bg-white p-8 rounded-xl shadow-sm border border-stone-100 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center mb-4 text-2xl">🛡️</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">ABMR</h3>
+                    <p class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">Antibody-Mediated Rejection</p>
+                    <p class="text-stone-600">
+                        The process where the recipient's immune system attacks the endothelial cells of the transplanted organ's blood vessels. It is a leading cause of graft loss.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="concept-card bg-white p-8 rounded-xl shadow-sm border border-stone-100 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-2xl">🧬</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">DSA</h3>
+                    <p class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">Donor-Specific Antibody</p>
+                    <p class="text-stone-600">
+                        Specific antibodies ("guided missiles") that recognize and attack the foreign tissue of the donor organ. Removing these is central to standard treatment.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="concept-card bg-white p-8 rounded-xl shadow-sm border border-stone-100 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="h-12 w-12 bg-amber-100 rounded-full flex items-center justify-center mb-4 text-2xl">🧠</div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">Memory B Cells</h3>
+                    <p class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">The "Memory Vault"</p>
+                    <p class="text-stone-600">
+                        Cells that remember past exposures (transfusions, pregnancies). They act as "Sleeper Agents," reactivating rapidly upon re-exposure to the transplant.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: The Speed Problem (Chart) -->
+    <section id="mechanism" class="py-16 bg-white border-y border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 mb-6">Challenge #1: The Speed of Reactivation</h2>
+                    <p class="text-lg text-stone-600 mb-6">
+                        Why are Memory B Cells so dangerous? Unlike a first-time infection, Memory B Cells trigger an <strong>"Anamnestic Response"</strong>.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center text-xs font-bold mt-1 mr-3">1</span>
+                            <span class="text-stone-600"><strong>Naive B Cells:</strong> Take weeks to learn and produce antibodies. The response is slow and low-intensity.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-red-100 text-red-800 flex items-center justify-center text-xs font-bold mt-1 mr-3">2</span>
+                            <span class="text-stone-600"><strong>Memory B Cells:</strong> Already know the target. Upon detection, they differentiate into Plasma Cells almost immediately.</span>
+                        </li>
+                    </ul>
+                    <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <p class="text-sm text-stone-700 italic">
+                            "This rapid, strong recall response is a main cause of rejection recurrence and chronicity."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="bg-stone-50 p-6 rounded-2xl shadow-inner border border-stone-200">
+                    <h3 class="text-lg font-bold text-stone-800 mb-4 text-center">Antibody Production: Naive vs. Memory</h3>
+                    <div class="chart-container">
+                        <canvas id="kineticsChart"></canvas>
+                    </div>
+                    <div class="flex justify-center mt-4 gap-4">
+                        <button onclick="updateChart('naive')" class="px-4 py-2 bg-white border border-stone-300 rounded text-sm hover:bg-stone-50">Show Naive Only</button>
+                        <button onclick="updateChart('both')" class="px-4 py-2 bg-stone-800 text-white rounded text-sm hover:bg-stone-700">Compare Both</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: The Pathway Diagram -->
+    <section class="py-16 bg-stone-900 text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-12 text-center">The Differentiation Pathway</h2>
+            
+            <!-- Process Flow -->
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-stone-700 -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                    
+                    <!-- Step 1 -->
+                    <div class="bg-stone-800 p-6 rounded-xl border border-stone-700 flex flex-col items-center text-center transform transition hover:scale-105">
+                        <div class="w-16 h-16 bg-stone-600 rounded-full flex items-center justify-center text-3xl mb-4 border-4 border-stone-900">🐣</div>
+                        <h3 class="text-xl font-bold text-blue-300 mb-2">Naive B Cell</h3>
+                        <p class="text-stone-400 text-sm">Initial state. Has not encountered the antigen yet. Slow to react.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-stone-800 p-6 rounded-xl border-2 border-amber-500/50 flex flex-col items-center text-center transform transition hover:scale-105 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                        <div class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center text-3xl mb-4 border-4 border-stone-900">💾</div>
+                        <h3 class="text-xl font-bold text-amber-400 mb-2">Memory B Cell</h3>
+                        <p class="text-stone-300 text-sm">The "Sleeper Agent". Formed after first exposure. Long-lived and resistant to standard drugs.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-stone-800 p-6 rounded-xl border border-stone-700 flex flex-col items-center text-center transform transition hover:scale-105">
+                        <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-3xl mb-4 border-4 border-stone-900">🏭</div>
+                        <h3 class="text-xl font-bold text-red-400 mb-2">Plasma Cell</h3>
+                        <p class="text-stone-400 text-sm">The "Factory". Differentiates from Memory B cells to mass-produce destructive DSA antibodies.</p>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center max-w-2xl mx-auto bg-stone-800/50 p-4 rounded-lg">
+                <p class="text-stone-300">
+                    <strong>Critical Insight:</strong> Current therapies often target the <em>product</em> (Antibodies) or the <em>factory</em> (Plasma Cells), but struggle to find and eliminate the <em>blueprint</em> (Memory B Cells).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Therapy Simulator (The "Problem" Interactive) -->
+    <section id="simulation" class="py-20 bg-stone-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900">Challenge #2: The Treatment Dilemma</h2>
+                <p class="mt-4 text-stone-600">
+                    Why do treatments like Plasmapheresis often fail to cure chronic ABMR? <br>
+                    <strong>Interact with the model below to see the limitation.</strong>
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
+                <!-- Sim Header -->
+                <div class="bg-stone-100 p-4 border-b border-stone-200 flex justify-between items-center">
+                    <h3 class="font-bold text-stone-700">ABMR Treatment Simulator</h3>
+                    <div class="flex gap-4 text-sm">
+                        <div class="flex items-center"><span class="w-3 h-3 bg-amber-500 rounded-full mr-2"></span> Memory B Cell (Factory)</div>
+                        <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span> DSA (Antibody)</div>
+                    </div>
+                </div>
+
+                <!-- Sim Canvas -->
+                <div class="p-8 relative min-h-[300px] bg-stone-50 flex flex-col justify-between">
+                    
+                    <!-- The "Factory" Area -->
+                    <div id="factory-area" class="flex justify-center gap-4 mb-8">
+                        <!-- Memory B Cells generated here by JS -->
+                    </div>
+
+                    <!-- The "Bloodstream" Area -->
+                    <div class="border-t-2 border-dashed border-stone-300 pt-4">
+                        <p class="text-xs text-stone-400 uppercase font-bold mb-2">Bloodstream (DSA Level)</p>
+                        <div id="antibody-area" class="flex flex-wrap gap-2 h-24 overflow-hidden content-start">
+                            <!-- Antibodies generated here by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Status Overlay -->
+                    <div id="status-msg" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur px-6 py-3 rounded-lg shadow-lg border border-stone-200 text-center hidden">
+                        <p class="font-bold text-stone-800">Antibodies Regenerating...</p>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="bg-stone-800 p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="applyPlasmapheresis()" class="flex flex-col items-center justify-center bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg transition group">
+                            <span class="font-bold text-lg mb-1">Apply Plasmapheresis</span>
+                            <span class="text-xs text-blue-100 opacity-80 group-hover:opacity-100">Removes circulating antibodies (DSA)</span>
+                        </button>
+                        
+                        <button onclick="applyIdealTherapy()" class="flex flex-col items-center justify-center bg-stone-600 hover:bg-amber-600 text-white py-3 px-4 rounded-lg transition group">
+                            <span class="font-bold text-lg mb-1">Target Memory B Cells</span>
+                            <span class="text-xs text-stone-300 opacity-80 group-hover:opacity-100 text-center">Experimental: Eliminates the source</span>
+                        </button>
+                    </div>
+                    <p class="mt-4 text-xs text-stone-400 text-center">
+                        *Plasmapheresis is standard care. Targeting Memory B Cells is the goal of new research.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Explanation of Logic -->
+            <div class="mt-8 bg-blue-50 border border-blue-100 rounded-lg p-6">
+                <h4 class="font-bold text-blue-900 mb-2">What just happened?</h4>
+                <ul class="list-disc list-inside text-blue-800 space-y-2 text-sm">
+                    <li><strong>Plasmapheresis:</strong> Cleared the red dots (DSA), but the amber circles (Memory B Cells) remained. Because the "Factory" was still open, the antibodies returned quickly.</li>
+                    <li><strong>Targeted Therapy:</strong> Eliminated the Memory B Cells. Without the factory, no new antibodies could be produced.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-stone-500 mb-4">Based on the report: <em>"Post-Transplant Rejection: Why Memory B Cells are Critical"</em></p>
+            <p class="text-sm text-stone-400">&copy; 2025 Interactive Medical Report</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. Chart.js Implementation (Kinetics) ---
+        let kineticsChart;
+
+        function initChart() {
+            const ctx = document.getElementById('kineticsChart').getContext('2d');
+            
+            // Data points stimulating time (Weeks)
+            const labels = ['Exposure', 'Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'];
+            
+            const naiveData = [0, 5, 15, 40, 30, 15, 5]; // Slow rise, lower peak
+            const memoryData = [0, 60, 95, 85, 60, 40, 20]; // Fast rise, high peak
+
+            kineticsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Naive B Cell Response',
+                            data: naiveData,
+                            borderColor: '#9ca3af', // Gray
+                            backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4
+                        },
+                        {
+                            label: 'Memory B Cell Response',
+                            data: memoryData,
+                            borderColor: '#ef4444', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '% Antibody Level';
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Antibody Titer (Level)'
+                            },
+                            grid: {
+                                color: '#f5f5f4'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(mode) {
+            if (mode === 'naive') {
+                kineticsChart.data.datasets[0].hidden = false;
+                kineticsChart.data.datasets[1].hidden = true;
+            } else {
+                kineticsChart.data.datasets[0].hidden = false;
+                kineticsChart.data.datasets[1].hidden = false;
+            }
+            kineticsChart.update();
+        }
+
+        // --- 2. Simulation Logic ---
+        
+        // State
+        const state = {
+            factories: 3, // Memory B Cells
+            antibodies: 15, // DSA count
+            isRegenerating: true
+        };
+
+        const factoryContainer = document.getElementById('factory-area');
+        const antibodyContainer = document.getElementById('antibody-area');
+        const statusMsg = document.getElementById('status-msg');
+
+        // Render initial state
+        function renderSim() {
+            // Render Factories
+            factoryContainer.innerHTML = '';
+            for(let i=0; i<state.factories; i++) {
+                const fac = document.createElement('div');
+                fac.className = 'sim-cell w-12 h-12 bg-amber-100 border-4 border-amber-500 rounded-full flex items-center justify-center text-xl shadow-md';
+                fac.innerHTML = '🧠';
+                fac.title = "Memory B Cell (Active)";
+                factoryContainer.appendChild(fac);
+            }
+
+            if(state.factories === 0) {
+                 factoryContainer.innerHTML = '<span class="text-stone-400 italic">No Memory B Cells Detected</span>';
+            }
+
+            // Render Antibodies
+            antibodyContainer.innerHTML = '';
+            for(let i=0; i<state.antibodies; i++) {
+                const ab = document.createElement('div');
+                ab.className = 'sim-cell w-4 h-4 bg-red-500 rounded-sm transform rotate-45 m-1';
+                antibodyContainer.appendChild(ab);
+            }
+            
+            if(state.antibodies === 0 && state.factories > 0) {
+                statusMsg.classList.remove('hidden');
+            } else {
+                statusMsg.classList.add('hidden');
+            }
+        }
+
+        // Logic: Plasmapheresis
+        function applyPlasmapheresis() {
+            // Clear antibodies
+            state.antibodies = 0;
+            renderSim();
+
+            // Regeneration Logic (The Problem)
+            if (state.factories > 0) {
+                setTimeout(() => {
+                    regenLoop(0);
+                }, 1000);
+            }
+        }
+
+        // Logic: Ideal Therapy
+        function applyIdealTherapy() {
+            // Kill factories
+            state.factories = 0;
+            state.isRegenerating = false;
+            renderSim();
+            
+            // Natural decay of existing antibodies (simulated by clearing them slowly)
+            let decay = setInterval(() => {
+                if(state.antibodies > 0) {
+                    state.antibodies--;
+                    renderSim();
+                } else {
+                    clearInterval(decay);
+                }
+            }, 200);
+        }
+
+        // Helper: Regeneration Loop
+        function regenLoop(count) {
+            if (state.factories === 0) return; // Stop if cured
+            if (count >= 15) return; // Max limit
+
+            state.antibodies++;
+            renderSim();
+            
+            // Speed of regeneration based on factory count
+            setTimeout(() => {
+                regenLoop(count + 1);
+            }, 300); 
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            renderSim();
+            
+            // Start a slow background generation if not full
+            setInterval(() => {
+                if(state.factories > 0 && state.antibodies < 15) {
+                    state.antibodies++;
+                    renderSim();
+                }
+            }, 2000);
+        });
+
+    </script>
+</body>
+</html>
