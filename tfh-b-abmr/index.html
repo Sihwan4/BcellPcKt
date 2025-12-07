@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-FAKE">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tfh:B Cell 상호작용과 ABMR 예방 연구 발표</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* Slate-100 */
+        }
+        .slide-container {
+            min-height: 85vh;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .slide-content { /* Added a consistent padding for content */
+            padding: 2.5rem 3rem; /* Adjusted default padding */
+        }
+        .slide-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e3a8a; /* Blue-900 */
+            margin-bottom: 1rem; /* Reduced margin */
+            border-bottom: 3px solid #60a5fa; /* Blue-400 */
+            padding-bottom: 0.5rem;
+        }
+        .slide-content li {
+            margin-bottom: 0.75rem;
+            list-style-type: none; 
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+        .slide-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3b82f6; /* Blue-500 */
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        .slide-content strong {
+            color: #ef4444; /* Red-500 */
+            font-weight: 600;
+        }
+        /* Custom styles for the table for better readability */
+        .slide-table th, .slide-table td {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .slide-table th {
+            background-color: #eff6ff; /* Blue-50 */
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+        /* Full height content container for better vertical filling */
+        .full-height-content {
+            height: calc(100% - 10rem); /* Approximate space for header/footer elements */
+            overflow-y: auto;
+        }
+    </style>
+    <script>
+        // 슬라이드 데이터 (20장)
+        const slides = [
+            {
+                title: "Tfh:B 세포 상호작용의 차단과 항체 매개 거부반응 예방",
+                content: `
+                    <div class="text-center pt-8 pb-4"> <!-- Reduced vertical padding for cover slide -->
+                        <h1 class="text-6xl font-extrabold text-blue-800 mb-4">Tfh:B 세포 상호작용의 차단</h1>
+                        <h2 class="text-4xl font-semibold text-gray-700 mb-8">신장 이식 쥐 모델에서 항체 매개 거부반응(ABMR) 예방에 미치는 영향</h2>
+                        <p class="text-2xl mt-4">Front Immunol. 2021;12:657894</p>
+                        <p class="text-xl mt-4 text-blue-600">발표자: 김시환</p>
+                        <p class="text-xl">소속: Asan Medical Center</p>
+                        <p class="text-xl mt-2">주요 주제: <strong>Tfh, B Cell, ABMR, Calcineurin Inhibitor (CNI)</strong></p>
+                    </div>
+                `,
+                section: "Ⅰ. 서론 및 연구 목표"
+            },
+            {
+                title: "신장 이식에서 항체 매개 거부반응 (ABMR)의 중요성",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>ABMR의 정의:</strong> 이식 신장에 대한 <strong>공여자 특이 항체(DSA)</strong>가 매개하는 면역 반응입니다.</li>
+                        <li><strong>임상적 중요성:</strong> ABMR은 이식 신장 기능의 만성적 저하 및 <strong>장기 생존율 감소의 주요 원인</strong>입니다.</li>
+                        <li><strong>DSA의 역할:</strong> DSA의 혈청 내 존재는 예후 불량과 관련이 있으며, DSA 생성 메커니즘을 이해하는 것이 필수적입니다.</li>
+                        <li><strong>연구 필요성:</strong> DSA 생성을 표적으로 하는 <strong>새로운 면역억제 전략</strong>을 개발하기 위한 근본적인 메커니즘 이해가 필요합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅰ. 서론 및 연구 목표"
+            },
+            {
+                title: "DSA 생성의 핵심: 여포 보조 T 세포(Tfh)와 배중심(GC)",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>배중심(GC) 반응:</strong> 림프기관 내에서 항원 특이적 B 세포가 <strong>고친화성 항체</strong>를 생성하는 장소입니다 (체세포 과변이 및 클래스 스위치 재조합).</li>
+                        <li><strong>DSA 특성:</strong> DSA의 친화도(MFI)와 IgG 서브클래스는 ABMR의 위험 및 임상 경과에 영향을 미치므로, GC 반응이 ABMR 발달을 통제합니다.</li>
+                        <li><strong>Tfh 세포의 역할:</strong> Tfh는 B 세포 소낭으로 이동하여 <strong>CD40L 및 IL-21</strong>을 제공, GC 반응을 주도합니다.</li>
+                        <li><strong>가설:</strong> Tfh:B 세포 상호작용이 DSA 생성 및 ABMR 발달의 핵심 고리일 것입니다.</li>
+                    </ul>
+                `,
+                section: "Ⅰ. 서론 및 연구 목표"
+            },
+            {
+                title: "연구 목표: CNI 용량에 따른 ABMR 메커니즘 규명",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>모델 설정:</strong> MHC-비일치 쥐 신장 이식 모델을 사용하여 de novo DSA가 생성되는 임상적 상황을 모방했습니다.</li>
+                        <li><strong>대조군 (loCNI):</strong> <strong>저용량 Cyclosporine A (CsA, 5 mg/kg/d)</strong>를 투여하여 DSA 형성 및 거부반응을 허용했습니다.</li>
+                        <li><strong>실험군 (hiCNI):</strong> <strong>고용량 Cyclosporine A (CsA, 10 mg/kg/d)</strong>를 투여하여 alloimmune 기능을 억제하고 비거부반응 상태를 유도했습니다.</li>
+                        <li><strong>핵심 목표:</strong> CNI 용량 변화가 림프기관 내 <strong>Tfh:B 세포 상호작용, GC 형성, DSA 생성 및 ABMR</strong>에 미치는 영향을 비교 분석합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅰ. 서론 및 연구 목표"
+            },
+            {
+                title: "연구 방법: 쥐 신장 이식 모델 및 약물 치료 전략",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>공여자/수혜자:</strong> Brown Norway (BN) → Lewis (LEW) rats (MHC-mismatched).</li>
+                        <li><strong>수술:</strong> 정위 신장 이식 후, 잔여 수혜자 신장 제거.</li>
+                        <li><strong>약물 치료:</strong> Ktx 당일부터 28일간 CsA 경구 투여.
+                            <ul class="ml-6 mt-2">
+                                <li>- **loCNI (저용량):** 5 mg/kg/d (trough level 약 93 ng/ml)</li>
+                                <li>- **hiCNI (고용량):** 10 mg/kg/d (trough level 약 733 ng/ml)</li>
+                            </ul>
+                        </li>
+                        <li><strong>분석 시점:</strong> Ktx 28일 후 희생 및 비장, 이식 신장 조직 회수.</li>
+                    </ul>
+                `,
+                section: "Ⅱ. 연구 방법"
+            },
+            {
+                title: "연구 방법: 주요 분석 방법",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>조직병리:</strong> Banff 2017 기준에 따른 거부반응(TCMR, ABMR) 분류 및 Trichrome 염색을 통한 섬유화 평가. C4d 염색.</li>
+                        <li><strong>DSA 측정:</strong> Flow Crossmatch를 이용하여 MHC class I에 대한 IgM, IgG 및 IgG 아형 DSA MFI 측정.</li>
+                        <li><strong>세포 분석 (Flow Cytometry):</strong> 비장 및 이식 신장 내 B 세포(CD45R+), T 세포(CD3+), 단핵구 식세포(MP, CD11b/c+) 빈도 및 절대 수 측정.</li>
+                        <li><strong>Tfh/GC 분석 (Immunofluorescence):</strong> 비장 여포 내 <strong>GC (Ki67+) 빈도 및 크기</strong>, <strong>활성화 Tfh (GC 내 CD3+)</strong> 및 휴지기 Tfh (MZ 내 CD3+) 수 측정.</li>
+                        <li><strong>분자 분석 (qPCR):</strong> Tfh 분화/기능 관련 유전자 (IL-21, ICOS, PD-1, AID 등) mRNA 발현 분석.</li>
+                    </ul>
+                `,
+                section: "Ⅱ. 연구 방법"
+            },
+            {
+                title: "결과 1: CNI 용량에 따른 거부반응 및 DSA 형성",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>hiCNI 그룹:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- 세포성 거부반응(TCMR) 및 ABMR이 <strong>완전히 예방됨 (0/6)</strong>.</li>
+                                <li>- DSA MFI (IgM, IgG)가 대조군 수준으로 <strong>강력하게 억제</strong>됨.</li>
+                            </ul>
+                        </li>
+                        <li><strong>loCNI 그룹:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- 6/8 마리에서 경계성 TCMR, 1/8 마리에서 Banff IB TCMR, <strong>3/8 마리에서 ABMR 징후</strong> (ptc, g, cg)가 나타남.</li>
+                                <li>- DSA MFI (IgM, IgG)가 hiCNI 대비 <strong>유의하게 높음</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>섬유화:</strong> loCNI 신장에서 hiCNI 대비 <strong>유의한 증가</strong> 관찰됨 (거부반응에 의해 증폭).</li>
+                        <li><strong>결론:</strong> <strong>고용량 CNI만</strong>이 de novo DSA 생성 및 ABMR을 효과적으로 차단했습니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 1. CNI 용량에 따른 거부반응 조직 소견 및 DSA MFI 분석 결과</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 2: 비장 내 림프구 빈도 변화",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>B 세포 (CD45R+):</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- 비장 내 B 세포의 빈도나 절대 수는 CNI 치료 및 이식에 의해 <strong>변화가 없었습니다</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>T 세포 (CD3+):</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- hiCNI 그룹에서 loCNI 및 대조군 대비 비장 내 T 세포 빈도가 <strong>유의하게 감소</strong>했습니다 (T 세포 활성화의 일반적인 억제).</li>
+                            </ul>
+                        </li>
+                        <li><strong>이식 신장 내 침윤:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- loCNI에서 B 세포와 T 세포 모두 대조군 대비 증가했습니다 (거부반응 관련 침윤).</li>
+                            </ul>
+                        </li>
+                        <li><strong>결론:</strong> CNI는 B 세포의 총량보다는 주로 <strong>T 세포의 빈도</strong>에 영향을 미쳤습니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 2. 비장 및 이식 신장 내 백혈구 서브셋 빈도 및 절대 수</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 3: GC 형성 억제 및 DSA와의 상관관계",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>GC (Ki67+) 소실:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- hiCNI 그룹에서 GC <strong>빈도 및 면적이 거의 완전히 사라졌습니다</strong> (loCNI 및 대조군 대비 유의하게 감소).</li>
+                                <li>- GC B 세포 효소인 <strong>AID mRNA 발현 역시 hiCNI에서 억제</strong>되었습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>DSA와 GC의 상관관계 (loCNI 그룹):</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- GC 빈도와 면적은 IgG 및 IgG2b DSA MFI와 <strong>강한 양의 상관관계</strong>를 보였습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>결론:</strong> DSA의 생성 및 친화도는 <strong>GC 형성 및 확장</strong>에 직접적으로 의존합니다. hiCNI는 GC 반응을 효과적으로 중단시킵니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 3. 배중심(GC) 형성 빈도 및 DSA와의 상관관계 분석</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 4: 활성화된 Tfh 세포의 소실이 GC 형성을 주도",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>활성화 Tfh 소실:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- <strong>활성화된 Tfh (GC 내 CD3+)</strong>: hiCNI 그룹에서 loCNI 및 대조군 대비 그 수가 <strong>실질적으로 유의하게 감소</strong>했습니다.</li>
+                                <li>- <strong>휴지기 Tfh (MZ 내 CD3+)</strong>: CNI 치료에 의해 <strong>영향을 받지 않았습니다</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tfh와 GC 확장:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- loCNI 그룹 내에서 활성화 Tfh의 수는 <strong>GC의 크기를 결정</strong>하는 것으로 나타났습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>GC 산물:</strong> hiCNI에서 GC 형성이 억제된 결과로, 비장 내 <strong>플라스마 세포 (IgG+ cells)의 수가 loCNI 대비 감소</strong>했습니다.</li>
+                        <li><strong>결론:</strong> <strong>활성화된 Tfh 세포</strong>는 DSA 생성의 근간이 되는 GC 반응의 주요 동인이며, hiCNI에 의해 특이적으로 억제됩니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 4. 활성화 Tfh 세포 수와 GC 형성 간의 관계</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 5: Tfh 활성화/분화 마커 억제 (PD-1, ICOS, ICOSL)",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>T 세포 활성화 억제:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- T 세포 활성화 관련 마커인 <strong>PD-1</strong> 및 <strong>ICOS</strong> mRNA 발현이 hiCNI에서 loCNI 및 대조군 대비 <strong>유의하게 낮았습니다</strong>.</li>
+                                <li>- 이는 CNI가 <strong>나이브 T 세포 활성화</strong>를 광범위하게 억제함을 시사합니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>ICOS Ligand 억제:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- Tfh 분화/유지에 필수적인 B 세포의 신호인 <strong>ICOS ligand</strong> mRNA 발현이 hiCNI에서 <strong>유의하게 감소</strong>했습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>결론:</strong> hiCNI는 T 세포 활성화 뿐 아니라, <strong>Tfh 성숙 및 유지에 필요한 B 세포 유래 신호 (ICOSL)</strong>까지 차단하여 <strong>Tfh:B 세포 상호작용</strong>을 양방향으로 방해합니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 5A-B. Tfh 관련 활성화 및 유지 마커 발현</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 6: Tfh 이펙터 기능 억제 (IL-21 축)",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>IL-21의 강력한 억제:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- B 세포 활성화 및 GC 반응의 핵심인 <strong>IL-21 mRNA 발현</strong>이 hiCNI에서 loCNI 및 대조군 대비 <strong>가장 강력하게 억제</strong>되었습니다.</li>
+                                <li>- 면역 형광 분석에서도 여포 내 IL-21 발현 영역이 hiCNI에서 <strong>현저히 감소</strong>했습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>IL-21 수용체 감소:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- <strong>IL-21 수용체 (IL-21R)</strong> mRNA 발현 또한 hiCNI에서 loCNI 대비 <strong>낮게 발현</strong>되었습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>CD40L:</strong> hiCNI에서 loCNI 대비 낮았으나, 대조군 대비는 억제되지 않았습니다 (CNI의 주요 표적이 아닐 가능성 시사).</li>
+                        <li><strong>결론:</strong> hiCNI는 Tfh 이펙터 기능의 핵심인 <strong>IL-21 생성 및 수용</strong>을 강력하게 억제하여 Tfh 자가 분화 및 B 세포 활성화를 차단합니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 5D-E. Tfh의 핵심 이펙터 분자 IL-21 발현 및 수용체</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 7: 기타 T:B 상호작용 축 분석 (IL-6, TACI)",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>IL-6 (Tfh 유지 및 증폭):</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- loCNI에서 IL-6 mRNA 발현이 <strong>유의하게 증가</strong>했습니다.</li>
+                                <li>- hiCNI는 loCNI 대비 IL-6를 낮추었으나, 대조군 수준으로 <strong>억제하지는 못했습니다</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>BAFF/APRIL 축:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- BAFF, APRIL, BAFF-R, BCMA 발현은 변화 없었습니다.</li>
+                                <li>- BAFF/APRIL 수용체인 <strong>TACI 발현만 hiCNI에서 유의하게 감소</strong>했습니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>결론:</strong> IL-6는 CNI 치료에도 불구하고 완전히 억제되지 않아, 만성 거부반응에서 <strong>추가적인 표적</strong>으로 중요함을 시사합니다.</li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-800">
+                        
+                        <p class="mt-2 text-xs">Figure 5G-H. IL-6 및 TACI mRNA 발현</p>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "결과 종합 요약: hiCNI의 ABMR 억제 메커니즘",
+                content: `
+                    <div class="grid grid-cols-2 gap-6 text-center items-center h-full">
+                        <div class="col-span-1 p-6 bg-blue-50 rounded-lg h-full flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold text-blue-700 mb-4">loCNI (DSA & ABMR 발생)</h3>
+                            <ul class="list-none space-y-3 text-left">
+                                <li>T 세포 활성화 <strong>허용</strong> (↑PD-1, ICOS)</li>
+                                <li><strong>활성화 Tfh 존재</strong> 및 GC 확장 주도</li>
+                                <li>ICOSL 및 IL-21 발현 <strong>높음</strong></li>
+                                <li><strong>Tfh:B 세포 피드백</strong> 활성화</li>
+                                <li>GC 형성 및 플라스마 세포 <strong>생성</strong> → <strong>DSA</strong></li>
+                            </ul>
+                        </div>
+                        <div class="col-span-1 p-6 bg-green-50 rounded-lg h-full flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold text-green-700 mb-4">hiCNI (DSA & ABMR 예방)</h3>
+                            <ul class="list-none space-y-3 text-left">
+                                <li>T 세포 활성화 <strong>억제</strong> (↓PD-1, ICOS)</li>
+                                <li><strong>활성화 Tfh 소실</strong> 및 GC 형성 억제</li>
+                                <li>ICOSL 및 IL-21 발현 <strong>강력히 억제</strong></li>
+                                <li><strong>Tfh:B 세포 상호작용 차단</strong></li>
+                                <li>GC 소실 및 플라스마 세포 <strong>감소</strong> → <strong>DSA 없음</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                section: "Ⅲ. 연구 결과"
+            },
+            {
+                title: "논의 1: de novo DSA 형성에 대한 Tfh-GC 축의 역할",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>T-의존성 항체:</strong> 본 연구는 DSA 생성이 <strong>Tfh 주도의 GC 반응</strong>에 의존함을 in vivo 쥐 모델을 통해 직접적으로 입증했습니다.</li>
+                        <li><strong>Under-immunosuppression의 결과:</strong> loCNI 조건 하의 면역 억제 부족은 <strong>Tfh의 생존 및 활성</strong>을 허용하여, 이로 인해 GC가 형성되고 DSA가 생성되었습니다.</li>
+                        <li><strong>CNI 용량의 영향:</strong> 이는 CNI 용량이 단순히 T 세포 억제를 넘어, <strong>GC 반응</strong>이라는 고친화성 항체 생성 경로를 직접적으로 조절함을 시사합니다.</li>
+                        <li><strong>활성화 Tfh의 중요성:</strong> 특히 휴지기 Tfh는 영향을 받지 않은 반면, <strong>GC 내 활성화 Tfh</strong>만 특이적으로 소실된 점은, 이 세포 집단이 거부반응에서 핵심 드라이버임을 강조합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "논의 2: hiCNI가 Tfh:B 세포 상호작용을 억제하는 기전",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>다중 표적 억제:</strong> hiCNI는 <strong>나이브 T 세포 활성화</strong> (PD-1, ICOS 감소)를 막아 Tfh 분화를 시작 단계부터 저해합니다.</li>
+                        <li><strong>피드백 루프 차단:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- Tfh 성숙에 필수적인 B 세포의 신호인 <strong>ICOSL</strong>을 억제합니다.</li>
+                                <li>- Tfh의 핵심 이펙터이자 자가 분화 신호인 <strong>IL-21</strong> (mRNA 및 여포 내 발현)을 강력하게 억제합니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>IL-21R 감소:</strong> IL-21 수용체까지 감소시킨다는 것은 Tfh 자극의 <strong>자연적인 종결 기전</strong>이 고용량 CNI에 의해 촉진됨을 시사합니다.</li>
+                        <li><strong>결론:</strong> hiCNI는 Tfh의 <strong>개발 경로 (T 세포 활성화)</strong>와 <strong>성숙/기능 축 (ICOSL-IL-21)</strong> 모두를 교란하여 <strong>Tfh:B 세포 통신</strong>을 완벽하게 차단합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "논의 3: CNI가 표적하지 못하거나 불완전하게 표적하는 축",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>IL-6 (Amplifier):</strong> loCNI에서 <strong>유의하게 증가</strong>하며 humoral response를 증폭시키지만, hiCNI에서도 대조군 수준으로 <strong>억제하지는 못했습니다</strong>.
+                            <ul class="ml-6 mt-2">
+                                <li>- → <strong>임상적 시사점:</strong> IL-6는 CNI 치료만으로는 불충분하게 통제되는 축이며, 항-IL-6 항체와 같은 <strong>추가적인 치료 표적</strong>으로 중요합니다.</li>
+                            </ul>
+                        </li>
+                        <li><strong>CD40L:</strong> hiCNI에서 억제 효과가 불완전했습니다 (대조군 대비 억제되지 않음).</li>
+                        <li><strong>BAFF/APRIL 축:</strong> BAFF와 APRIL 자체는 CNI에 의해 영향을 받지 않았으며, 수용체인 <strong>TACI</strong>만 감소했습니다.</li>
+                        <li><strong>결론:</strong> CNI는 IL-6와 같은 주요 염증-면역 증폭 사이토카인을 완전히 억제하지 못하므로, ABMR에 대한 완전한 방어를 위해서는 <strong>복합적인 면역억제 전략</strong>이 필요합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "연구의 한계점",
+                content: `
+                    <ul class="list-none space-y-4 text-lg text-gray-700">
+                        <li><strong>DSA 측정의 제한:</strong> 본 연구는 <strong>MHC Class I DSA</strong>만 측정했으므로, MHC Class II DSA의 역할에 대해서는 결론을 내릴 수 없습니다.</li>
+                        <li><strong>단기 모델:</strong> Ktx 후 28일 시점의 분석이므로, 만성 거부반응의 장기적인 면역 동역학을 완전히 반영하지 못할 수 있습니다.</li>
+                        <li><strong>동물 모델의 한계:</strong> 쥐 모델의 결과가 인간의 ABMR 병태생리를 100% 대변하지는 않을 수 있습니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "결론 및 연구의 의의",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>핵심 결론:</strong> 신장 이식 후 de novo DSA 생성 및 ABMR 발달은 <strong>활성화 Tfh가 주도하는 비장 내 GC 반응</strong>에 의존합니다.</li>
+                        <li><strong>CNI의 역할:</strong> <strong>고용량 CNI</strong>는 T 세포 활성화, <strong>ICOSL-IL-21 축</strong>, 그리고 <strong>활성화 Tfh의 소실</strong>을 통해 Tfh:B 세포 상호작용을 파괴하여 ABMR을 성공적으로 예방합니다.</li>
+                        <li><strong>임상적 시사점:</strong> CNI 용량 조절은 DSA 생성에 직접적인 영향을 미치며, Tfh 세포나 IL-21과 같은 Tfh 이펙터 분자를 표적으로 하는 <strong>새로운 치료법</strong> 개발의 근거를 제시합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "향후 전망: Tfh 표적 치료의 필요성",
+                content: `
+                    <ul class="list-none space-y-4 text-lg">
+                        <li><strong>ABMR 극복 전략:</strong> CNI 치료만으로는 IL-6 등 증폭 인자가 남아있기 때문에, Tfh-GC 축을 보다 특이적으로 표적하는 전략이 필요합니다.</li>
+                        <li><strong>가능한 표적:</strong>
+                            <ul class="ml-6 mt-2">
+                                <li>- **IL-21/IL-21R 차단:** Tfh의 기능과 분화를 동시에 억제하여 GC 반응을 효과적으로 중단.</li>
+                                <li>- **ICOS/ICOSL 축 차단:** Tfh:B 세포 간의 결정적인 협력 신호를 방해.</li>
+                                <li>- **IL-6 억제제 병용:** CNI가 불완전하게 통제하는 염증 증폭 인자를 추가로 제어.</li>
+                            </ul>
+                        </li>
+                        <li><strong>최종 목표:</strong> DSA 생성의 근원을 차단하여 ABMR을 예방하고, 이식 신장의 장기 생존율을 개선합니다.</li>
+                    </ul>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            },
+            {
+                title: "감사 및 질의응답 (Q&A)",
+                content: `
+                    <div class="text-center py-20 h-full flex flex-col justify-center"> <!-- Adjusted vertical padding and added flex utilities -->
+                        <h2 class="text-5xl font-extrabold text-blue-800 mb-6">경청해 주셔서 감사합니다.</h2>
+                        <div class="mt-8">
+                            <h3 class="text-3xl font-semibold text-gray-700 mb-8">질문 있으시면 해주세요.</h3>
+                        </div>
+                    </div>
+                `,
+                section: "Ⅳ. 논의 및 결론"
+            }
+        ];
+
+        let currentSlide = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const slideView = document.getElementById('slide-view');
+            const slideCounter = document.getElementById('slide-counter');
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+
+            function renderSlide(index) {
+                const slide = slides[index];
+                // Apply a fixed minimum height to the slide content wrapper
+                slideView.innerHTML = `
+                    <div class="slide-content h-full">
+                        <p class="text-sm font-semibold text-blue-500 mb-2">${slide.section} (${index + 1}/${slides.length})</p>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl mb-6">${slide.title}</h2>
+                        <div class="text-gray-800 text-base md:text-lg overflow-y-auto" style="height: calc(85vh - 12rem);">
+                            ${slide.content}
+                        </div>
+                    </div>
+                `;
+                slideCounter.textContent = `${index + 1} / ${slides.length}`;
+
+                prevButton.disabled = index === 0;
+                nextButton.disabled = index === slides.length - 1;
+
+                prevButton.classList.toggle('opacity-50', index === 0);
+                nextButton.classList.toggle('opacity-50', index === slides.length - 1);
+            }
+
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    renderSlide(currentSlide);
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    renderSlide(currentSlide);
+                }
+            });
+
+            // Initial render
+            renderSlide(currentSlide);
+        });
+    </script>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Header and Navigation -->
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-bold text-gray-800 hidden md:block">Tfh:B Cell 상호작용과 ABMR 예방 연구</h1>
+            <div class="flex items-center space-x-4">
+                <span id="slide-counter" class="text-lg font-mono text-gray-600">1 / 20</span>
+                <button id="prev-slide" class="p-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition disabled:opacity-50" disabled>
+                    이전
+                </button>
+                <button id="next-slide" class="p-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition disabled:opacity-50">
+                    다음
+                </button>
+            </div>
+        </header>
+
+        <!-- Slide View Area -->
+        <div id="slide-view" class="slide-container bg-white rounded-xl overflow-hidden shadow-2xl transition duration-300">
+            <!-- Slide content will be injected here -->
+        </div>
+
+    </div>
+
+</body>
+</html>
