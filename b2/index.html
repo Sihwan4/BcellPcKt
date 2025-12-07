@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B 세포와 항체 매개 거부 반응 (ABMR) 개요</title>
+    <title>B 세포 및 항체 매개 거부 반응 (ABMR): 23 슬라이드 심층 분석</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -47,232 +47,612 @@
         .point {
             margin-bottom: 1rem;
         }
+        .key-term {
+            color: #ef4444; /* red-500 */
+            font-weight: 700;
+        }
+        .slide-number {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
 
     <div id="slides-container" class="slides-container">
+        
+        <!-- I. Introduction (1-3) -->
+
         <!-- Slide 1: Title -->
-        <div id="slide-1" class="slide bg-gradient-to-br from-blue-500 to-indigo-600">
-            <div class="slide-content text-center text-gray-800">
+        <div id="slide-1" class="slide bg-gradient-to-br from-blue-700 to-indigo-800 text-white">
+            <div class="slide-content text-center bg-white text-gray-800">
                 <h1 class="text-5xl md:text-6xl font-extrabold mb-4 text-gray-900">
-                    신장 이식에서의 B 세포와 ABMR
+                    신장 이식 면역학: B 세포와 ABMR
                 </h1>
                 <p class="text-2xl md:text-3xl font-light text-blue-700">
-                    항체 매개 거부 반응(ABMR) 및 공여 특이 항체(DSA)의 역할
+                    항체 매개 거부 반응 (ABMR) 및 공여 특이 항체 (DSA)의 심층 분석
                 </p>
                 <div class="mt-8 text-lg text-gray-600">
-                    <p>자료 기반: 논문 분석 (이식, 면역학 관련)</p>
+                    <p>자료 기반: 최신 이식 면역학 논문</p>
                 </div>
             </div>
+            <span class="slide-number text-white">1/23</span>
         </div>
 
-        <!-- Slide 2: ABMR 개요 및 DSA -->
+        <!-- Slide 2: ABMR 정의 및 중요성 -->
         <div id="slide-2" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">1. ABMR 개요: 이식편 손실의 주요 원인</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">1. ABMR 정의 및 임상적 중요성</h2>
                 </div>
                 <div class="text-lg space-y-4">
                     <div class="point">
                         <span class="font-semibold text-gray-700">정의:</span>
-                        <span class="text-gray-600">공여 특이 항체(Donor-Specific Antibodies, DSA)가 매개하는 이식편 손상.</span>
-                    </div>
-                    <div class="point">
-                        <span class="font-semibold text-gray-700">임상적 중요성:</span>
-                        <span class="text-gray-600">신장 이식 수혜자에서 후기 이식편 손실(late graft loss)의 주요 원인입니다.</span>
+                        <span class="text-gray-600">주로 <span class="key-term">공여 특이 항체(DSA)</span>가 이식편 혈관 내피세포에 결합하여 손상을 매개하는 거부 반응.</span>
                     </div>
                     <div class="point">
                         <span class="font-semibold text-gray-700">DSA의 역할:</span>
-                        <span class="text-gray-600">DSA는 ABMR 및 이식편 손실의 독립적인 위험 인자입니다. 이는 주로 장수 형질세포와 기억 B 세포에서 분비됩니다.</span>
+                        <span class="text-gray-600">DSA는 ABMR 및 장기적인 이식편 손실의 <span class="key-term">독립적인 위험 인자</span>입니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">DSA의 병태생리:</span>
-                        <span class="text-gray-600">DSA가 이식편 혈관 내피세포에 결합하여 보체 의존적/비의존적 경로를 통해 염증성 손상을 유발합니다.</span>
+                        <span class="font-semibold text-gray-700">주요 원인:</span>
+                        <span class="text-gray-600">ABMR은 T 세포 매개 거부 반응(TCMR)보다 후기에 발생하며 <span class="key-term">후기 이식편 손실</span>의 가장 흔한 원인으로 부상했습니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">병태생리:</span>
+                        <span class="text-gray-600">DSA가 내피에 결합하여 보체(C4d) 활성화 또는 NK 세포 활성화 등 <span class="key-term">미세혈관 염증(MVI)</span>을 유발합니다.</span>
                     </div>
                 </div>
-                <div class="mt-8">
-                     <p class="text-sm text-gray-500 italic">
-                        출처: IRNF_44_2128374.pdf, cootr-27-405.pdf
-                    </p>
-                </div>
             </div>
+            <span class="slide-number">2/23</span>
         </div>
 
-        <!-- Slide 3: B 세포 및 장수 형질세포 생성 경로 -->
+        <!-- Slide 3: Banff 2019 분류 개요 -->
         <div id="slide-3" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">2. B 세포 동역학: DSA의 근원</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">2. Banff 2019 분류에 따른 ABMR 스펙트럼</h2>
                 </div>
                 <div class="text-lg space-y-4">
-                    <div class="point">
-                        <span class="font-semibold text-gray-700">B 세포 분화:</span>
-                        <span class="text-gray-600">순수 B 세포는 T 도움 세포(Tfh)와 상호작용하며 배중심(GC) 반응을 통해 증식하고 분화합니다.</span>
+                    <div class="point p-3 rounded-lg border-l-4 border-red-500 bg-red-50">
+                        <span class="font-semibold text-red-700">활성 ABMR (Active AMR):</span>
+                        <span class="text-gray-600">급성 조직 손상(MVI, 동맥염) + 항체 상호작용 증거(C4d/분자 마커) + DSA. <span class="key-term">신속한 치료에 반응할 수 있음.</span></span>
                     </div>
-                    <div class="point">
-                        <span class="font-semibold text-gray-700">주요 산물:</span>
-                        <span class="text-gray-600">단기 형질세포, 기억 B 세포, 그리고 <span class="text-red-600 font-bold">장수 형질세포(LLPCs)</span>.</span>
+                    <div class="point p-3 rounded-lg border-l-4 border-yellow-500 bg-yellow-50">
+                        <span class="font-semibold text-yellow-700">만성 활성 ABMR (Chronic Active AMR):</span>
+                        <span class="text-gray-600">만성 조직 손상(이식 사구체병증, TG) + 경증-중등도 MVI + DSA. <span class="key-term">예후 불량, 치료 반응성 낮음.</span></span>
                     </div>
-                    <div class="point">
-                        <span class="font-semibold text-gray-700">장수 형질세포(LLPCs):</span>
-                        <span class="text-gray-600">주로 골수(Bone Marrow)에 장기간 생존하며, 높은 친화도의 DSA를 지속적으로 분비하는 주범입니다. (수십 년 또는 평생 지속 가능)</span>
-                    </div>
-                    <div class="point">
-                        <span class="font-semibold text-gray-700">DSA 생성 경로:</span>
-                        <span class="text-gray-600"> DSA 생성 경로를 이해하는 것은 ABMR 예방 및 치료의 핵심입니다.</span>
+                    <div class="point p-3 rounded-lg border-l-4 border-gray-500 bg-gray-50">
+                        <span class="font-semibold text-gray-700">만성 (비활성) ABMR (Chronic Inactive AMR):</span>
+                        <span class="text-gray-600">만성 조직 손상(TG)만 존재하며 MVI 및 C4d가 없는 상태. <span class="key-term">예후 가장 불량, 거의 이식편 손실로 진행.</span></span>
                     </div>
                 </div>
-                <div class="mt-8 text-center">
-                    <img src="https://placehold.co/600x250/3b82f6/ffffff?text=B+cell+and+LLPC+Production+Pathway" onerror="this.onerror=null;this.src='https://placehold.co/600x250/3b82f6/ffffff?text=B+세포+및+LLPC+생성+경로+다이어그램';" alt="B 세포 및 LLPC 생성 경로" class="mx-auto rounded-lg shadow-xl">
+                <div class="mt-8 text-sm text-gray-500 italic">
+                    <p>Banff 2019 분류는 ABMR 진단 및 중증도를 구별하는 표준 기준입니다. (Table 1, cootr-27-405.pdf 참조)</p>
                 </div>
             </div>
+            <span class="slide-number">3/23</span>
         </div>
 
-        <!-- Slide 4: 기억 B 세포의 이질성 및 임상적 예측 -->
+        <!-- II. B 세포 면역학 및 DSA 생성 (4-8) -->
+        
+        <!-- Slide 4: B 세포 분화 경로 (DSA의 근원) -->
         <div id="slide-4" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">3. 기억 B 세포: ABMR의 잠재적 예측 인자</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">3. B 세포 분화: DSA를 생성하는 세포</h2>
                 </div>
                 <div class="text-lg space-y-4">
                     <div class="point">
-                        <span class="font-semibold text-gray-700">IgG+ vs. IgM+ 아형:</span>
-                        <span class="text-gray-600">IgG+ 기억 B 세포는 항원에 더 강하게 반응하여 빠르게 항체 분비 세포(ASCs)로 분화하여 DSA 생성을 촉진합니다.</span>
+                        <span class="font-semibold text-gray-700">Naive B 세포 활성화:</span>
+                        <span class="text-gray-600">항원(HLA) 자극 시 T 도움 세포(Tfh)와의 상호작용(B7/CD28 등)을 통해 증식 및 분화 시작.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">ABMR 예측:</span>
-                        <span class="text-gray-600">혈청 DSA가 음성인 환자라도 HLA-특이적 기억 B 세포를 보유하고 있다면, 이식 후 DSA를 신속하게 생성하여 ABMR 위험이 높습니다 (감작 환자의 재이식 등).</span>
+                        <span class="font-semibold text-gray-700">배중심(GC) 반응:</span>
+                        <span class="text-gray-600">DSA 생성을 위한 <span class="key-term">항체 친화도 성숙</span> 및 <span class="key-term">Ig 계열 전환</span>이 일어나는 핵심 과정입니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">DSAm 검출 연구:</span>
-                        <span class="text-gray-600">기억 B 세포에서 유래된 DSA(DSAm)를 검출하는 새로운 분석법이 개발되었으나, 임상 ABMR과의 유의미한 상관관계는 아직 논란 중이며 추가 검증이 필요합니다.</span>
+                        <span class="font-semibold text-gray-700">분화 산물:</span>
+                        <span class="text-gray-600">GC-독립적 경로: 단기 형질세포, GC-의존적 경로: 기억 B 세포 및 장수 형질세포.</span>
                     </div>
                 </div>
-                <div class="mt-8 bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <p class="font-semibold text-blue-700">임상적 시사점:</p>
-                    <p class="text-gray-600">ABMR 예측을 위해 기억 B 세포의 정량화 및 모니터링이 미래의 중요한 접근 방식이 될 수 있습니다.</p>
+                <div class="mt-8 text-center">
+                    
                 </div>
             </div>
+            <span class="slide-number">4/23</span>
         </div>
 
-        <!-- Slide 5: ABMR의 Banff 2019 분류 및 치료 원칙 -->
+        <!-- Slide 5: 장수 형질세포 (LLPC): DSA의 지속적인 분비원 -->
         <div id="slide-5" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">4. ABMR 진단 및 치료 원칙 (Banff 2019)</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">4. 장수 형질세포 (LLPC): 만성 ABMR의 난제</h2>
                 </div>
                 <div class="text-lg space-y-4">
                     <div class="point">
-                        <span class="font-semibold text-gray-700">활성 ABMR (Active AMR):</span>
-                        <ul class="list-disc ml-6 text-gray-600">
-                            <li>진단: 미세혈관 염증(MVI), C4d 침착 또는 분자 마커, 혈청 DSA.</li>
-                            <li>치료: <span class="font-bold text-red-600">혈장 분리 반출술(PLEX) + IVIg + 코르티코스테로이드</span>를 기본으로 하며, 추가 요법 고려.</li>
-                        </ul>
+                        <span class="font-semibold text-gray-700">장기 생존:</span>
+                        <span class="text-gray-600">LLPC는 주로 골수(Bone Marrow)의 생존 틈새(survival niches)에 자리 잡아 수십 년간 DSA를 <span class="key-term">지속적으로 분비</span>합니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">만성 활성 ABMR (Chronic active AMR):</span>
-                        <ul class="list-disc ml-6 text-gray-600">
-                            <li>진단: 이식 신장 사구체병증(TG) 등 만성 손상 + MVI + DSA.</li>
-                            <li>치료: <span class="font-bold">기저 면역억제 요법 최적화</span>. 효과적인 치료법은 아직 부족하여 임상 시험 참여가 권장됩니다.</li>
-                        </ul>
+                        <span class="font-semibold text-gray-700">CD20 음성:</span>
+                        <span class="text-gray-600">LLPC는 <span class="key-term">CD20 항원을 발현하지 않아</span>, 리툭시맙(Rituximab, 항-CD20)과 같은 B 세포 제거 요법으로 제거되지 않습니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">DSA 음성 ABMR:</span>
-                        <span class="text-gray-600">DSA가 없더라도 MVI가 심하면 ABMR로 간주하고 치료를 고려해야 합니다.</span>
+                        <span class="font-semibold text-gray-700">임상적 의미:</span>
+                        <span class="text-gray-600">DSA의 <span class="key-term">만성적인 공급원</span>이므로, 만성 ABMR 치료가 어려운 근본적인 이유가 됩니다.</span>
                     </div>
                 </div>
+                <div class="mt-8 bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                    <p class="font-semibold text-indigo-700">핵심 목표:</p>
+                    <p class="text-gray-600">만성 ABMR 치료의 성공은 LLPC를 효과적으로 표적하고 제거하는 데 달려 있습니다 (예: 보르테조밉, 다라투무맙).</p>
+                </div>
             </div>
+            <span class="slide-number">5/23</span>
         </div>
-
-        <!-- Slide 6: ABMR 치료 전략: B 세포 및 형질세포 표적 -->
+        
+        <!-- Slide 6: 기억 B 세포의 이질성 (1) -->
         <div id="slide-6" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">5. ABMR 치료: B/형질세포 및 T-B 상호작용 표적</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">5. 기억 B 세포의 이질성: 아형별 기능 차이 (IgM vs IgG)</h2>
                 </div>
                 <div class="grid md:grid-cols-2 gap-6 text-lg">
                     <div class="space-y-3">
-                        <h3 class="font-extrabold text-xl text-blue-800">B 세포 / 형질세포 표적</h3>
-                        <div class="point border-l-4 border-red-500 pl-3">
-                            <span class="font-semibold">리툭시맙 (Rituximab):</span>
-                            <span class="text-gray-600"> 항-CD20 항체. B 세포 제거. 장수 형질세포(CD20-)에는 효과 없음.</span>
-                        </div>
-                        <div class="point border-l-4 border-red-500 pl-3">
-                            <span class="font-semibold">보르테조밉 (Bortezomib):</span>
-                            <span class="text-gray-600"> 프로테아좀 억제제. 장수 형질세포의 사멸 유도.</span>
-                        </div>
-                        <div class="point border-l-4 border-red-500 pl-3">
-                            <span class="font-semibold">다라투무맙 (Daratumumab):</span>
-                            <span class="text-gray-600"> 항-CD38 항체. CD38+ 형질세포 제거.</span>
-                        </div>
-                        <div class="point border-l-4 border-red-500 pl-3">
-                            <span class="font-semibold">토실리주맙 (Tocilizumab):</span>
-                            <span class="text-gray-600"> 항-IL-6R 항체. B 세포 분화 및 형질세포 생존 억제.</span>
-                        </div>
+                        <h3 class="font-extrabold text-xl text-blue-800">IgM+ 기억 B 세포</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li>배중심(GC) 비의존적으로 생성되기도 함.</li>
+                            <li>GC로 재진입하여 <span class="key-term">추가적인 친화도 성숙</span>을 거치려는 경향이 높음.</li>
+                            <li>상대적으로 <span class="key-term">낮은 체세포 과돌연변이율</span>을 가질 수 있음.</li>
+                        </ul>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-extrabold text-xl text-blue-800">T-B 상호작용 차단</h3>
-                        <div class="point border-l-4 border-green-500 pl-3">
-                            <span class="font-semibold">벨라타셉트 (Belatacept):</span>
-                            <span class="text-gray-600"> CD28-CD80/86 경로 차단. T 세포 활성화 억제로 DSA 생성 감소.</span>
-                        </div>
-                        <div class="point border-l-4 border-green-500 pl-3">
-                            <span class="font-semibold">항-CD40/CD154 항체:</span>
-                            <span class="text-gray-600"> B 세포 증식, 항체 생산 및 기억 B 세포 생성 경로 차단 (ASKP1240 등).</span>
-                        </div>
-                        <div class="point border-l-4 border-green-500 pl-3">
-                            <span class="font-semibold">CXCL13-CXCR5 차단:</span>
-                            <span class="text-gray-600"> B 세포의 배중심 진입을 유도하는 축을 차단하여 DSA 생산을 잠재적으로 예방.</span>
-                        </div>
+                        <h3 class="font-extrabold text-xl text-blue-800">IgG+ 기억 B 세포</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li>주로 GC 반응을 통해 생성.</li>
+                            <li><span class="key-term">빠르게 항체 분비 세포(ASCs)로 분화</span>하려는 경향이 높음.</li>
+                            <li>높은 친화도와 <span class="key-term">IgG 계열 전환</span>이 일어난 상태.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
+            <span class="slide-number">6/23</span>
         </div>
 
-        <!-- Slide 7: ABMR 치료의 미래와 과제 -->
+        <!-- Slide 7: 기억 B 세포의 이질성 (2) -->
         <div id="slide-7" class="slide bg-gray-100">
             <div class="slide-content">
                 <div class="slide-header">
-                    <h2 class="text-3xl font-bold text-blue-600">6. ABMR 치료의 미래: 다중 표적 및 정밀 의학</h2>
+                    <h2 class="text-3xl font-bold text-blue-600">6. IgG+ 기억 B 세포: ABMR을 가속화하는 주역</h2>
                 </div>
                 <div class="text-lg space-y-4">
                     <div class="point">
-                        <span class="font-semibold text-gray-700">만성 ABMR의 난제:</span>
-                        <span class="text-gray-600">장수 형질세포의 영구적인 존재로 인해 만성 ABMR은 치료가 어렵습니다.</span>
+                        <span class="font-semibold text-gray-700">신속한 반응:</span>
+                        <span class="text-gray-600">IgG+ 기억 B 세포는 항원(HLA)에 재노출 시 naive B 세포보다 훨씬 <span class="key-term">빠르고 강력하게</span> 반응하여 DSA를 생성합니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">다중 표적 치료:</span>
-                        <span class="text-gray-600">항체 생산 감소(B/형질세포 표적) + 항체 제거(PLEX, IdeS 등) + 매개 경로 억제(보체 억제)를 결합하는 것이 가장 효과적일 가능성이 높습니다.</span>
+                        <span class="font-semibold text-gray-700">ABMR 유발:</span>
+                        <span class="text-gray-600">감작 환자의 재이식 시, <span class="key-term">IgG+ 기억 B 세포</span>는 Tfh 세포의 도움을 받아 즉시 DSA를 대량 생산하여 <span class="key-term">조기 및 중증 ABMR</span> 발생을 촉진할 수 있습니다.</span>
                     </div>
                     <div class="point">
-                        <span class="font-semibold text-gray-700">정밀 모니터링:</span>
-                        <span class="text-gray-600">DSA 역가, C1q 결합 능력, 그리고 궁극적으로 <span class="font-bold text-red-600">기억 B 세포의 아형 및 기능</span>을 정량적으로 모니터링하여 개별 환자의 위험도를 평가하는 것이 중요합니다.</span>
+                        <span class="font-semibold text-gray-700">임상적 의의:</span>
+                        <span class="text-gray-600">IgG+ 기억 B 세포를 정량화하는 것은 ABMR 위험을 예측하고 이식 전 <span class="key-term">탈감작 요법</span>의 필요성을 결정하는 데 중요합니다.</span>
                     </div>
                 </div>
+            </div>
+            <span class="slide-number">7/23</span>
+        </div>
+
+        <!-- Slide 8: dnDSA (de novo DSA) 발생 위험 인자 -->
+        <div id="slide-8" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">7. De novo DSA (dnDSA) 발생 위험 인자</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">면역학적 요인</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">Eplet Mismatch:</span> HLA 항원 불일치보다 <span class="key-term">Eplet 불일치 부하</span>가 높을수록 DSA 발생 위험 증가.</li>
+                            <li><span class="key-term">HLA Class II 항체:</span> Class I보다 Class II DSA(특히 HLA-DQ/DR)가 더 흔하고 <span class="key-term">예후가 불량</span>하며 오래 지속되는 경향.</li>
+                            <li><span class="key-term">선행 TCMR:</span> T 세포 매개 거부 반응은 종종 DSA 생성에 선행합니다.</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">관리 및 환자 요인</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">면역억제제 비순응:</span> DSA 발생의 가장 큰 원인.</li>
+                            <li><span class="key-term">CNI 저노출:</span> Tacrolimus (Tac) 최저 혈중 농도(Trough level)를 낮게 유지할 경우 위험 증가 (특히 < 7 ng/ml).</li>
+                            <li><span class="key-term">CNI 철회:</span> T 세포 활성화 경로가 열리면서 항체 매개 반응이 촉진될 수 있음.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">8/23</span>
+        </div>
+
+
+        <!-- III. 진단 및 모니터링 딜레마 (9-12) -->
+
+        <!-- Slide 9: DSA 병원성 딜레마 -->
+        <div id="slide-9" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">8. DSA 병원성 딜레마: 모든 DSA는 병원성인가?</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">임상적 관찰:</span>
+                        <span class="text-gray-600">dnDSA를 가진 환자의 24-75%는 조직 검사상 ABMR 증거가 없습니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">병원성 DSA의 특성:</span>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">높은 MFI(Mean Fluorescent Intensity):</span> MFI 값이 높을수록 ABMR 및 이식편 손실 위험 증가.</li>
+                            <li><span class="key-term">C1q 결합 능력:</span> 보체를 활성화하는 DSA는 병원성이 높으며 예후 불량과 관련.</li>
+                            <li><span class="key-term">IgG 서브클래스:</span> 특정 IgG 서브클래스(예: IgG3)가 더 나쁜 결과와 연관될 수 있음.</li>
+                        </ul>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">권고:</span>
+                        <span class="text-gray-600">안정적인 이식편 기능이라도 DSA가 유의미하게 상승하면 <span class="key-term">이식편 조직 검사</span>를 고려해야 합니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">9/23</span>
+        </div>
+
+        <!-- Slide 10: DSA 모니터링 필요성 -->
+        <div id="slide-10" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">9. DSA 모니터링: 언제, 왜 모니터링해야 하는가?</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">모니터링 권장 시점:</span>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">면역억제제 비순응</span>이 의심될 때.</li>
+                            <li>의사가 <span class="key-term">면역억제제 감량</span>을 권장할 때(예: 감염, 암).</li>
+                            <li><span class="key-term">거부 반응</span> 발생 시.</li>
+                            <li>일부 센터에서는 안정적인 환자에게도 <span class="key-term">연간 정기 검사</span>를 시행.</li>
+                        </ul>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">미해결 질문:</span>
+                        <span class="text-gray-600">DSA 스크리닝 후 선제적인 개입(조직 검사 및 치료)이 <span class="key-term">만성 ABMR 및 이식 사구체병증</span>의 발생을 최소화할 수 있는가?</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">10/23</span>
+        </div>
+
+        <!-- Slide 11: DSA-음성 ABMR (DSA-ve AMR) -->
+        <div id="slide-11" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">10. DSA-음성 ABMR: 비-HLA 항체의 역할</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">진단적 어려움:</span>
+                        <span class="text-gray-600">조직 검사에서 미세혈관 염증(MVI)이 보이지만, 혈청 DSA가 검출되지 않는 경우 진단 및 관리가 어려움.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">비-HLA 항체 후보:</span>
+                        <span class="text-gray-600">HLA 외의 다른 항체가 원인일 수 있습니다. (예: <span class="key-term">항-AT1 수용체 항체(AT1R Ab)</span>, 항-내피 세포 항체 등).</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">AT1R 항체 관리:</span>
+                        <span class="text-gray-600">중증 고혈압 및 혈관 병변이 있는 환자에서 의심되며, 면역억제와 함께 <span class="key-term">Angiotensin II 수용체 차단제</span>를 사용해야 합니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">11/23</span>
+        </div>
+
+        <!-- Slide 12: DSA-ve AMR의 분자 진단 및 NK 세포 -->
+        <div id="slide-12" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">11. DSA-ve AMR: 분자 진단 및 NK 세포 관여</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">분자 진단의 유용성:</span>
+                        <span class="text-gray-600">DSA 상태와 관계없이 MVI 조직에서 <span class="key-term">IFNγ 유도 경로</span> 및 <span class="key-term">NK 세포/내피 세포 활성화</span>와 관련된 전사체 변화가 과발현됩니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">NK 세포의 역할:</span>
+                        <span class="text-gray-600">자연 살해 세포(NK cell) 침윤은 ABMR의 주요 특징이며, <span class="key-term">NK 세포 활성화</span>가 ABMR 병태생리 및 이식편 실패에서 중심적인 역할을 합니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">관리 권고:</span>
+                        <span class="text-gray-600">DSA가 없더라도 MVI가 심한 경우 만성 손상 및 기능 악화를 막기 위해 <span class="key-term">ABMR에 준하여 치료</span>하는 것이 권장됩니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">12/23</span>
+        </div>
+
+        <!-- IV. ABMR 치료 전략 및 신약 (13-18) -->
+
+        <!-- Slide 13: ABMR 치료의 기본 전략 (다중 표적) -->
+        <div id="slide-13" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">12. ABMR 치료 전략: 다중 표적 접근법</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">치료 난제:</span>
+                        <span class="text-gray-600">ABMR에 대해 FDA 승인을 받은 치료법이 없으며, 임상시험 부족으로 치료가 이질적입니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">다중 표적 필요성:</span>
+                        <span class="text-gray-600">DSA 생성, DSA 제거, 및 DSA 매개 손상 경로를 동시에 차단하는 <span class="key-term">복합 요법</span>이 단일 표적보다 효과적일 가능성이 높습니다.</span>
+                    </div>
+                    <div class="mt-8 text-center">
+                        
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">13/23</span>
+        </div>
+
+        <!-- Slide 14: Active AMR 표준 치료 -->
+        <div id="slide-14" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">13. 활성 ABMR 표준 치료: PLEX, IVIg, Steroids</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">기본 요법:</span>
+                        <span class="text-gray-600">활성 ABMR(pre-DSA 유무 무관)은 <span class="key-term">혈장 분리 반출술(PLEX) + 정맥내 면역글로불린(IVIg) + 코르티코스테로이드</span> 병용 요법이 권장됩니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">PLEX/IVIg 역할:</span>
+                        <span class="text-gray-600">PLEX는 순환하는 DSA를 물리적으로 제거하고, IVIg는 DSA를 중화하고 면역 조절 작용을 합니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">한계점:</span>
+                        <span class="text-gray-600">이러한 조합의 임상적 효과를 뒷받침하는 <span class="key-term">대규모 무작위 임상시험은 부족</span>한 상황입니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">14/23</span>
+        </div>
+
+        <!-- Slide 15: B 세포 표적 치료 (1): Rituximab의 한계 -->
+        <div id="slide-15" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">14. B 세포 표적 치료 (1): 리툭시맙 (Rituximab, Anti-CD20)</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">작용 기전:</span>
+                        <span class="text-gray-600"><span class="key-term">CD20 항원</span>을 표적하여 B 세포(Naive B, Memory B)를 제거합니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">ABMR 효과 논란:</span>
+                        <span class="text-gray-600">가장 큰 무작위 대조 임상시험(RITUX ERAH)에서 Rituximab 추가가 <span class="key-term">이식편 기능 또는 생존율 개선</span>과 유의미한 관련이 없었습니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">주요 한계:</span>
+                        <span class="text-gray-600">LLPC는 CD20이 없으므로 <span class="key-term">DSA의 지속적인 분비를 막지 못하며</span>, IVIg와 병용 시 Rituximab의 반감기가 단축될 수 있습니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">15/23</span>
+        </div>
+
+        <!-- Slide 16: 형질세포 표적 치료 (2): Bortezomib -->
+        <div id="slide-16" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">15. 형질세포 표적 치료 (2): 보르테조밉 (Bortezomib)</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">작용 기전:</span>
+                        <span class="text-gray-600"><span class="key-term">프로테아좀 억제제</span>로, 항체를 대량 생산하는 형질세포의 <span class="key-term">소포체 스트레스</span>를 유발하여 세포 사멸(apoptosis)을 유도합니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">임상 효과:</span>
+                        <span class="text-gray-600">초기 ABMR에서는 DSA 감소 및 이식편 기능 개선 효과가 보고되었으나, <span class="key-term">만기 ABMR(Late AMR)</span>에서는 유의미한 기능 개선을 보이지 못했습니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">한계점:</span>
+                        <span class="text-gray-600">짧은 반감기와 부작용(말초 신경병증, 위장관 반응)이 있으며, 단독 요법보다 <span class="key-term">복합 요법</span>에서 효과가 증대됩니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">16/23</span>
+        </div>
+
+        <!-- Slide 17: 형질세포 표적 치료 (3): Daratumumab 및 IL-6 차단 -->
+        <div id="slide-17" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">16. 형질세포 표적 치료 (3): Daratumumab 및 IL-6 차단</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">Daratumumab (Anti-CD38)</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">CD38</span>을 고발현하는 형질세포를 표적.</li>
+                            <li>만성 활성 ABMR 치료에서 DSA 감소 및 이식편 생존 개선 보고.</li>
+                            <li>단, <span class="key-term">DSA의 빠른 반등</span>이 흔한 부작용으로 보고됨.</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">Anti-IL-6/IL-6R 항체</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li>IL-6는 형질세포 분화 및 생존에 필수적임.</li>
+                            <li><span class="key-term">Clazakizumab (Anti-IL-6)</span>, <span class="key-term">Tocilizumab (Anti-IL-6R)</span>은 DSA 수준 감소 효과가 보고됨.</li>
+                            <li>LLPC를 간접적으로 표적하는 새로운 전략.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">17/23</span>
+        </div>
+
+        <!-- Slide 18: T-B 상호작용 차단: Belatacept -->
+        <div id="slide-18" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">17. T-B 상호작용 차단 (1): 벨라타셉트 (Belatacept)</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">작용 기전:</span>
+                        <span class="text-gray-600">선택적 T 세포 공동 자극 차단제. <span class="key-term">CD28-CD80/86 경로</span>를 차단하여 T 세포 활성화 및 증식을 억제.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">DSA/ABMR 예방:</span>
+                        <span class="text-gray-600">Cyclosporine 기반 요법 대비 <span class="key-term">dnDSA 발생률을 유의하게 낮추었습니다.</span> (BENEFIT/BENEFIT-EXT trial 7년 추적 관찰).</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">Tfh 세포 차단:</span>
+                        <span class="text-gray-600">Tfh-B 세포 공동 자극 신호를 표적하여 dnDSA 및 ABMR 발생을 예방할 수 있는 잠재적 메커니즘을 가집니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">18/23</span>
+        </div>
+
+        <!-- Slide 19: T-B 상호작용 차단 (2): CD40/CD154 및 기타 -->
+        <div id="slide-19" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">18. T-B 상호작용 차단 (2): CD40/CD154 축 및 보체</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">CD40-CD154 축 차단</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">B 세포 증식, Ig 계열 전환, 기억 B 세포 생성</span>에 필수.</li>
+                            <li>Anti-CD40 항체(예: ASKP1240)는 DSA 생성을 억제하고 이식편 생존율을 연장시키는 효과 보고.</li>
+                            <li>Anti-CD154 항체는 혈전증 위험으로 인해 임상 적용에 어려움이 있음.</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">보체 및 IgG 엔도펩티다제</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">Eculizumab (Anti-C5)</span>: ABMR 시 보체 활성화 경로를 차단하여 손상 예방.</li>
+                            <li><span class="key-term">Imlifidase (IdeS)</span>: IgG 엔도펩티다제로 DSA를 신속하게 절단하여 DSA 제거 (탈감작 요법에 활용).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">19/23</span>
+        </div>
+
+
+        <!-- V. 치료 모니터링 및 미래 방향 (20-22) -->
+
+        <!-- Slide 20: 치료 반응 모니터링 -->
+        <div id="slide-20" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">19. ABMR 치료 반응 모니터링</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">기능적 평가:</span>
+                        <span class="text-gray-600">혈청 크레아티닌(Cr) 개선 또는 < 1.5 mg/dl 유지 (개선된 기능은 더 나은 예후를 시사).</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">DSA 역가:</span>
+                        <span class="text-gray-600">DSA MFI 값의 감소는 이식편 손실 위험 감소와 연관되지만, <span class="key-term">MFI만으로 치료 실패를 판단해서는 안 됩니다.</span> (DSA 완전 제거는 거의 불가능)</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">조직학적 평가:</span>
+                        <span class="text-gray-600">필요시 <span class="key-term">재조직 검사(Repeat Biopsy)</span>를 통해 염증 해소 및 만성 손상 진행 여부를 확인.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">20/23</span>
+        </div>
+        
+        <!-- Slide 21: 새로운 예측 및 모니터링 툴 -->
+        <div id="slide-21" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">20. 새로운 예측 및 모니터링 툴</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">비침습적 바이오마커</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">Donor-Derived Cell-Free DNA (dd-cfDNA)</span>: 이식편 손상 및 활성 거부 반응의 조기 검출 가능성.</li>
+                            <li>순환 <span class="key-term">Tfh 세포</span> 모니터링: 체액성 동종반응의 바이오마커로 DSA 생성 예측 가능성.</li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="font-extrabold text-xl text-blue-800">예측 모델</h3>
+                        <ul class="list-disc ml-6 text-gray-600">
+                            <li><span class="key-term">iBox Score</span>: 이식편 손실 위험 예측 시스템.</li>
+                            <li><span class="key-term">DISPO Score</span>: 임상, 면역, 조직학적 특징을 통합한 동적 예측 툴로 치료 반응 평가에 활용 가능.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">21/23</span>
+        </div>
+
+        <!-- Slide 22: 기억 B 세포 기반 위험 평가의 미래 -->
+        <div id="slide-22" class="slide bg-gray-100">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h2 class="text-3xl font-bold text-blue-600">21. 기억 B 세포 기반 위험 평가의 미래</h2>
+                </div>
+                <div class="text-lg space-y-4">
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">DSAm 검출 연구:</span>
+                        <span class="text-gray-600">기억 B 세포를 자극하여 생성된 DSA(DSAm)를 검출하는 분석법이 연구되었으나, 현재까지 고위험군 환자에서 <span class="key-term">임상 ABMR 예측에 유의미한 연관성</span>을 찾지 못했습니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">임상 적용 과제:</span>
+                        <span class="text-gray-600">높은 재현성 확보, DSA-음성 감작 환자 등 <span class="key-term">특정 고위험군에서의 임상적 가치 검증</span>이 선행되어야 합니다.</span>
+                    </div>
+                    <div class="point">
+                        <span class="font-semibold text-gray-700">궁극적 목표:</span>
+                        <span class="text-gray-600">B 세포 면역 메모리 평가를 통해 이식 전 위험 계층화를 개선하고, <span class="key-term">개인 맞춤형 면역억제 전략</span>을 수립하는 것입니다.</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">22/23</span>
+        </div>
+
+        <!-- VI. Conclusion (23) -->
+
+        <!-- Slide 23: Conclusion -->
+        <div id="slide-23" class="slide bg-gradient-to-br from-indigo-800 to-blue-700 text-white">
+            <div class="slide-content text-center bg-white text-gray-800">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900">
+                    22. 최종 요약 및 미래 전망
+                </h2>
+                <ul class="list-none space-y-3 text-xl md:text-2xl text-gray-700">
+                    <li><span class="font-bold text-blue-600">ABMR의 핵심:</span> DSA를 생성하는 B 세포와 장수 형질세포의 동역학 이해.</li>
+                    <li><span class="font-bold text-blue-600">만성 ABMR의 난제:</span> LLPC의 장기 생존으로 인해 치료가 어려우며, 복합 요법 및 새로운 LLPC 표적 치료제 개발이 시급함.</li>
+                    <li><span class="font-bold text-blue-600">미래 전망:</span> 기억 B 세포 및 분자 바이오마커를 통한 <span class="key-term">정밀 위험 평가</span>가 ABMR 관리의 개인화를 이끌 것입니다.</li>
+                </ul>
                 <div class="mt-8">
-                     <p class="text-sm text-gray-500 italic">
-                        출처: cootr-27-405.pdf, IRNF_44_2128374.pdf
+                     <p class="text-lg text-gray-500 italic">
+                        감사합니다.
                     </p>
                 </div>
             </div>
+            <span class="slide-number text-white">23/23</span>
         </div>
-
-        <!-- Slide 8: Conclusion -->
-        <div id="slide-8" class="slide bg-gradient-to-br from-indigo-600 to-blue-500">
-            <div class="slide-content text-center text-gray-800">
-                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900">
-                    요약: B 세포 중심의 이식 면역 관리
-                </h2>
-                <ul class="list-none space-y-3 text-xl md:text-2xl text-gray-700">
-                    <li><span class="font-bold text-blue-600">B 세포 및 형질세포:</span> ABMR을 일으키는 DSA의 근원입니다.</li>
-                    <li><span class="font-bold text-blue-600">만성 ABMR:</span> 장수 형질세포로 인해 치료가 매우 어렵습니다.</li>
-                    <li><span class="font-bold text-blue-600">미래 전략:</span> T-B 상호작용 차단 및 형질세포 제거를 위한 새로운 표적 치료제 개발에 초점을 맞추고 있습니다.</li>
-                    <li><span class="font-bold text-blue-600">개인화:</span> 기억 B 세포 모니터링을 통한 정밀 위험 평가가 중요해지고 있습니다.</li>
-                </ul>
-            </div>
-        </div>
-
+        
     </div>
 
     <script>
