@@ -1,0 +1,59 @@
+name: Auto Update Index HTML  # 워크플로 이름
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시가 발생할 때 실행
+
+jobs:
+  generate_index:
+    runs-on: ubuntu-latest  # 워크플로를 실행할 환경 (GitHub Runner)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # 리포지토리를 runner 환경으로 체크아웃
+
+      - name: Generate and Update index.html
+        id: generate
+        run: |
+          # 1. 'b', 'b2', 'tlo', 'pc1' 등 디렉토리 목록을 HTML 리스트로 생성
+          LIST_ITEMS=""
+          for DIR in pc1 b b2 tlo; do
+            if [ -d "$DIR" ]; then # 해당 이름의 디렉토리가 존재하는지 확인
+              LIST_ITEMS="${LIST_ITEMS}        <li><a href=\"${DIR}/\">${DIR} Report</a></li>\n"
+            fi
+          done
+
+          # 2. 새로운 index.html 파일 내용 생성
+          NEW_INDEX=$(cat <<EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>연구 보고서 목록</title>
+          </head>
+          <body>
+              <h1>연구 보고서 목록</h1>
+              <ul>
+          ${LIST_ITEMS}
+              </ul>
+          </body>
+          </html>
+          EOF
+          )
+          
+          # 3. 변경 사항이 있는지 확인하고 index.html에 작성
+          # 기존 파일이 없거나 내용이 다를 경우에만 덮어씁니다.
+          if [ ! -f index.html ] || [ "$(cat index.html)" != "$NEW_INDEX" ]; then
+            echo -e "$NEW_INDEX" > index.html
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and Push changes
+        if: steps.generate.outputs.changed == 'true' # 이전 단계에서 변경이 발생했을 경우에만 실행
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Auto: Update index.html with latest directory list'
+          file_pattern: 'index.html'
+          branch: main
