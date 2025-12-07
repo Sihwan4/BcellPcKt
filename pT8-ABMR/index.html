@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABMR과 CD28-CD8+ T세포 증가 연구 발표</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate-50 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .presentation-wrapper {
+            width: 90vw;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background-color: white;
+        }
+        .slide-container {
+            flex-grow: 1;
+            padding: 2.5rem 4rem;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+        .slide-container.active {
+            display: flex;
+        }
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e3a8a; /* Blue-900 */
+            border-bottom: 4px solid #3b82f6; /* Blue-500 */
+            padding-bottom: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        .slide-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937; /* Gray-800 */
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .slide-content p, .slide-content li {
+            font-size: 1.15rem;
+            line-height: 1.75;
+            color: #374151; /* Gray-700 */
+        }
+        .slide-content ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .slide-content li {
+            padding-left: 2rem;
+            position: relative;
+        }
+        .slide-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ef4444; /* Red-500 */
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .slide-content strong {
+            color: #1e3a8a; /* Blue-900 */
+            font-weight: 700;
+        }
+        /* Custom style for math terms */
+        .math-term {
+            font-family: monospace, serif;
+            font-weight: 600;
+            color: #059669; /* Emerald-600 */
+        }
+        .footnote {
+            font-size: 0.9rem;
+            color: #6b7280; /* Gray-500 */
+            margin-top: 1.5rem;
+            border-top: 1px dashed #e5e7eb;
+            padding-top: 0.5rem;
+        }
+        .nav-button {
+            transition: all 0.2s;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .table-custom th, .table-custom td {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+        .table-custom th {
+            background-color: #eff6ff; /* Blue-50 */
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-wrapper">
+        
+        <!-- Navigation Controls -->
+        <div class="flex justify-between items-center p-4 bg-gray-50 border-b border-gray-200 rounded-t-xl">
+            <button id="prev-btn" class="nav-button bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg disabled:opacity-50" disabled>
+                &larr; 이전 슬라이드
+            </button>
+            <div id="slide-indicator" class="text-xl font-semibold text-gray-700"></div>
+            <button id="next-btn" class="nav-button bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg">
+                다음 슬라이드 &rarr;
+            </button>
+        </div>
+
+        <!-- SLIDE CONTENT AREA -->
+        <div id="slides-area" class="flex-grow">
+            
+            <!-- Slide 1: Cover -->
+            <div id="slide-1" class="slide-container active">
+                <div class="slide-content text-center flex flex-col justify-center items-center h-full">
+                    <div class="mb-16">
+                        <h1 class="text-6xl font-extrabold text-blue-800 mb-4">
+                            항체 매개 이식 거부 반응(ABMR)과
+                        </h1>
+                        <h1 class="text-5xl font-extrabold text-blue-600 mb-12">
+                            말초 분화 CD28-CD8+ T 세포의 연관성
+                        </h1>
+                        <p class="text-2xl font-medium text-gray-700">
+                            Analyses of a cohort of 1032 kidney transplant recipients
+                        </p>
+                        <p class="text-2xl mt-2 text-gray-500">
+                            eBioMedicine. 2022 Aug 18;83:104226.
+                        </p>
+                    </div>
+                    <div class="text-xl text-gray-600">
+                        <p class="font-bold">발표자: Sihwan Kim</p>
+                        <p>소속: Asan Medical Center</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Rejection Problem -->
+            <div id="slide-2" class="slide-container">
+                <h2 class="slide-title">서론: 신장 동종 이식 거부 반응의 이해</h2>
+                <div class="slide-content">
+                    <h3 class="text-red-600">신장 이식 실패의 주요 원인: 거부 반응</h3>
+                    <ul>
+                        <li>신장 동종 이식 거부 반응은 신장 손상 및 <strong>이식 실패의 주요 원인</strong>입니다.</li>
+                        <li>Banff 분류에 따라 주요 거부 반응은 크게 두 가지로 나뉩니다.
+                            <ul>
+                                <li class="text-blue-700" style="list-style-type: '👉';"><strong>T 세포 매개 거부 반응 (TCMR)</strong></li>
+                                <li class="text-red-700" style="list-style-type: '👉';"><strong>항체 매개 거부 반응 (ABMR)</strong>: 이 연구의 주요 초점</li>
+                            </ul>
+                        </li>
+                        <li>ABMR은 <strong>공여자 특이 항체(DSA)</strong>가 핵심이지만, T 세포와 같은 <strong>세포 구성 요소의 복잡한 관여</strong>가 점차 밝혀지고 있습니다.</li>
+                    </ul>
+                </div>
+                <div class="footnote">출처: Introduction, Banff Classification</div>
+            </div>
+
+            <!-- Slide 3: CD28-CD8+ T Cells -->
+            <div id="slide-3" class="slide-container">
+                <h2 class="slide-title">CD28-CD8+ T 세포: 분화된 T 세포 하위 집단</h2>
+                <div class="slide-content flex flex-row gap-8">
+                    <div class="w-1/2">
+                        <h3>정의 및 특징</h3>
+                        <ul>
+                            <li>CD28-CD8+ T 세포는 <strong>CD28 보조 자극 분자가 하향 조절된</strong> 분화된 CD8+ T 세포 하위 집단입니다.</li>
+                            <li>이들은 <strong>만성적인 항원 자극</strong>과 관련된 조건에서 증가합니다:
+                                <ul>
+                                    <li style="list-style-type: '⭐';">노화, 만성 바이러스 감염, 자가면역 질환, 암</li>
+                                    <li style="list-style-type: '⭐';"><strong>동종 이식 (Allotransplantation)</strong></li>
+                                </ul>
+                            </li>
+                            <li>CD28-CD8+ T 세포는 주로 <strong>Effector/Memory (TEMRA)</strong> 속성을 가지며 강력한 <strong>세포 독성 잠재력</strong>을 보입니다.</li>
+                        </ul>
+                    </div>
+                    <div class="w-1/2">
+                        <h3>ABMR 관여 가능성</h3>
+                        <ul>
+                            <li>이전 소규모 연구: 신장 이식 후 <strong>만성 거부 반응</strong> 환자에서 CD28-CD8+ T 세포의 비율 증가 보고.</li>
+                            <li>이들은 세포 독성 분자(<strong>Granzyme A/Perforin</strong>) 및 염증성 사이토카인(<strong>IFN-γ, TNF-α</strong>)을 발현합니다.</li>
+                            <li><strong>가설:</strong> 이 세포 집단의 증가된 빈도, 수, 기능은 ABMR의 병리생물학에 기여할 수 있습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footnote">출처: Background, Introduction</div>
+            </div>
+
+            <!-- Slide 4: Research Goal and Methods Overview -->
+            <div id="slide-4" class="slide-container">
+                <h2 class="slide-title">연구 목표 및 방법 개요</h2>
+                <div class="slide-content">
+                    <div class="flex flex-row gap-8">
+                        <div class="w-1/2">
+                            <h3>연구 목표</h3>
+                            <ul class="text-blue-800">
+                                <li><strong>대규모 코호트</strong> 분석을 통해 말초 혈액 CD28-CD8+ T 세포 수준과 <strong>Banff 분류 기반 거부 반응 진단</strong> 간의 연관성을 규명.</li>
+                                <li>특히, <strong>항체 매개 거부 반응 (ABMR)</strong>과의 연관성에 초점을 맞춤.</li>
+                                <li>ABMR 환자의 CD28-CD8+ T 세포의 <strong>기능적 특징</strong> 분석.</li>
+                            </ul>
+                        </div>
+                        <div class="w-1/2">
+                            <h3>방법 개요</h3>
+                            <ul class="text-gray-800">
+                                <li><strong>코호트:</strong> 1032명의 신장 이식 수혜자, 총 1495건의 생검 분석.</li>
+                                <li><strong>데이터:</strong> DIVAT 데이터베이스를 통한 임상 데이터 수집.</li>
+                                <li><strong>표현형:</strong> 유세포 분석법(Flow Cytometry)을 통한 CD28-CD8+ T 세포 측정 (백분율 및 절대 수).</li>
+                                <li><strong>통계:</strong> 선형 혼합 효과 모델(Multivariate Linear Mixed-effects models)을 통한 연관성 분석.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Summary, Methods, Introduction</div>
+            </div>
+
+            <!-- Slide 5: Cohort Characteristics -->
+            <div id="slide-5" class="slide-container">
+                <h2 class="slide-title">연구 코호트: 생검 그룹별 특징 (N=1495)</h2>
+                <div class="slide-content">
+                    <p class="mb-4">총 1495건의 생검을 5가지 그룹으로 분류했습니다. (Banff 2015/2017 기준)</p>
+                    <table class="table-custom w-full">
+                        <thead>
+                            <tr>
+                                <th class="w-1/6">그룹 번호</th>
+                                <th class="w-1/4">진단 (Biopsy Group)</th>
+                                <th class="w-1/6">건수 (n)</th>
+                                <th class="w-1/6">비율 (%)</th>
+                                <th>주요 특징</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Group 1</strong></td>
+                                <td>정상/준정상 또는 IFTA Grade 1</td>
+                                <td>1060</td>
+                                <td>70.9%</td>
+                                <td>기준 그룹 (Reference Group)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Group 2</strong></td>
+                                <td>IFTA Grade 2/3</td>
+                                <td>90</td>
+                                <td>6.0%</td>
+                                <td>만성 간질성 섬유증 및 세뇨관 위축</td>
+                            </tr>
+                            <tr>
+                                <td class="bg-red-50"><strong>Group 3</strong></td>
+                                <td class="bg-red-50"><strong>ABMR</strong> (항체 매개 거부 반응)</td>
+                                <td class="bg-red-50"><strong>211</strong></td>
+                                <td class="bg-red-50"><strong>14.1%</strong></td>
+                                <td class="bg-red-50">미세혈관 염증, <span class="math-term">C4d</span> 침착, <span class="math-term">DSA</span> 존재</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Group 4</strong></td>
+                                <td>TCMR (T 세포 매개 거부 반응)</td>
+                                <td>51</td>
+                                <td>3.4%</td>
+                                <td>간질성 염증, 세뇨관염, 동맥염</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Group 5</strong></td>
+                                <td>미치료 경계성 거부 반응 (Borderline)</td>
+                                <td>83</td>
+                                <td>5.6%</td>
+                                <td>경계 진단, 치료 시작 전</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="footnote">출처: Patients, materials and methods (Study design, Figure 1)</div>
+            </div>
+
+            <!-- Slide 6: Statistical Model Details -->
+            <div id="slide-6" class="slide-container">
+                <h2 class="slide-title">통계 분석: 다변량 선형 혼합 효과 모델</h2>
+                <div class="slide-content">
+                    <h3>분석 목표 및 기법</h3>
+                    <ul>
+                        <li><strong>비정규 분포 변수:</strong> CD28-CD8+ T 세포 백분율 및 절대 수에 <strong>자연 로그(Natural Logarithm) 변환</strong> 적용.</li>
+                        <li><strong>모델:</strong> Linear Mixed-effects Model 사용. 같은 수혜자에게서 여러 번의 생검이 수행되었으므로, <strong>'이식당 무작위 절편' (random intercept per transplantation)</strong>을 포함하여 데이터의 비독립성을 설명.</li>
+                    </ul>
+                    <h3>혼란 변수 조정 (Covariate Adjustment)</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <ul class="col-span-1">
+                            <li>수혜자/공여자 연령 및 성별</li>
+                            <li>재이식 여부</li>
+                            <li>CMV 혈청학 상태 (수혜자/공여자)</li>
+                            <li>냉 허혈 시간 (Cold Ischemia Time)</li>
+                            <li>생검 시점 (Post-transplantation Time)</li>
+                        </ul>
+                        <ul class="col-span-1">
+                            <li>생검 이유 (For Cause vs Surveillance)</li>
+                            <li>유도 요법 (Induction Therapy)</li>
+                            <li>생검 시 크레아티닌 수치</li>
+                            <li>HLA 부적합 수</li>
+                            <li>Anti-HLA Class I/II 면역화 여부</li>
+                        </ul>
+                    </div>
+                    <p class="footnote mt-4">유의성 검정: Holm-Bonferroni 방법으로 다중 비교 오류율을 조정했습니다.</p>
+                </div>
+                <div class="footnote">출처: Statistical analyses</div>
+            </div>
+
+            <!-- Slide 7: Result 1 - Increased Percentage in ABMR -->
+            <div id="slide-7" class="slide-container">
+                <h2 class="slide-title">주요 결과 1: ABMR에서 CD28-CD8+ T 세포 백분율 증가</h2>
+                <div class="slide-content">
+                    <div class="flex flex-row gap-8">
+                        <div class="w-1/2">
+                            <h3>유의한 연관성 확인</h3>
+                            <ul>
+                                <li>다변량 분석 결과, 생검 그룹과 CD28-CD8+ T 세포의 로그 백분율 간에 <strong>매우 유의한 연관성</strong> 확인 (<span class="math-term">p = 0.0003</span>).</li>
+                                <li class="text-red-700"><strong>ABMR 그룹 (Group 3) vs. 정상/준정상 그룹 (Group 1)</strong>에서 유의한 차이 발견 (<span class="math-term">p = 0.0004</span>).</li>
+                                <li>TCMR 그룹 (Group 4) 및 경계성 거부 반응 그룹 (Group 5)에서는 정상 그룹 대비 유의미한 차이를 발견하지 못했습니다.</li>
+                            </ul>
+                            <h3 class="mt-8">정량적 차이</h3>
+                            <p class="text-2xl font-bold text-red-600 ml-4">ABMR 환자는 정상 환자 대비</p>
+                            <p class="text-3xl font-extrabold text-blue-800 ml-4 mt-2">CD28-CD8+ T 세포 백분율이 <strong>34% 더 높음</strong></p>
+                            <p class="text-base text-gray-500 ml-4 mt-1">(Confounder-adjusted mean difference of log percentage = 0.29)</p>
+                        </div>
+                        <div class="w-1/2 flex items-center justify-center">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Results (Figure 2A, Table 2, Figure 3A)</div>
+            </div>
+            
+            <!-- Slide 8: Result 2 - Increased Absolute Number in ABMR -->
+            <div id="slide-8" class="slide-container">
+                <h2 class="slide-title">주요 결과 2: ABMR에서 CD28-CD8+ T 세포 절대 수 증가</h2>
+                <div class="slide-content">
+                    <div class="flex flex-row gap-8">
+                        <div class="w-1/2">
+                            <h3>유의한 연관성 확인</h3>
+                            <ul>
+                                <li>다변량 분석 결과, 생검 그룹과 CD28-CD8+ T 세포의 로그 절대 수 간에도 <strong>매우 유의한 연관성</strong> 확인 (<span class="math-term">p = 0.0006</span>).</li>
+                                <li class="text-red-700"><strong>ABMR 그룹 (Group 3) vs. 정상/준정상 그룹 (Group 1)</strong>에서 유의한 차이 발견 (<span class="math-term">p = 0.0004</span>).</li>
+                                <li>백분율 분석과 마찬가지로, 다른 그룹에서는 정상 그룹 대비 유의미한 차이를 발견하지 못했습니다.</li>
+                            </ul>
+                            <h3 class="mt-8">정량적 차이</h3>
+                            <p class="text-2xl font-bold text-red-600 ml-4">ABMR 환자는 정상 환자 대비</p>
+                            <p class="text-3xl font-extrabold text-blue-800 ml-4 mt-2">CD28-CD8+ T 세포 절대 수가 <strong>46% 더 높음</strong></p>
+                            <p class="text-base text-gray-500 ml-4 mt-1">(Confounder-adjusted mean difference of log absolute number = 0.38)</p>
+                        </div>
+                        <div class="w-1/2 flex items-center justify-center">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Results (Figure 2B, Table 3, Figure 3B)</div>
+            </div>
+
+            <!-- Slide 9: Functional Analysis Setup -->
+            <div id="slide-9" class="slide-container">
+                <h2 class="slide-title">기능 분석 방법: CD8+ T 세포의 활성 검증</h2>
+                <div class="slide-content">
+                    <div class="grid grid-cols-3 gap-8">
+                        <div class="col-span-1">
+                            <h3>샘플 및 분리</h3>
+                            <ul>
+                                <li><strong>그룹 3 (ABMR):</strong> 24개 <span class="math-term">PBMC</span> 샘플</li>
+                                <li><strong>그룹 1 (정상/준정상):</strong> 46개 <span class="math-term">PBMC</span> 샘플</li>
+                                <li>동결 <span class="math-term">PBMC</span>를 해동 후 밤새 배양하여 사용.</li>
+                            </ul>
+                        </div>
+                        <div class="col-span-1">
+                            <h3>자극 조건 (4시간)</h3>
+                            <ul>
+                                <li><strong><span class="math-term">TCR</span> 자극:</strong> Plate-bound anti-<span class="math-term">CD3</span> <span class="math-term">mAb</span></li>
+                                <li><strong><span class="math-term">Fc$\gamma$RIIIA</span> 자극:</strong> Plate-bound anti-<span class="math-term">CD16</span> <span class="math-term">mAb</span> (CD28-CD8+ T 세포 하위 집단 포함)</li>
+                                <li>보조 자극: Soluble anti-<span class="math-term">CD28</span> 또는 <span class="math-term">IL-15</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-span-1">
+                            <h3>기능 측정 지표</h3>
+                            <ul>
+                                <li><strong>세포 독성 (Cytotoxicity):</strong> 표면 <span class="math-term">CD107a</span> 발현 (탈과립화 마커)</li>
+                                <li><strong><span class="math-term">TH1</span> 사이토카인:</strong> 세포 내 <span class="math-term">TNF-α</span> 및 <span class="math-term">IFN-γ</span> 발현</li>
+                                <li>유세포 분석기로 획득 후 <span class="math-term">FlowJo</span>로 데이터 분석.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Functional analysis of CD8+ T cells</div>
+            </div>
+
+            <!-- Slide 10: Functional Result 1 - Enhanced Effector Function in CD28- -->
+            <div id="slide-10" class="slide-container">
+                <h2 class="slide-title">기능 결과 1: CD28-CD8+ T 세포의 강력한 효과 기능</h2>
+                <div class="slide-content">
+                    <h3>CD28-CD8+ T 세포 vs. CD28+CD8+ T 세포 (ABMR 환자)</h3>
+                    <p class="mb-4">ABMR 환자의 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포는 <span class="math-term">CD28+CD8+</span> <span class="math-term">T</span> 세포에 비해 자극에 <strong>더욱 강력하게</strong> 반응했습니다.</p>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4>TCR 자극 (anti-CD3) 시</h4>
+                            <ul>
+                                <li class="text-red-700"><strong><span class="math-term">TNF-α</span> 및 <span class="math-term">IFN-γ</span> 동시 양성</strong> 세포 비율 <strong>유의하게 높음</strong></li>
+                                <li class="text-red-700"><strong><span class="math-term">CD107a</span> 양성</strong> 세포 비율 (<strong>세포 독성</strong>) <strong>유의하게 높음</strong></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4><span class="math-term">FcγRIIIA</span> 자극 (anti-CD16) 시</h4>
+                            <ul>
+                                <li class="text-red-700"><strong><span class="math-term">TNF-α</span> 및 <span class="math-term">IFN-γ</span> 동시 양성</strong> 세포 비율 <strong>유의하게 높음</strong></li>
+                                <li class="text-red-700"><strong><span class="math-term">CD107a</span> 양성</strong> 세포 비율 (<strong>세포 독성</strong>) <strong>유의하게 높음</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="footnote mt-4">이는 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 집단이 ABMR 발생 시점에서 <strong>고도로 활성화된 효과 세포</strong>임을 시사합니다.</p>
+                </div>
+                <div class="footnote">출처: Results (Figure 4B, 4C)</div>
+            </div>
+
+            <!-- Slide 11: Functional Result 2 - Stronger Cytotoxicity in ABMR vs Normal -->
+            <div id="slide-11" class="slide-container">
+                <h2 class="slide-title">기능 결과 2: ABMR 환자의 <span class="math-term">CD28-CD8+</span> T 세포 특이성</h2>
+                <div class="slide-content">
+                    <h3><span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 기능 비교: ABMR (Group 3) vs. 정상 (Group 1)</h3>
+                    <p class="mb-4"><span class="math-term">CD28-</span> <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포의 강력한 효과 기능은 정상 그룹에서도 관찰되었으나, <strong><span class="math-term">ABMR</span> 환자</strong>에서 일부 기능이 더욱 강력했습니다.</p>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4>TCR 자극 시 (<span class="math-term">anti-CD3</span>)</h4>
+                            <ul>
+                                <li class="text-red-700"><strong><span class="math-term">CD107a</span> 발현 (세포 독성):</strong> <span class="math-term">ABMR</span> 그룹에서 정상 그룹보다 <strong>유의하게 높음</strong> (<span class="math-term">p < 0.05</span>).</li>
+                                <li><span class="math-term">TNF-α /IFN-γ</span> 발현: 두 그룹 간 차이 없음.</li>
+                            </ul>
+                            <h4 class="mt-4">함의</h4>
+                            <p><strong>ABMR</strong>과 관련된 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포는 <strong>더 높은 고유 세포 독성 잠재력</strong>을 가질 수 있으며, 이는 ABMR 병리생물학에서 이들이 단순한 마커 이상의 역할을 할 수 있음을 시사합니다.</p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Results (Figure 4D)</div>
+            </div>
+
+            <!-- Slide 12: Result 3 - Graft Survival Analysis Setup -->
+            <div id="slide-12" class="slide-container">
+                <h2 class="slide-title">이식 생존율 분석: 1년 시점의 CD28-CD8+ T 세포</h2>
+                <div class="slide-content">
+                    <h3>분석 대상 및 목표</h3>
+                    <ul>
+                        <li><strong>하위 코호트:</strong> 1년 감시 생검을 수행한 수혜자 (<span class="math-term">n=510</span>)를 대상으로 분석.</li>
+                        <li><strong>기준 시점:</strong> 1년 감시 생검 시점.</li>
+                        <li><strong>결과 변수:</strong> 이식 실패 (<span class="math-term">투석으로 복귀 또는 선행 재이식</span>)까지의 시간.</li>
+                    </ul>
+                    <h3>통계 기법</h3>
+                    <ul>
+                        <li><strong><span class="math-term">Kaplan-Meier</span> 추정치:</strong> 전체 생존 곡선 파악. (<span class="math-term">5년 생존율: 88.4%</span>)</li>
+                        <li><strong>다변량 <span class="math-term">Cox</span> 비례 위험 모델 (Cause-specific <span class="math-term">Cox</span> models):</strong> 혼란 변수를 조정한 후 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 수준과 이식 생존율 간의 연관성 조사.</li>
+                    </ul>
+                </div>
+                <div class="footnote">출처: Results (The percentage and absolute number of CD28-CD8+ T cells at 1 year are not associated with graft survival)</div>
+            </div>
+
+            <!-- Slide 13: Result 3 - Graft Survival Analysis Result -->
+            <div id="slide-13" class="slide-container">
+                <h2 class="slide-title">이식 생존율 분석 결과: 유의한 연관성 없음</h2>
+                <div class="slide-content">
+                    <div class="flex flex-row gap-8">
+                        <div class="w-1/2">
+                            <h3>다변량 <span class="math-term">Cox</span> 모델 결과 요약</h3>
+                            <p class="mb-4">1년 시점에서 측정된 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 수준은 장기 이식 생존율과 <strong>유의한 관련이 없었습니다.</strong></p>
+                            <table class="table-custom w-full">
+                                <thead>
+                                    <tr>
+                                        <th>변수</th>
+                                        <th>위험비 (HR)</th>
+                                        <th>$p$-값</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="math-term">Log</span> <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 (<span class="math-term">%</span>)</td>
+                                        <td>1.15</td>
+                                        <td>0.2963</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="math-term">Log</span> <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 (절대 수)</td>
+                                        <td>1.17</td>
+                                        <td>0.1791</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="w-1/2">
+                            <h3>주요 관련 요인 (Multivariable Cox Model)</h3>
+                            <ul>
+                                <li class="text-blue-700"><strong>생검 시 크레아티닌 수치:</strong> 이식 실패와 가장 강력한 연관성 (<span class="math-term">HR $\approx$ 1.02, p < 0.0001</span>).</li>
+                                <li class="text-blue-700"><strong><span class="math-term">HLA A-B-DR</span> 부적합 수 <span class="math-term">> 4</span>: </strong> <span class="math-term">HR $\approx$ 1.92</span>.</li>
+                                <li>냉 허혈 시간: 12시간 이상/24시간 이상인 경우 위험 증가.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Results (Table 4, Table 5)</div>
+            </div>
+
+            <!-- Slide 14: Discussion - ABMR & TCMR Overlap -->
+            <div id="slide-14" class="slide-container">
+                <h2 class="slide-title">고찰: ABMR 병리생물학에서 <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포의 역할</h2>
+                <div class="slide-content">
+                    <h3>ABMR 진단과 <span class="math-term">T</span> 세포 증가</h3>
+                    <ul>
+                        <li><span class="math-term">ABMR</span>은 <span class="math-term">T</span> 세포가 관여하지 않는 것처럼 보일 수 있으나, <span class="math-term">MHC</span> 및 <span class="math-term">minor</span> <span class="math-term">histocompatibility</span> 항원은 <span class="math-term">T</span> 세포 의존적 항원입니다.</li>
+                        <li class="text-red-700"><strong>항체 생성에는 <span class="math-term">T</span> 세포 도움 (<span class="math-term">T</span> <span class="math-term">cell</span> <span class="math-term">help</span>)이 필수적</strong>입니다.</li>
+                        <li><span class="math-term">ABMR</span> 조직 생검에서도 세포 독성 <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포 및 <span class="math-term">T</span> 세포 관련 유전자 발현이 관찰됩니다.</li>
+                    </ul>
+                    <h3><span class="math-term">CD28-CD8+</span> T 세포의 역할 재조명</h3>
+                    <p class="ml-4 italic text-gray-600">"ABMR과 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 증가 간의 연관성은 놀라운 것이 아닙니다. 두 기전은 대개 동시에 작동합니다."</p>
+                    <p class="mt-4">이 <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포 집단은 <span class="math-term">ABMR</span>의 전반적인 <strong>동종 면역 반응 강도</strong>를 나타내는 마커일 수 있습니다.</p>
+                </div>
+                <div class="footnote">출처: Discussion</div>
+            </div>
+
+            <!-- Slide 15: Discussion - Functional Significance -->
+            <div id="slide-15" class="slide-container">
+                <h2 class="slide-title">고찰: 기능적 우위와 병리생물학적 참여</h2>
+                <div class="slide-content">
+                    <h3>기능적 우위</h3>
+                    <ul>
+                        <li><span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포는 <span class="math-term">CD28+</span> <span class="math-term">T</span> 세포보다 <span class="math-term">TCR</span> 또는 <span class="math-term">CD16</span> 자극에 반응하여 더 많은 <strong><span class="math-term">TH1</span> <span class="math-term">사이토카인</span></strong>과 더 강력한 <strong>세포 독성</strong>을 보입니다.</li>
+                        <li>이러한 강력한 효과 기능은 <span class="math-term">ABMR</span> 특이적이지는 않고, 정상 이식 환자에서도 <span class="math-term">CD28-</span> <span class="math-term">T</span> 세포의 일반적인 특징입니다.</li>
+                    </ul>
+                    <h3>ABMR 특이적 우위</h3>
+                    <p class="text-red-700 font-bold ml-4 mt-4"><strong><span class="math-term">ABMR</span> 환자의 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포는 정상 환자에 비해 <span class="math-term">TCR</span> 자극 시 <span class="math-term">CD107a</span> 발현이 높았습니다.</strong></p>
+                    <p class="ml-4 mt-2">이는 <span class="math-term">ABMR</span> 환자에서 이 <span class="math-term">T</span> 세포 집단이 <strong>더 높은 고유 세포 독성 활성</strong>을 가지며, 항체 매개 손상과 함께 <strong>추가적인 이식 손상</strong>을 유도하는 데 직접적으로 기여할 수 있음을 시사합니다.</p>
+                </div>
+                <div class="footnote">출처: Discussion</div>
+            </div>
+
+            <!-- Slide 16: Study Limitation 1 -->
+            <div id="slide-16" class="slide-container">
+                <h2 class="slide-title">연구의 한계 (1)</h2>
+                <div class="slide-content">
+                    <h3>연구 설계 및 표지자 선택의 제한</h3>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4>단일 센터 연구</h4>
+                            <ul>
+                                <li>프랑스 낭트 대학 병원 단일 센터의 데이터를 사용했습니다.</li>
+                                <li class="text-gray-600">향후 다기관 연구를 통한 일반화가 필요합니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>제한된 림프구 표현형 마커</h4>
+                            <ul>
+                                <li><span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 하위 집단 식별에 초점을 맞추어 제한된 마커만 사용했습니다.</li>
+                                <li class="text-gray-600">더 포괄적인 마커 (<span class="math-term">예: CCR7, CD45RA</span>)를 사용하면 <span class="math-term">effector/memory</span> <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포의 역할을 더 잘 규명할 수 있을 것입니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Discussion (Our study has some limitations)</div>
+            </div>
+
+            <!-- Slide 17: Study Limitation 2 -->
+            <div id="slide-17" class="slide-container">
+                <h2 class="slide-title">연구의 한계 (2)</h2>
+                <div class="slide-content">
+                    <h3>기능적 분석 및 통계 모델의 제한</h3>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4>다클론성 자극 사용</h4>
+                            <ul>
+                                <li><span class="math-term">CD8+</span> <span class="math-term">T</span> 세포 기능 연구에 <span class="math-term">TCR</span> 자극을 위해 <strong>다클론성 <span class="math-term">anti-CD3</span></strong> <span class="math-term">mAb</span>를 사용했습니다.</li>
+                                <li class="text-gray-600"><strong>공여자 항원</strong> 자극을 사용했다면 <span class="math-term">alloimmune</span> 반응에서의 역할을 더 확실히 확인할 수 있습니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>혼란 변수 및 결측 데이터</h4>
+                            <ul>
+                                <li><span class="math-term">Ethnicity</span> 및 <strong>사회경제적 상태</strong>와 같이 수집되지 않은 <span class="math-term">unobserved</span> <span class="math-term">confounder</span>가 존재할 수 있습니다.</li>
+                                <li class="text-gray-600">결측 데이터가 있는 개인을 다변량 분석에서 제외했으나, 그 비율이 낮아 (<span class="math-term">~ 5%</span>) 큰 편향은 없을 것으로 판단됩니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footnote">출처: Discussion (Our study has some limitations)</div>
+            </div>
+
+            <!-- Slide 18: Summary -->
+            <div id="slide-18" class="slide-container">
+                <h2 class="slide-title">결론 요약</h2>
+                <div class="slide-content">
+                    <h3>주요 발견</h3>
+                    <ul>
+                        <li class="text-red-700"><strong>대규모 코호트 (<span class="math-term">N=1032</span>) 분석</strong>을 통해, <span class="math-term">ABMR</span> 진단은 말초 혈액 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포의 <strong>백분율 및 절대 수의 유의한 증가</strong>와 강력하게 연관되어 있음을 확인.</li>
+                        <li class="text-red-700">$\text{ABMR}$ 환자의 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포는 <span class="math-term">TCR</span> 자극 시 정상 환자의 동일 세포 집단보다 <strong>더 강력한 세포 독성 잠재력</strong>을 보임.</li>
+                    </ul>
+                    <h3 class="mt-8">연구의 의의</h3>
+                    <p class="ml-4 text-blue-800">이 결과는 <span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포 집단이 <span class="math-term">ABMR</span>의 <span class="math-term">pathobiology</span>에 참여하며, 단순히 <span class="math-term">T</span> 세포 매개 거부 반응에 국한되지 않고 항체 매개 거부 반응 과정에서도 중요한 역할을 할 수 있음을 시사합니다.</p>
+                </div>
+                <div class="footnote">출처: Summary, Interpretation, Discussion</div>
+            </div>
+
+            <!-- Slide 19: Future Directions -->
+            <div id="slide-19" class="slide-container">
+                <h2 class="slide-title">향후 연구 방향</h2>
+                <div class="slide-content">
+                    <h3><span class="math-term">CD8+</span> <span class="math-term">T</span> 세포의 역할 명확화</h3>
+                    <ul>
+                        <li><strong><span class="math-term">TEMRA</span> (<span class="math-term">CD45RA+CCR7-CD8+</span>) 세포</strong>와 같은 <span class="math-term">memory/effector</span> <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포 하위 집단의 역할을 더 정교하게 분석.</li>
+                        <li><strong><span class="math-term">공여자</span> <span class="math-term">세포</span></strong>를 사용한 기능 실험을 통해 <span class="math-term">alloimmune</span> 반응에서의 <span class="math-term">CD8+</span> <span class="math-term">T</span> 세포의 특이적 역할을 규명.</li>
+                        <li><span class="math-term">CD28-CD8+</span> <span class="math-term">T</span> 세포를 표적으로 하는 새로운 면역 관용 및 치료 전략의 개발 가능성 탐색.</li>
+                    </ul>
+                </div>
+                <div class="footnote">출처: Interpretation, Implications of all the available evidence</div>
+            </div>
+
+            <!-- Slide 20: Q&A -->
+            <div id="slide-20" class="slide-container">
+                <h2 class="slide-title">질의응답 (Q&A)</h2>
+                <div class="slide-content text-center flex flex-col justify-center items-center h-full">
+                    <p class="text-5xl font-extrabold text-green-700 mb-8">감사합니다.</p>
+                    <p class="text-3xl font-semibold text-gray-700 mb-12">질문 있으시면 해주십시오.</p>
+                    <div class="text-xl text-gray-600">
+                        <p>저자 정보: Hoa Le Mai, Magali Giral, Sophie Brouard et al.</p>
+                        <p>논문: Antibody-mediated allograft rejection is associated with an increase in peripheral differentiated CD28-CD8+ T cells – Analyses of a cohort of 1032 kidney transplant recipients</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Slide Footer -->
+        <div class="h-8 bg-blue-100 flex justify-end items-center px-6 text-sm text-blue-800 rounded-b-xl">
+            <p>eBioMedicine. 2022 Aug 18;83:104226</p>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide-container');
+        const slideIndicator = document.getElementById('slide-indicator');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let currentSlide = 0;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            slideIndicator.textContent = `${currentSlide + 1} / ${slides.length}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        });
+
+        // Initialize presentation
+        updateSlide();
+    </script>
+</body>
+</html>
