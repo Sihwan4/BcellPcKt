@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main  # main 브랜치에 푸시가 발생할 때 실행
-
+      
+permissions:
+  contents: write # 리포지토리 파일에 대한 쓰기 권한을 부여
+  
 jobs:
   generate_index:
     runs-on: ubuntu-latest
