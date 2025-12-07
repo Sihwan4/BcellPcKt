@@ -7,21 +7,27 @@ on:
 
 jobs:
   generate_index:
-    runs-on: ubuntu-latest  # 워크플로를 실행할 환경 (GitHub Runner)
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # 리포지토리를 runner 환경으로 체크아웃
+        uses: actions/checkout@v4
 
       - name: Generate and Update index.html
         id: generate
         run: |
-          # 1. 'b', 'b2', 'tlo', 'pc1' 등 디렉토리 목록을 HTML 리스트로 생성
+          # 리포지토리의 최상위 디렉토리를 탐색하여 폴더 목록을 자동으로 생성합니다.
+          # '.'는 현재 디렉토리를 의미하며, type d (디렉토리)인 항목만 찾습니다.
+          # .git과 .github 폴더는 제외합니다.
+          
+          # 폴더 목록을 배열에 저장 (정렬 후)
+          DIRS=($(find . -maxdepth 1 -type d -not -name "." -not -name ".git" -not -name ".github" | sort))
+          
           LIST_ITEMS=""
-          for DIR in pc1 b b2 tlo; do
-            if [ -d "$DIR" ]; then # 해당 이름의 디렉토리가 존재하는지 확인
-              LIST_ITEMS="${LIST_ITEMS}        <li><a href=\"${DIR}/\">${DIR} Report</a></li>\n"
-            fi
+          for DIR_PATH in "${DIRS[@]}"; do
+            DIR_NAME=$(basename "$DIR_PATH") # './b' -> 'b'
+            # 링크 텍스트는 폴더 이름을 사용합니다.
+            LIST_ITEMS="${LIST_ITEMS}        <li><a href=\"${DIR_NAME}/\">${DIR_NAME} Report Summary</a></li>\n"
           done
 
           # 2. 새로운 index.html 파일 내용 생성
@@ -42,7 +48,6 @@ jobs:
           )
           
           # 3. 변경 사항이 있는지 확인하고 index.html에 작성
-          # 기존 파일이 없거나 내용이 다를 경우에만 덮어씁니다.
           if [ ! -f index.html ] || [ "$(cat index.html)" != "$NEW_INDEX" ]; then
             echo -e "$NEW_INDEX" > index.html
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -51,7 +56,7 @@ jobs:
           fi
 
       - name: Commit and Push changes
-        if: steps.generate.outputs.changed == 'true' # 이전 단계에서 변경이 발생했을 경우에만 실행
+        if: steps.generate.outputs.changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'Auto: Update index.html with latest directory list'
