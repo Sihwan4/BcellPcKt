@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B Cells & Plasma Cells in AMR: Interactive Explorer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Accents. 
+         Background: bg-stone-50
+         Text: text-stone-800
+         Primary Accent (B Cells): text-blue-600 / bg-blue-100
+         Secondary Accent (Plasma Cells): text-purple-600 / bg-purple-100
+         Alert/Danger (Rejection/Antibodies): text-rose-600
+    -->
+
+    <!-- Application Structure Plan: 
+         1. Header: Title and context.
+         2. Dashboard Layout: A grid-based single-page view divided into logical thematic sections rather than slides.
+            - Section A: The Burden of AMR (Intro stats).
+            - Section B: The B-Cell Factory (Development & GC Reaction). Interactive flow.
+            - Section C: The Culprit (Plasmablasts vs LLPCs). Comparative interactive cards.
+            - Section D: Mechanisms of Injury (CDC vs ADCC). Toggle view.
+            - Section E: Therapeutic Landscape. Interactive filterable list linking drugs to targets.
+            - Section F: Strategy & Future (Combination therapy timeline).
+         3. Navigation: Sticky sub-nav to jump between these thematic sections.
+         4. Why this structure? It transforms linear slides into a connected knowledge graph. Users first understand the "Why" (Burden), then the "Who" (Cells), the "How" (Injury), and finally the "Solution" (Therapy).
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. AMR Impact (Slide 2): 
+            - Goal: Inform about severity.
+            - Viz: Doughnut Chart (Chart.js).
+            - Interaction: Hover for stats.
+            - Justification: Simple proportional representation of graft loss causes.
+         2. B-Cell Development (Slide 3-5):
+            - Goal: Change/Process understanding.
+            - Viz: Interactive Horizontal Stepper (HTML/CSS).
+            - Interaction: Click stage to see markers/details.
+            - Justification: Linear process best represented by a flow; allows drilling down into markers without clutter.
+         3. Cell Comparison (Slide 9-11):
+            - Goal: Compare attributes.
+            - Viz: Interactive Comparison Cards (Grid).
+            - Interaction: Toggle 'Survival Factor' or 'Resistance' overlays.
+            - Justification: Highlights the stark differences between short-lived and long-lived cells (the core problem).
+         4. Therapy Targets (Slide 14-19):
+            - Goal: Organize treatments.
+            - Viz: Filterable Data Grid.
+            - Interaction: Click drug to see Mechanism, Pros, Cons.
+            - Justification: Much better than sequential slides; allows quick comparison of efficacy (e.g., Rituximab vs Anti-CD38).
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        /* Chart Container Styling Enforcement */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .active-nav {
+            border-bottom: 2px solid #ea580c; /* Orange-600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+
+        /* Card Hover Effects */
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-stone-900 tracking-tight">AMR Interactive Explorer</h1>
+                <p class="text-sm text-stone-500">B Cells & Plasma Cells in Antibody-Mediated Rejection</p>
+            </div>
+            <nav class="mt-4 md:mt-0 overflow-x-auto w-full md:w-auto">
+                <ul class="flex space-x-6 text-sm whitespace-nowrap">
+                    <li><a href="#impact" class="nav-link hover:text-orange-600 transition-colors py-2" onclick="setActiveNav(this)">Impact & Overview</a></li>
+                    <li><a href="#b-cell-journey" class="nav-link hover:text-orange-600 transition-colors py-2" onclick="setActiveNav(this)">B-Cell Journey</a></li>
+                    <li><a href="#the-problem" class="nav-link hover:text-orange-600 transition-colors py-2" onclick="setActiveNav(this)">The LLPC Problem</a></li>
+                    <li><a href="#therapies" class="nav-link hover:text-orange-600 transition-colors py-2" onclick="setActiveNav(this)">Therapies</a></li>
+                    <li><a href="#strategy" class="nav-link hover:text-orange-600 transition-colors py-2" onclick="setActiveNav(this)">Future Strategy</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 space-y-16">
+
+        <!-- SECTION 1: IMPACT & OVERVIEW -->
+        <section id="impact" class="scroll-mt-24">
+            <div class="max-w-4xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">The Clinical Challenge of AMR</h2>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Antibody-Mediated Rejection (AMR) is the leading cause of late kidney transplant failure. 
+                    This section visualizes the magnitude of the problem and introduces the key antagonist: the Donor-Specific Antibody (DSA).
+                    Explore the data below to understand why standard treatments are often insufficient.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Chart Col -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-lg font-semibold mb-4 text-center">Late Kidney Allograft Losses</h3>
+                    <div class="chart-container">
+                        <canvas id="amrImpactChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-stone-400 mt-2"> </p>
+                </div>
+                
+                <!-- Info Col -->
+                <div class="space-y-6">
+                    <div class="bg-orange-50 p-6 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-orange-900 mb-2">The Core Problem</h4>
+                        <p class="text-stone-700">AMR accounts for <span class="font-bold">~50%</span> of late kidney allograft losses. It is driven by Donor-Specific Antibodies (DSAs) produced by B cells and Plasma cells.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-stone-900 mb-2">Two Types of Activation</h4>
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="toggleActivation('TI')" class="px-3 py-1 text-sm rounded-full bg-stone-200 hover:bg-stone-300 transition-colors focus:ring-2 focus:ring-stone-400" id="btn-ti">T-Independent</button>
+                            <button onclick="toggleActivation('TD')" class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors focus:ring-2 focus:ring-blue-400" id="btn-td">T-Dependent</button>
+                        </div>
+                        <div id="activation-content" class="text-sm text-stone-600 h-24 transition-all duration-300">
+                            <!-- JS populates this -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-stone-200">
+
+        <!-- SECTION 2: B-CELL JOURNEY -->
+        <section id="b-cell-journey" class="scroll-mt-24">
+            <div class="max-w-4xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">The B-Cell Assembly Line</h2>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Understanding the developmental stages of B cells is crucial because therapeutic agents target specific surface markers expressed only at certain stages.
+                    Click through the developmental pathway below to see which markers (CD19, CD20, CD38) are present and the key events occurring in the Germinal Center.
+                </p>
+            </div>
+
+            <!-- Interactive Flow Diagram -->
+            <div class="bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden">
+                <!-- Stepper Nav -->
+                <div class="flex overflow-x-auto bg-stone-100 border-b border-stone-200 p-2 space-x-2 scrollbar-hide">
+                    <button class="step-btn flex-shrink-0 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white shadow-sm text-blue-700" onclick="updateBCellStage(0)">1. Bone Marrow</button>
+                    <span class="text-stone-400 self-center">→</span>
+                    <button class="step-btn flex-shrink-0 px-4 py-2 rounded-md text-sm font-medium text-stone-500 hover:bg-white hover:shadow-sm transition-colors" onclick="updateBCellStage(1)">2. Periphery (Naive)</button>
+                    <span class="text-stone-400 self-center">→</span>
+                    <button class="step-btn flex-shrink-0 px-4 py-2 rounded-md text-sm font-medium text-stone-500 hover:bg-white hover:shadow-sm transition-colors" onclick="updateBCellStage(2)">3. Germinal Center</button>
+                    <span class="text-stone-400 self-center">→</span>
+                    <button class="step-btn flex-shrink-0 px-4 py-2 rounded-md text-sm font-medium text-stone-500 hover:bg-white hover:shadow-sm transition-colors" onclick="updateBCellStage(3)">4. Outcome (Memory/PC)</button>
+                </div>
+
+                <div class="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Visual Representation Area -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 id="stage-title" class="text-2xl font-bold text-stone-800">Pro-B to Mature Naive</h3>
+                        <div id="stage-visual" class="bg-stone-50 rounded-lg p-6 min-h-[200px] flex items-center justify-center border border-dashed border-stone-300 relative">
+                            <!-- Dynamic Content -->
+                        </div>
+                        <div id="stage-desc" class="text-stone-600 text-sm leading-relaxed">
+                            <!-- Dynamic Text -->
+                        </div>
+                    </div>
+
+                    <!-- Marker Panel -->
+                    <div class="bg-stone-50 rounded-lg p-6 border border-stone-200">
+                        <h4 class="font-bold text-stone-700 mb-4 border-b border-stone-200 pb-2">Surface Markers (Therapeutic Targets)</h4>
+                        <div class="space-y-3" id="marker-list">
+                            <!-- Dynamic Markers -->
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-stone-200">
+                            <h4 class="font-bold text-stone-700 mb-2">Key Interaction</h4>
+                            <p id="key-interaction" class="text-sm text-stone-600 italic">Select a stage to see details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-stone-200">
+
+        <!-- SECTION 3: THE PROBLEM (LLPC) -->
+        <section id="the-problem" class="scroll-mt-24">
+            <div class="max-w-4xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">The Root Cause: Long-Lived Plasma Cells</h2>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Why does rejection persist despite treatment? The answer lies in the biology of Long-Lived Plasma Cells (LLPCs). 
+                    Unlike Plasmablasts, LLPCs hide in the bone marrow and are resistant to standard therapies like Rituximab.
+                    Compare the cell types below to see why they are the "Silent Reservoir" of DSAs.
+                </p>
+            </div>
+
+            <!-- Comparison Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <!-- Plasmablast Card -->
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 shadow-sm relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-bl-lg font-bold">Dividing</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Plasmablast</h3>
+                    <p class="text-xs text-stone-500 mb-4">Short-lived factory</p>
+                    
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Lifespan:</span> <span class="font-semibold">Days</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Location:</span> <span>Blood/Spleen</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>CD20:</span> <span class="text-blue-600 font-bold">+/-</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Proliferation:</span> <span class="text-green-600 font-bold">+++</span></li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-stone-50 rounded text-xs text-stone-500">
+                        Sensitive to anti-proliferatives (Mycophenolate) and partially Rituximab.
+                    </div>
+                </div>
+
+                <!-- Short-lived PC Card -->
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 shadow-sm relative overflow-hidden">
+                     <div class="absolute top-0 right-0 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-bl-lg font-bold">Transient</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Short-Lived PC</h3>
+                    <p class="text-xs text-stone-500 mb-4">The intermediate stage</p>
+                    
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Lifespan:</span> <span class="font-semibold">Weeks</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Location:</span> <span>Lymph Nodes</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>CD20:</span> <span class="text-red-500 font-bold">Negative</span></li>
+                        <li class="flex justify-between border-b border-stone-100 pb-1"><span>Proliferation:</span> <span>+</span></li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-stone-50 rounded text-xs text-stone-500">
+                        Often CD20 negative, making Rituximab ineffective.
+                    </div>
+                </div>
+
+                <!-- LLPC Card (Hero) -->
+                <div class="interactive-card bg-purple-50 p-6 rounded-xl border-2 border-purple-200 shadow-md relative overflow-hidden transform scale-105 z-10">
+                     <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs px-2 py-1 rounded-bl-lg font-bold">THE TARGET</div>
+                    <h3 class="text-xl font-bold text-purple-900 mb-1">Long-Lived PC</h3>
+                    <p class="text-xs text-purple-600 mb-4">The root cause of cAMR</p>
+                    
+                    <ul class="space-y-2 text-sm text-stone-700">
+                        <li class="flex justify-between border-b border-purple-200 pb-1"><span>Lifespan:</span> <span class="font-bold text-purple-700">Decades</span></li>
+                        <li class="flex justify-between border-b border-purple-200 pb-1"><span>Location:</span> <span class="font-bold">Bone Marrow Niche</span></li>
+                        <li class="flex justify-between border-b border-purple-200 pb-1"><span>CD20:</span> <span class="text-red-600 font-bold">Negative</span></li>
+                        <li class="flex justify-between border-b border-purple-200 pb-1"><span>CD38/138:</span> <span class="text-green-600 font-bold">High</span></li>
+                        <li class="flex justify-between border-b border-purple-200 pb-1"><span>BCMA:</span> <span class="text-green-600 font-bold">Positive</span></li>
+                    </ul>
+                    <div class="mt-4 p-3 bg-white rounded border border-purple-100 text-xs text-purple-800 font-medium">
+                        Resistant to chemo & Rituximab. Requires Proteasome inhibitors or anti-CD38/BCMA.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resistance Mechanisms Toggle -->
+            <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6">
+                <h3 class="text-lg font-bold mb-4">Why Treatment Fails: Mechanism Viewer</h3>
+                <div class="flex gap-4 mb-4 flex-wrap">
+                    <button class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded text-sm font-medium transition" onclick="showResistance('cd20')">CD20 Loss</button>
+                    <button class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded text-sm font-medium transition" onclick="showResistance('niche')">Marrow Niche</button>
+                    <button class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded text-sm font-medium transition" onclick="showResistance('apoptosis')">Apoptosis Resistance</button>
+                </div>
+                <div id="resistance-display" class="bg-stone-50 p-4 rounded border border-stone-200 text-stone-700 text-sm">
+                    Select a mechanism above to see clinical implications.
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-stone-200">
+
+        <!-- SECTION 4: THERAPIES -->
+        <section id="therapies" class="scroll-mt-24">
+            <div class="max-w-4xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">The Therapeutic Arsenal</h2>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Treating AMR requires a multi-pronged approach: removing existing antibodies, killing the producer cells, and preventing regeneration.
+                    Explore standard and emerging therapies below. Click on a drug category to see how it works.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Filter List -->
+                <div class="lg:col-span-4 space-y-2">
+                    <h3 class="font-bold text-stone-400 text-xs uppercase tracking-wider mb-2">Select Agent Category</h3>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-orange-400 hover:bg-orange-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 drug-btn active-drug" onclick="updateTherapy('std')">Standard (PLEX/IVIg)</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-blue-400 hover:bg-blue-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 drug-btn" onclick="updateTherapy('cd20')">Anti-CD20 (Rituximab)</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-purple-400 hover:bg-purple-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 drug-btn" onclick="updateTherapy('cd38')">Anti-CD38 (Daratumumab)</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-teal-400 hover:bg-teal-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 drug-btn" onclick="updateTherapy('il6')">IL-6 Inhibition</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-rose-400 hover:bg-rose-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 drug-btn" onclick="updateTherapy('proteasome')">Proteasome Inhibitors</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg bg-white border hover:border-indigo-400 hover:bg-indigo-50 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 drug-btn" onclick="updateTherapy('bcma')">Novel (BCMA/CAR-T)</button>
+                </div>
+
+                <!-- Detail Panel -->
+                <div class="lg:col-span-8">
+                    <div class="bg-white rounded-xl shadow-md border border-stone-200 h-full p-6 md:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 id="therapy-title" class="text-2xl font-bold text-stone-900">Standard Care</h3>
+                                <span id="therapy-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-700">Antibody Removal</span>
+                            </div>
+                            <div id="therapy-viz" class="mb-6 p-4 bg-stone-50 rounded-lg border border-dashed border-stone-300 min-h-[120px] flex items-center justify-center text-stone-400 font-mono text-sm">
+                                [Mechanism Diagram Placeholder]
+                            </div>
+                            <h4 class="font-bold text-sm text-stone-700 mb-2">Mechanism of Action</h4>
+                            <p id="therapy-mech" class="text-stone-600 mb-6">Physically removes circulating antibodies or blocks receptors.</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-green-50 p-4 rounded border border-green-100">
+                                    <h5 class="font-bold text-green-800 text-sm mb-1">Pros / Efficacy</h5>
+                                    <p id="therapy-pros" class="text-sm text-green-700">Rapid reduction in DSA.</p>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded border border-red-100">
+                                    <h5 class="font-bold text-red-800 text-sm mb-1">Limitations</h5>
+                                    <p id="therapy-cons" class="text-sm text-red-700">Rebound effect common; does not stop production.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: FUTURE STRATEGY -->
+        <section id="strategy" class="bg-stone-900 text-stone-200 rounded-2xl p-8 md:p-12 scroll-mt-24 shadow-2xl">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-white mb-6">The Future: Combination Therapy</h2>
+                <p class="text-stone-400 mb-8 leading-relaxed">
+                    "Clear the antibodies, kill the factories, and shut down the production line." 
+                    No single agent can do it all. The future lies in rational combination strategies.
+                </p>
+
+                <!-- Timeline / Phase Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Phase 1 -->
+                    <div class="bg-stone-800 p-4 rounded-lg border border-stone-700 hover:border-orange-500 transition-colors">
+                        <div class="text-orange-500 font-bold text-sm uppercase mb-2">Phase 1</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Reduction</h3>
+                        <p class="text-xs text-stone-400 mb-3">Rapidly lower DSA burden.</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">PLEX</span>
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">IdeS</span>
+                        </div>
+                    </div>
+                    <!-- Phase 2 -->
+                    <div class="bg-stone-800 p-4 rounded-lg border border-stone-700 hover:border-purple-500 transition-colors">
+                        <div class="text-purple-500 font-bold text-sm uppercase mb-2">Phase 2</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Elimination</h3>
+                        <p class="text-xs text-stone-400 mb-3">Kill the source (Plasma Cells).</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">Anti-CD38</span>
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">CAR-T</span>
+                        </div>
+                    </div>
+                    <!-- Phase 3 -->
+                    <div class="bg-stone-800 p-4 rounded-lg border border-stone-700 hover:border-blue-500 transition-colors">
+                        <div class="text-blue-500 font-bold text-sm uppercase mb-2">Phase 3</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Blockade</h3>
+                        <p class="text-xs text-stone-400 mb-3">Prevent T-B help & regeneration.</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">Belatacept</span>
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">IL-6 Inh.</span>
+                        </div>
+                    </div>
+                    <!-- Phase 4 -->
+                    <div class="bg-stone-800 p-4 rounded-lg border border-stone-700 hover:border-green-500 transition-colors">
+                        <div class="text-green-500 font-bold text-sm uppercase mb-2">Phase 4</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Maintenance</h3>
+                        <p class="text-xs text-stone-400 mb-3">Long-term suppression.</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="px-2 py-1 bg-stone-700 rounded text-[10px]">Standard IS</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-stone-700 text-center">
+                    <p class="italic text-stone-500">"The Ultimate Goal: Prevent AMR before it occurs through better immune monitoring."</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-stone-200 mt-12 py-8">
+        <div class="container mx-auto px-4 text-center text-stone-500 text-sm">
+            <p class="mb-2">Based on the report: <strong>B Cells and Plasma Cells in Antibody-Mediated Rejection</strong></p>
+            <p>Author: Gemini</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. IMPACT CHART ---
+        const ctx = document.getElementById('amrImpactChart').getContext('2d');
+        const amrChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Late Graft Loss due to AMR', 'Other Causes'],
+                datasets: [{
+                    data: [50, 50],
+                    backgroundColor: [
+                        '#ea580c', // Orange-600 for AMR
+                        '#e5e5e5'  // Neutral Grey for others
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, usePointStyle: true }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '%';
+                            },
+                            afterBody: function(context) {
+                                if (context[0].label.includes('AMR')) {
+                                    return "Caused primarily by Donor-Specific Antibodies (DSAs).";
+                                }
+                                return "";
+                            }
+                        }
+                    }
+                },
+                cutout: '70%', // Thinner ring
+            }
+        });
+
+        // --- 2. ACTIVATION TOGGLE LOGIC ---
+        const activationData = {
+            'TI': {
+                html: "<span class='font-bold text-stone-800'>T-Independent Response:</span> Rapid, short-lived response. Produces mostly low-affinity <span class='text-orange-600 font-bold'>IgM</span>. Crucially, this pathway creates <span class='underline decoration-wavy decoration-red-400'>NO Germinal Centers</span> and NO memory.",
+                btnId: 'btn-ti'
+            },
+            'TD': {
+                html: "<span class='font-bold text-blue-800'>T-Dependent Response:</span> The 'Gold Standard' of rejection. Requires T-B interaction. Forms <span class='font-bold text-blue-600'>Germinal Centers</span>, allowing affinity maturation. Result: High-affinity IgG, Memory B cells, and <span class='font-bold text-purple-600'>Long-Lived Plasma Cells</span>.",
+                btnId: 'btn-td'
+            }
+        };
+
+        function toggleActivation(type) {
+            // Update Text
+            const contentDiv = document.getElementById('activation-content');
+            contentDiv.style.opacity = 0;
+            setTimeout(() => {
+                contentDiv.innerHTML = activationData[type].html;
+                contentDiv.style.opacity = 1;
+            }, 300);
+
+            // Update Buttons
+            document.getElementById('btn-ti').className = "px-3 py-1 text-sm rounded-full transition-colors focus:ring-2 focus:ring-stone-400 " + (type === 'TI' ? "bg-stone-800 text-white" : "bg-stone-200 hover:bg-stone-300");
+            document.getElementById('btn-td').className = "px-3 py-1 text-sm rounded-full transition-colors focus:ring-2 focus:ring-blue-400 " + (type === 'TD' ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800 hover:bg-blue-200");
+        }
+        // Init
+        toggleActivation('TD');
+
+        // --- 3. B-CELL JOURNEY INTERACTION ---
+        const bCellStages = [
+            {
+                title: "1. Bone Marrow Origin",
+                desc: "The journey begins. Stem cells differentiate into Pro-B and Pre-B cells. They undergo genetic rearrangement to create a unique B Cell Receptor (BCR).",
+                visual: `<div class="flex gap-4 items-center"><div class="w-12 h-12 rounded-full bg-stone-300 flex items-center justify-center text-xs">Stem</div><span class="text-stone-400">→</span><div class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-300 flex items-center justify-center text-sm font-bold text-blue-700">Pre-B</div></div>`,
+                markers: [
+                    { name: "CD19", status: "Positive (+)", color: "text-green-600" },
+                    { name: "CD20", status: "Positive (+)", color: "text-green-600" },
+                    { name: "CD38", status: "Variable", color: "text-yellow-600" }
+                ],
+                interaction: "Targetable by Anti-CD19/CD20 agents early in development."
+            },
+            {
+                title: "2. Peripheral Maturation",
+                desc: "Immature B cells migrate to the spleen and lymph nodes. Here they become Mature Naive B cells, waiting for antigen encounter. They express IgM and IgD.",
+                visual: `<div class="w-20 h-20 rounded-full bg-blue-500 border-4 border-blue-200 flex items-center justify-center text-white font-bold shadow-lg">Naive B</div>`,
+                markers: [
+                    { name: "CD19/CD20", status: "High (+)", color: "text-green-600" },
+                    { name: "BCR", status: "Expressing IgM/IgD", color: "text-blue-600" }
+                ],
+                interaction: "Rituximab (Anti-CD20) is highly effective at this stage."
+            },
+            {
+                title: "3. The Germinal Center",
+                desc: "<span class='text-orange-600 font-bold'>The Engine of Rejection.</span> Inside the lymph node follicle. <br><strong>Dark Zone:</strong> Rapid proliferation & mutation. <br><strong>Light Zone:</strong> Selection by TFH cells. Only high-affinity clones survive.",
+                visual: `<div class="flex gap-2 p-2 border border-stone-300 rounded bg-white"><div class="w-1/2 bg-stone-800 text-white p-2 text-center rounded text-xs"><div class="font-bold mb-1">Dark Zone</div>Proliferation<br>Mutation</div><div class="w-1/2 bg-yellow-100 text-yellow-800 p-2 text-center rounded text-xs"><div class="font-bold mb-1">Light Zone</div>Selection<br>TFH Help</div></div>`,
+                markers: [
+                    { name: "BCL6", status: "High (TFH master reg)", color: "text-purple-600" },
+                    { name: "CD40", status: "Essential for help", color: "text-red-600" }
+                ],
+                interaction: "Block IL-6 or CD40-CD154 here to stop affinity maturation."
+            },
+            {
+                title: "4. The Outcome (Memory & PC)",
+                desc: "Successful clones exit as either <strong>Memory B Cells</strong> (waiting to reactivate) or <strong>Plasma Cells</strong> (antibody factories).",
+                visual: `<div class="flex flex-col gap-2"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-blue-400"></div><span class="text-xs">Memory B (decades)</span></div><div class="flex items-center gap-2"><div class="w-10 h-10 rounded-full bg-purple-600 border-2 border-purple-300"></div><span class="text-xs font-bold">Long-Lived PC (decades)</span></div></div>`,
+                markers: [
+                    { name: "CD20", status: "Lost in PCs (-)", color: "text-red-600 font-bold" },
+                    { name: "CD138", status: "High in PCs (+)", color: "text-purple-600" },
+                    { name: "BCMA", status: "High in PCs (+)", color: "text-purple-600" }
+                ],
+                interaction: "LLPCs lose CD20, becoming invisible to Rituximab."
+            }
+        ];
+
+        function updateBCellStage(index) {
+            const data = bCellStages[index];
+            
+            // Visual Updates
+            document.getElementById('stage-title').innerText = data.title;
+            document.getElementById('stage-desc').innerHTML = data.desc;
+            document.getElementById('stage-visual').innerHTML = data.visual;
+            document.getElementById('key-interaction').innerText = data.interaction;
+
+            // Markers List Build
+            const list = document.getElementById('marker-list');
+            list.innerHTML = '';
+            data.markers.forEach(m => {
+                list.innerHTML += `<div class="flex justify-between items-center text-sm p-2 bg-white rounded border border-stone-100"><span class="font-bold text-stone-700">${m.name}</span><span class="${m.color}">${m.status}</span></div>`;
+            });
+
+            // Button Styles
+            document.querySelectorAll('.step-btn').forEach((btn, i) => {
+                if(i === index) {
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-blue-700', 'border', 'border-blue-100');
+                    btn.classList.remove('text-stone-500');
+                } else {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-blue-700', 'border', 'border-blue-100');
+                    btn.classList.add('text-stone-500');
+                }
+            });
+        }
+        // Init
+        updateBCellStage(0);
+
+        // --- 4. RESISTANCE MECHANISM TOGGLE ---
+        const resistanceInfo = {
+            'cd20': "<strong>Lack of CD20:</strong> Long-lived plasma cells downregulate CD20. Since Rituximab targets CD20, it literally cannot 'see' or bind to the cells producing the antibodies.",
+            'niche': "<strong>Bone Marrow Niche:</strong> Stromal cells in the bone marrow secrete survival factors (CXCL12, APRIL, BAFF) that protect LLPCs from death signals and chemotherapy.",
+            'apoptosis': "<strong>Anti-Apoptotic Proteins:</strong> LLPCs overexpress MCL-1 and BCL-2, making them intrinsically resistant to cell death, even when stressed."
+        };
+        function showResistance(key) {
+            document.getElementById('resistance-display').innerHTML = resistanceInfo[key];
+        }
+
+        // --- 5. THERAPY DATA MANAGER ---
+        const therapyData = {
+            'std': {
+                title: "Standard Care (PLEX / IVIg)",
+                badge: "Antibody Removal",
+                mech: "<strong>Plasmapheresis (PLEX):</strong> Mechanical filtration of blood to remove IgG. <br><strong>IVIg:</strong> Saturates FcRn receptors to increase IgG clearance and modulate inflammation.",
+                pros: "Rapidly lowers circulating DSAs (within hours/days). Essential for acute crises.",
+                cons: "<strong>Rebound:</strong> Does not stop synthesis. Antibody levels often bounce back higher within weeks.",
+                viz: `<div class="text-4xl">🩸 ➡️ 🗑️</div>`
+            },
+            'cd20': {
+                title: "Rituximab (Anti-CD20)",
+                badge: "B-Cell Depletion",
+                mech: "Monoclonal antibody binding CD20 on B cells. Triggers CDC and ADCC to kill the cell.",
+                pros: "Excellent at depleting Naive and Memory B cells. Reduces 'replenishment' of plasma cells.",
+                cons: "<strong>Ineffective against Plasma Cells:</strong> PCs do not express CD20. Useless for stopping current antibody production.",
+                viz: `<div class="text-4xl">🦠 💥 💀</div>`
+            },
+            'cd38': {
+                title: "Daratumumab (Anti-CD38)",
+                badge: "Plasma Cell Targeting",
+                mech: "Targets CD38, which is highly expressed on Plasma Cells. Induces direct apoptosis and ADCC.",
+                pros: "One of the few drugs that can actually kill the antibody factory (LLPCs).",
+                cons: "Also depletes other CD38+ cells (NK cells, Tregs). Variable response rates (30-70%).",
+                viz: `<div class="text-4xl">🎯 🏭 📉</div>`
+            },
+            'il6': {
+                title: "Tocilizumab / Clazakizumab",
+                badge: "Cytokine Blockade",
+                mech: "Blocks IL-6 or its receptor (IL-6R). IL-6 is crucial for TFH differentiation and Plasma Cell survival.",
+                pros: "Stabilizes eGFR in chronic AMR. Disrupts the entire germinal center axis.",
+                cons: "Infection risk. Does not immediately remove existing antibodies.",
+                viz: `<div class="text-4xl">🛑 🗣️ 📉</div>`
+            },
+            'proteasome': {
+                title: "Bortezomib",
+                badge: "Proteasome Inhibition",
+                mech: "Inhibits the proteasome. Since PCs make tons of protein (antibodies), blocking waste disposal causes fatal ER stress.",
+                pros: "Potent killer of metabolically active Plasma Cells.",
+                cons: "<strong>Toxicity:</strong> Significant neuropathy. rebound phenomenon common upon stopping.",
+                viz: `<div class="text-4xl">⚙️ 🚫 😵</div>`
+            },
+            'bcma': {
+                title: "BCMA & CAR-T",
+                badge: "Future / Novel",
+                mech: "Targets B-Cell Maturation Antigen (BCMA), found almost exclusively on Plasma Cells. CAR-T uses engineered T-cells to hunt them.",
+                pros: "Deep, potentially permanent depletion of Plasma Cells.",
+                cons: "High cost, complex logistics, cytokine release syndrome (CRS) risk.",
+                viz: `<div class="text-4xl">🧬 🤖 🎯</div>`
+            }
+        };
+
+        function updateTherapy(key) {
+            const data = therapyData[key];
+            document.getElementById('therapy-title').innerText = data.title;
+            document.getElementById('therapy-badge').innerText = data.badge;
+            document.getElementById('therapy-mech').innerHTML = data.mech;
+            document.getElementById('therapy-pros').innerHTML = data.pros;
+            document.getElementById('therapy-cons').innerHTML = data.cons;
+            document.getElementById('therapy-viz').innerHTML = data.viz;
+
+            // highlight active button
+            document.querySelectorAll('.drug-btn').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-offset-2', 'bg-stone-100');
+                if(btn.getAttribute('onclick').includes(key)) {
+                    btn.classList.add('bg-stone-50', 'ring-2');
+                }
+            });
+        }
+        // Init
+        updateTherapy('std');
+
+        // --- NAVIGATION STATE ---
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-nav');
+            });
+            element.classList.add('active-nav');
+        }
+
+    </script>
+</body>
+</html>
