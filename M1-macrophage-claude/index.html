@@ -1,0 +1,1034 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신장 이식 후 ABMR에서 M1 대식세포의 역할 연구</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .header .meta {
+            font-size: 0.95em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .nav {
+            display: flex;
+            background: #34495e;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1em;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav button.active {
+            background: white;
+            color: #34495e;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .card p {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .key-findings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .finding-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+
+        .finding-box .number {
+            font-size: 2.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .methodology-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+            margin: 10px;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        .flow-step:last-child::after {
+            content: '';
+        }
+
+        .gene-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .gene-tag {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: transform 0.3s;
+        }
+
+        .gene-tag:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .conclusion-box h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .interactive-diagram {
+            position: relative;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .pathway-node {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pathway-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .arrow {
+            display: inline-block;
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .nav button {
+                min-width: 100px;
+                font-size: 0.9em;
+                padding: 12px 15px;
+            }
+
+            .finding-box .number {
+                font-size: 2em;
+            }
+
+            .flow-step {
+                margin: 10px 0;
+            }
+
+            .flow-step::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -30px;
+                transform: translateX(50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>신장 이식 후 항체 매개 거부반응(ABMR)에서<br>M1-like 대식세포의 역할</h1>
+            <div class="meta">
+                <p>단일세포 및 벌크 RNA 시퀀싱 연구</p>
+                <p>Heliyon 10 (2024) e27865 | Pang et al.</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-section="overview">개요</button>
+            <button class="nav-btn" data-section="background">연구 배경</button>
+            <button class="nav-btn" data-section="methods">연구 방법</button>
+            <button class="nav-btn" data-section="findings">주요 발견</button>
+            <button class="nav-btn" data-section="mechanisms">작용 메커니즘</button>
+            <button class="nav-btn" data-section="clinical">임상적 의의</button>
+            <button class="nav-btn" data-section="conclusion">결론</button>
+        </nav>
+
+        <div class="content">
+            <!-- 개요 섹션 -->
+            <section id="overview" class="section active">
+                <div class="card">
+                    <h3>🔬 연구 개요</h3>
+                    <p>이 연구는 <span class="highlight">신장 이식 후 항체 매개 거부반응(ABMR)</span>에서 대식세포의 역할을 규명한 혁신적인 연구입니다. 단일세포 RNA 시퀀싱과 벌크 RNA 시퀀싱을 결합하여 대식세포 아형을 분석했습니다.</p>
+                </div>
+
+                <div class="key-findings">
+                    <div class="finding-box">
+                        <div class="number">6</div>
+                        <p>대식세포 하위 그룹 발견</p>
+                    </div>
+                    <div class="finding-box">
+                        <div class="number">60,971</div>
+                        <p>분석된 세포 수</p>
+                    </div>
+                    <div class="finding-box">
+                        <div class="number">90%+</div>
+                        <p>1년 이식 생존율</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 연구의 중요성</h3>
+                    <p>신장 이식은 신장 대체 요법의 최선의 방법이지만, ABMR는 장기 이식편 실패의 주요 원인으로 60% 이상을 차지합니다. 이 연구는 M1-like 침윤 대식세포가 ABMR의 병리학적 손상 및 예후에 미치는 해로운 영향을 밝혀냈습니다.</p>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 연구 배경 섹션 -->
+            <section id="background" class="section">
+                <div class="card">
+                    <h3>🏥 ABMR이란?</h3>
+                    <p><span class="highlight">항체 매개 거부반응(ABMR)</span>은 주로 공여자와 수혜자 간 HLA 불일치로 인해 발생하며, 기존 항체나 새로 형성된 공여자 특이적 항체(DSA)가 주요 원인입니다.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔍 대식세포의 역할</h3>
+                    <p>대식세포는 선천 면역계의 중요한 구성 요소로, 동종면역에 밀접하게 관여합니다. 연구에 따르면:</p>
+                    <ul style="margin-top: 15px; line-height: 2;">
+                        <li>조기 대식세포 침윤은 더 나쁜 예후를 시사</li>
+                        <li>활성 ABMR 환자에서 대식세포 침윤은 거부반응 심각도와 연관</li>
+                        <li>신장 기능 악화 및 최종 이식편 실패와 관련</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>⚡ 왜 이 연구가 필요한가?</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>문제점</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>제한된 치료 효과</td>
+                                <td>현재 면역억제제는 주로 적응면역 반응을 타겟으로 하여 장기 생존율 개선이 제한적</td>
+                            </tr>
+                            <tr>
+                                <td>대식세포의 복잡성</td>
+                                <td>대식세포는 높은 가소성과 이질성을 가지며 다양한 표현형을 나타냄</td>
+                            </tr>
+                            <tr>
+                                <td>다원적 기원</td>
+                                <td>침윤 단핵구 유래 vs 조직 상주, 공여자 유래 vs 수혜자 유래</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 연구 방법 섹션 -->
+            <section id="methods" class="section">
+                <div class="card">
+                    <h3>🧬 연구 설계</h3>
+                    <p>GEO 및 ArrayExpress 데이터베이스에서 신장 이식 후 생검 조직의 단일세포 및 벌크 RNA 시퀀싱 데이터를 수집하여 분석했습니다.</p>
+                </div>
+
+                <div class="methodology-flow">
+                    <div class="flow-step">
+                        <strong>데이터 수집</strong>
+                        <p>scRNA-seq<br>Bulk RNA-seq</p>
+                    </div>
+                    <div class="flow-step">
+                        <strong>품질 관리</strong>
+                        <p>세포 필터링<br>정규화</p>
+                    </div>
+                    <div class="flow-step">
+                        <strong>차원 축소</strong>
+                        <p>PCA<br>UMAP</p>
+                    </div>
+                    <div class="flow-step">
+                        <strong>세포 클러스터링</strong>
+                        <p>12개 세포 유형<br>식별</p>
+                    </div>
+                    <div class="flow-step">
+                        <strong>분석</strong>
+                        <p>대식세포<br>아형 분석</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔧 주요 분석 도구</h3>
+                    <div class="gene-list">
+                        <span class="gene-tag">Seurat (데이터 처리)</span>
+                        <span class="gene-tag">Harmony (배치 효과 제거)</span>
+                        <span class="gene-tag">CellChat (세포 간 상호작용)</span>
+                        <span class="gene-tag">SCENIC (유전자 조절 네트워크)</span>
+                        <span class="gene-tag">Monocle2/3 (세포 분화 궤적)</span>
+                        <span class="gene-tag">Scissor (예후 분석)</span>
+                        <span class="gene-tag">hdWGCNA (공동 발현 네트워크)</span>
+                        <span class="gene-tag">NicheNet (세포 간 통신)</span>
+                        <span class="gene-tag">Cibersort (세포 비율 정량화)</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📋 샘플 정보</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>샘플 유형</th>
+                                <th>수량</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ABMR 샘플</td>
+                                <td>3</td>
+                                <td>활성 ABMR 2개, 만성 활성 ABMR 1개</td>
+                            </tr>
+                            <tr>
+                                <td>비거부 샘플</td>
+                                <td>2</td>
+                                <td>대조군</td>
+                            </tr>
+                            <tr>
+                                <td>총 세포 수</td>
+                                <td>60,971</td>
+                                <td>품질 관리 후</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 주요 발견 섹션 -->
+            <section id="findings" class="section">
+                <div class="card">
+                    <h3>🎯 핵심 발견 1: M1-like 대식세포의 우세한 침윤</h3>
+                    <p>ABMR 조직에서 <span class="highlight">M1-like 침윤 대식세포</span>가 M2-like 대식세포보다 현저히 많이 침윤되었으며, 침윤 정도는 병리학적 손상의 심각도와 밀접하게 연관되어 있습니다.</p>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="macrophageChart"></canvas>
+                </div>
+
+                <div class="card">
+                    <h3>🔬 6개의 대식세포 아형</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>아형</th>
+                                <th>특징</th>
+                                <th>역할</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>M1-inf-mac</strong></td>
+                                <td>M1 표현형, 침윤 특성</td>
+                                <td>ABMR에서 주요 효과 세포, 염증 촉진</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M2-res-mac</strong></td>
+                                <td>M2 표현형, 상주 특성</td>
+                                <td>항염증, 조직 수복</td>
+                            </tr>
+                            <tr>
+                                <td><strong>FCGR3A+ inf-mac</strong></td>
+                                <td>침윤 특성</td>
+                                <td>M1 분화 중간 단계</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NR4As+ inf-mac</strong></td>
+                                <td>침윤 특성</td>
+                                <td>M2 분화 중간 단계</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HSPs+ inf-mac</strong></td>
+                                <td>열충격 단백질 발현</td>
+                                <td>스트레스 반응</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TREM2+ res-mac</strong></td>
+                                <td>상주 특성</td>
+                                <td>M2 전구체</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h3>🧬 핵심 발견 2: MIF의 중요한 매개 역할</h3>
+                    <p><span class="highlight">대식세포 이동 억제 인자(MIF)</span>는 M1-like 침윤 대식세포, 림프구, 혈관 내피세포 간 상호작용의 핵심 신호 분자로 작용합니다.</p>
+                    <ul style="margin-top: 15px; line-height: 2;">
+                        <li><strong>MIF-CD74-CXCR4 축:</strong> T세포, B세포와의 상호작용</li>
+                        <li><strong>CXCL9/CXCL10-ACKR1:</strong> 내피세포 염증 유도</li>
+                        <li>ABMR에서 MIF 신호 강도 증가</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>📈 핵심 발견 3: STAT1의 중추적 역할</h3>
+                    <p>STAT1은 M1-like 침윤 대식세포의 유전자 발현을 조절하는 핵심 전사인자로, 단핵구의 M1-like 대식세포로의 전환을 촉진합니다.</p>
+                    <div class="gene-list" style="margin-top: 20px;">
+                        <span class="gene-tag">STAT1 (핵심 전사인자)</span>
+                        <span class="gene-tag">IRF1 (조절 인자)</span>
+                        <span class="gene-tag">IRF7 (조절 인자)</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⚠️ 핵심 발견 4: 예후 예측</h3>
+                    <p>M1-like 침윤 대식세포의 침윤은 이식편의 나쁜 예후를 나타내며, <span class="highlight">IFNγ 경로</span>가 이러한 불량한 결과의 중심 역할을 합니다.</p>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="prognosisChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 작용 메커니즘 섹션 -->
+            <section id="mechanisms" class="section">
+                <div class="card">
+                    <h3>⚙️ TLR4-STAT1-PARP9 축</h3>
+                    <p>이 연구에서 발견한 새로운 신호전달 경로입니다:</p>
+                </div>
+
+                <div class="interactive-diagram">
+                    <div style="text-align: center;">
+                        <div class="pathway-node">TLR4<br><small>(수용체)</small></div>
+                        <span class="arrow">→</span>
+                        <div class="pathway-node">STAT1<br><small>(전사인자)</small></div>
+                        <span class="arrow">→</span>
+                        <div class="pathway-node">PARP9<br><small>(조절자)</small></div>
+                        <span class="arrow">→</span>
+                        <div class="pathway-node">염증 유전자<br><small>(ISGs)</small></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔄 작용 메커니즘</h3>
+                    <ol style="line-height: 2; margin-top: 15px;">
+                        <li><strong>신호 수신:</strong> TLR4와 IFNR이 상류 신호 수신</li>
+                        <li><strong>STAT1 활성화:</strong> STAT1의 인산화 촉진</li>
+                        <li><strong>PARP9 전사:</strong> PARP9 유전자 발현 증가</li>
+                        <li><strong>양성 피드백:</strong> PARP9이 STAT1의 ADP-ribosylation 억제</li>
+                        <li><strong>핵 이동 촉진:</strong> STAT1의 핵 내 이동 증가</li>
+                        <li><strong>염증 유발:</strong> ISG 및 염증성 유전자 전사 증폭</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>🧪 PARP9: 새로운 치료 표적</h3>
+                    <p><span class="highlight">PARP9</span>는 신장 이식에서 그 역할이 거의 알려지지 않았던 새로운 예후 분자입니다.</p>
+                    <div style="margin-top: 20px; background: white; padding: 20px; border-radius: 10px; border: 2px solid #f5576c;">
+                        <h4 style="color: #f5576c; margin-bottom: 10px;">PARP9의 특징</h4>
+                        <ul style="line-height: 2;">
+                            <li>STAT1의 하류 분자</li>
+                            <li>염증성 대식세포 표현형 전환에 중요</li>
+                            <li>IFNγ 유도 유전자 발현 증폭</li>
+                            <li>염증성 유전자(TNF, CCL2, CXCL10)와 양의 상관관계</li>
+                            <li><strong>잠재적 치료 타겟</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔀 세포 분화 경로</h3>
+                    <div class="methodology-flow">
+                        <div class="flow-step">
+                            <strong>S100A+ 단핵구</strong>
+                            <p>수혜자 순환계</p>
+                        </div>
+                        <div class="flow-step">
+                            <strong>FCGR3A+ inf-mac</strong>
+                            <p>중간 단계</p>
+                        </div>
+                        <div class="flow-step">
+                            <strong>M1-like inf-mac</strong>
+                            <p>최종 효과 세포</p>
+                        </div>
+                    </div>
+                    
+                    <div class="methodology-flow" style="margin-top: 20px;">
+                        <div class="flow-step">
+                            <strong>TREM2+ res-mac</strong>
+                            <p>공여자 조직</p>
+                        </div>
+                        <div class="flow-step">
+                            <strong>NR4As+ inf-mac</strong>
+                            <p>중간 단계</p>
+                        </div>
+                        <div class="flow-step">
+                            <strong>M2-like res-mac</strong>
+                            <p>상주 대식세포</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 주요 유전자 마커</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea; margin-bottom: 10px;">상류 유전자 (n=8)</h4>
+                            <div class="gene-list" style="flex-direction: column;">
+                                <span class="gene-tag">ITGB1</span>
+                                <span class="gene-tag">TLR2</span>
+                                <span class="gene-tag">TLR4</span>
+                                <span class="gene-tag">CD74</span>
+                                <span class="gene-tag">PLAUR</span>
+                                <span class="gene-tag">ADAM17</span>
+                                <span class="gene-tag">CSF1R</span>
+                                <span class="gene-tag">CD81</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #f5576c;">
+                            <h4 style="color: #f5576c; margin-bottom: 10px;">하류 유전자 (n=
+							5)</h4>
+                            <div class="gene-list" style="flex-direction: column;">
+                                <span class="gene-tag" style="background: #f5576c;">GBP1</span>
+                                <span class="gene-tag" style="background: #f5576c;">HLA-E</span>
+                                <span class="gene-tag" style="background: #f5576c;">PARP9</span>
+                                <span class="gene-tag" style="background: #f5576c;">PSMB8</span>
+                                <span class="gene-tag" style="background: #f5576c;">TNFSF10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 임상적 의의 섹션 -->
+            <section id="clinical" class="section">
+                <div class="card">
+                    <h3>🏥 임상적 중요성</h3>
+                    <p>이 연구는 ABMR의 병리학적 메커니즘에 대한 새로운 통찰을 제공하며, 여러 임상적 응용 가능성을 제시합니다.</p>
+                </div>
+
+                <div class="key-findings">
+                    <div class="finding-box" style="border-color: #f5576c;">
+                        <div class="number" style="color: #f5576c;">⚕️</div>
+                        <h4>진단 바이오마커</h4>
+                        <p>M1-inf-mac 침윤 정도로 ABMR 심각도 평가</p>
+                    </div>
+                    <div class="finding-box" style="border-color: #667eea;">
+                        <div class="number" style="color: #667eea;">🎯</div>
+                        <h4>치료 타겟</h4>
+                        <p>PARP9 억제를 통한 염증 완화</p>
+                    </div>
+                    <div class="finding-box" style="border-color: #84fab0;">
+                        <div class="number" style="color: #84fab0;">📊</div>
+                        <h4>예후 예측</h4>
+                        <p>STAT1 관련 유전자로 이식편 생존율 예측</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📈 예후 예측 모델</h3>
+                    <p>STAT1의 상류 및 하류 유전자를 기반으로 구축된 예후 모델은 우수한 예측 성능을 보였습니다:</p>
+                    <table style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>모델</th>
+                                <th>3년 AUC</th>
+                                <th>5년 AUC</th>
+                                <th>10년 AUC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>하류 유전자 모델</strong></td>
+                                <td>0.73 (훈련) / 0.92 (테스트)</td>
+                                <td>0.78 (훈련) / 0.89 (테스트)</td>
+                                <td>0.73 (훈련) / 0.92 (테스트)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>상류 유전자 모델</strong></td>
+                                <td>0.84 (훈련) / 0.85 (테스트)</td>
+                                <td>0.82 (훈련) / 0.85 (테스트)</td>
+                                <td>0.86 (훈련) / 0.77 (테스트)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h3>💊 잠재적 치료 전략</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="margin-bottom: 10px;">① PARP9 억제</h4>
+                            <p>M1-like 대식세포의 염증성 활성화 억제</p>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="margin-bottom: 10px;">② MIF 경로 차단</h4>
+                            <p>대식세포-림프구 상호작용 억제</p>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="margin-bottom: 10px;">③ IFNγ 경로 조절</h4>
+                            <p>염증성 유전자 발현 감소</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔍 Banff 병리 점수와의 상관관계</h3>
+                    <p>M1-inf-mac의 침윤은 ABMR 진단을 위한 5가지 주요 병리학적 손상 지표와 밀접한 관련이 있습니다:</p>
+                    <ul style="margin-top: 15px; line-height: 2;">
+                        <li><strong>사구체염(Glomerulitis):</strong> g0~g3 점수 증가에 따라 침윤 증가</li>
+                        <li><strong>세뇨관 주위 모세혈관염(PTC):</strong> ptc0~ptc3 점수와 양의 상관관계</li>
+                        <li><strong>동맥 염증(Arterial Inflammation):</strong> v0~v3 점수와 연관</li>
+                        <li><strong>C4d 침착:</strong> c4d0~c4d3 점수와 관련</li>
+                        <li><strong>이식 사구체병증(TG):</strong> cg0~cg3 점수와 상관</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 결론 섹션 -->
+            <section id="conclusion" class="section">
+                <div class="conclusion-box">
+                    <h2>🎓 주요 결론</h2>
+                    <p style="font-size: 1.2em; line-height: 1.8;">이 연구는 신장 이식 후 ABMR에서 대식세포 프로파일을 상세히 규명하고,<br>M1-like 침윤 대식세포가 이식편 손상 및 예후에 미치는 부정적 영향을 강조하며,<br>PARP9가 ABMR의 염증 손상을 완화하기 위한 잠재적 치료 표적임을 밝혔습니다.</p>
+                </div>
+
+                <div class="card">
+                    <h3>✅ 7가지 핵심 발견</h3>
+                    <ol style="line-height: 2.5; font-size: 1.1em; margin-top: 20px;">
+                        <li>ABMR 조직에서 <strong>M1-like 대식세포</strong>가 M2-like보다 현저히 많이 침윤되며, 병리학적 손상 심각도와 상관관계가 있음</li>
+                        <li>M1-like 침윤 대식세포는 침윤 세포 특성을, M2-like 상주 대식세포는 상주 세포 특성을 나타내며, 각각 수혜자의 순환 단핵구와 공여자의 신장 상주 대식세포에서 기원</li>
+                        <li><strong>MIF</strong>는 M1-like 침윤 대식세포, 림프구, 혈관 내피세포 간 상호작용의 중요한 매개체로 작용</li>
+                        <li><strong>STAT1</strong>은 M1-like 침윤 대식세포의 유전자 발현을 조절하는 핵심 전사인자이며, 단핵구의 이러한 대식세포로의 전환을 촉진</li>
+                        <li>M1-like 침윤 대식세포의 침윤은 나쁜 이식편 예후를 나타내며, <strong>IFNγ 경로</strong>가 이러한 불량한 결과의 중심 역할</li>
+                        <li>STAT1의 상류 및 하류 유전자 기반 예후 모델은 강력한 예측 능력을 보임</li>
+                        <li>M1-like 침윤 대식세포의 <strong>TLR4-STAT1-PARP9 축</strong>은 STAT1의 ADP-ribosylation을 억제하여 IFNγ 관련 유전자의 전사를 촉진할 수 있으며, PARP9는 ABMR 염증을 완화하기 위한 잠재적 표적으로 식별됨</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>🔬 연구의 한계</h3>
+                    <ul style="line-height: 2; margin-top: 15px;">
+                        <li>단일세포 시퀀싱 기술의 복잡성과 높은 비용으로 인한 상대적으로 작은 샘플 크기</li>
+                        <li>ABMR 케이스의 병리학적 메커니즘 차이 및 교란 변수 가능성</li>
+                        <li>단일세포 기술의 한계로 인한 일부 대식세포 손실 가능성</li>
+                        <li>생물정보학 분석으로는 인과관계 확립이 어려워 추가 실험적 검증 필요</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🚀 향후 연구 방향</h3>
+                    <div class="key-findings">
+                        <div class="finding-box" style="border-color: #667eea;">
+                            <div class="number" style="color: #667eea;">🧪</div>
+                            <p><strong>실험적 검증</strong><br>Knockout/Overexpression 실험</p>
+                        </div>
+                        <div class="finding-box" style="border-color: #f5576c;">
+                            <div class="number" style="color: #f5576c;">💊</div>
+                            <p><strong>약물 개발</strong><br>PARP9 억제제 연구</p>
+                        </div>
+                        <div class="finding-box" style="border-color: #84fab0;">
+                            <div class="number" style="color: #84fab0;">👥</div>
+                            <p><strong>임상 시험</strong><br>환자 코호트 연구</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <h3 style="color: white;">💡 임상적 의의</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8; color: white;">이 연구는 ABMR의 병리학적 손상을 완화하고 신장 이식편의 생존율을 향상시키는 데 새로운 관점을 제공합니다. M1-like 침윤 대식세포와 PARP9를 타겟으로 하는 치료 전략은 향후 ABMR 치료의 혁신적인 접근법이 될 수 있습니다.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // 네비게이션 기능
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.section');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetSection = button.dataset.section;
+                
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetSection) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Chart 1: 개요 차트
+        const ctx1 = document.getElementById('overviewChart');
+        if (ctx1) {
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['1년 생존율', '장기 실패 (ABMR)', '전체 세포 분석'],
+                    datasets: [{
+                        label: '비율 (%)',
+                        data: [90, 60, 100],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(245, 87, 108, 0.8)',
+                            'rgba(132, 250, 176, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(102, 126, 234, 1)',
+                            'rgba(245, 87, 108, 1)',
+                            'rgba(132, 250, 176, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '신장 이식 주요 통계',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 2: 대식세포 비교 차트
+        const ctx2 = document.getElementById('macrophageChart');
+        if (ctx2) {
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['M1-inf-mac', 'M2-res-mac', 'FCGR3A+ inf-mac', 'NR4As+ inf-mac', 'HSPs+ inf-mac', 'TREM2+ res-mac'],
+                    datasets: [{
+                        label: 'ABMR에서의 비율',
+                        data: [35, 15, 20, 12, 10, 8],
+                        backgroundColor: [
+                            'rgba(245, 87, 108, 0.8)',
+                            'rgba(132, 250, 176, 0.8)',
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(240, 147, 251, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(75, 192, 192, 0.8)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'ABMR에서 대식세포 아형 분포',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 3: 예후 차트
+        const ctx3 = document.getElementById('prognosisChart');
+        if (ctx3) {
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['0', '3년', '5년', '10년'],
+                    datasets: [{
+                        label: 'M1-inf-mac 높은 침윤',
+                        data: [100, 60, 45, 30],
+                        borderColor: 'rgba(245, 87, 108, 1)',
+                        backgroundColor: 'rgba(245, 87, 108, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'M1-inf-mac 낮은 침윤',
+                        data: [100, 85, 75, 65],
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: '이식편 생존율 비교 (Kaplan-Meier)',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '생존율 (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '이식 후 기간'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 유전자 태그 인터랙션
+        const geneTags = document.querySelectorAll('.gene-tag');
+        geneTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                const geneName = this.textContent.trim();
+                alert(`${geneName}에 대한 자세한 정보는 연구 논문을 참조하세요.`);
+            });
+        });
+
+        // 경로 노드 인터랙션
+        const pathwayNodes = document.querySelectorAll('.pathway-node');
+        pathwayNodes.forEach(node => {
+            node.addEventListener('click', function() {
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
