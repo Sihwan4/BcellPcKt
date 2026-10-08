@@ -1,0 +1,885 @@
+---
+title: "나노포어 베이스콜링(Basecalling)"
+subtitle: "딥러닝: 신호 처리에서 생성까지"
+author: "Sihwan Kim"
+format:
+  revealjs:
+    theme: dark
+    width: 1920
+    height: 1080
+    margin: 0.08
+    slide-number: true
+    css: custom.css
+    include-after-body: twemoji.html
+    embed-resources: true
+---
+
+
+# 목차 (Table of Contents)
+- 1. 서론: 왜 음성 인식(STT)과 같은 문제인가?
+- 2. 베이스콜러 아키텍처의 세대별 진화
+- 3. 컴퓨터공학 관점의 핵심 알고리즘 3선
+- 4. 하드웨어 가속 및 시스템 엔지니어링
+- 5. 실습 및 오픈소스 분석 리소스
+- 6. 결론 및 향후 전망
+
+
+# 1. 서론: 왜 음성 인식(STT)과 같은 문제인가?
+
+## 1. 서론: 왜 음성 인식(STT)과 같은 문제인가? {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 핵심 명제
+나노포어 베이스콜링은 생물학 문제가 아닌, **비정형 아날로그 시계열(pA)을 이산 시퀀스(A, C, G, T)로 변환하는 Sequence-to-Sequence(STT)** 과제다.
+:::
+
+- **입력:** 초당 수천 번 샘플링되는 연속 전류 신호 (Continuous Float Array)
+- **출력:** DNA/RNA 염기 서열 문자열 (Discrete String $\{A, C, G, T\}$)
+- **접근법:** 음성 신호 처리 및 최신 자연어·음성 딥러닝 기법의 직접 차용
+
+---
+
+## 나노포어 시퀀싱: 물리적 메커니즘
+
+::: {.columns}
+::: {.column width="50%"}
+### 🔬 물리적 흐름
+1. **전압 인가:** 단백질 나노포어 막에 일정 전압 인가
+2. **분자 통과:** 음전하를 띤 단일 가닥 DNA가 통과
+3. **이온 차단:** 통과 염기의 크기·구조에 따라 전류 차단
+4. **저항 발생:** 통과 염기 조합별 고유 저항 형성
+:::
+
+::: {.column width="50%"}
+### ⚡ 신호 변환
+- **스케일:** pA(피코암페어) 단위의 미세 이온 전류
+- **속도:** 모터 단백질 제어로 초당 400~450 bases 통과
+- **디지털화:** 고주파(4~5 kHz) 디지털 샘플링 기록
+:::
+:::
+
+---
+
+## 원시 신호 데이터: pA 시계열의 특성
+
+| 항목 | 나노포어 원시 신호 특성 | 엔지니어링 의미 |
+|:---|:---|:---|
+| **샘플링 레이트** | 4 kHz ~ 5 kHz | 초당 4,000~5,000개 실수 배열 기록 |
+| **신호 대 잡음비** | 낮음 (Low SNR) | 열 잡음·전자기 노이즈 필터링 필수 |
+| **저장 포맷** | `.fast5` (HDF5) $\to$ `.pod5` (Arrow) | 랜덤 I/O 병목 해소, 컬럼형 고속 스트리밍 |
+| **최종 목표** | $\mathbf{X} \in \mathbb{R}^T \to \mathbf{Y} \in \{A, C, G, T\}^U$ | 비정형 연속 실수 시계열의 토큰화 |
+
+---
+
+## k-mer 문제: 왜 1:1 측정이 불가능한가?
+
+::: {.columns}
+::: {.column width="45%"}
+### 수축부(Constriction Zone)
+- 나노포어의 판독 구간 길이가 단일 염기보다 긺
+- 특정 시점 전류는 **5~6개 염기(k-mer)**의 합성 저항값
+- 경우의 수: $4^5 = 1,024$ ~ $4^6 = 4,096$가지
+:::
+
+::: {.column width="55%"}
+### 비선형 컨텍스트(Context) 효과
+
+```
+... A  [C  G  T  A  A]  T ... -> I_t     (Current)
+... A   C [G  T  A  A   T]... -> I_{t+1} (Current)
+└── 슬라이딩 윈도우 방식으로 교체 ──┘
+
+```
+
+> **단순 LUT(Lookup Table) 매핑 불가**  
+> 전후 서열 문맥(Context)에 따라 동일 염기도 전혀 다른 파형을 유발함.
+:::
+:::
+
+---
+
+## 신호 비대칭성: 샘플 수와 염기 길이의 불일치
+
+::: {.callout-warning appearance="minimal"}
+### 비동기 통과 속도
+모터 단백질(Helicase)의 이동 속도는 물리적으로 불균일하여 **사전 정렬(Ground-truth Alignment)**이 불가능하다.
+:::
+
+- **가변적 체류 시간(Dwell time):** 염기 1개당 매핑되는 전류 샘플 수가 약 8~15개 이상으로 유동적
+- **호모폴리머(Homopolymer) 평탄화:** 동일 염기 연속 구간(예: `AAAAA`) 통과 시 신호 정체 발생
+- **Time-warping 문제:** 입력 신호 길이($T$)와 출력 염기 길이($U$) 사이의 불일치 ($T \gg U$)
+
+---
+
+## 음성 인식(STT)과의 1:1 완벽 대칭
+
+| 비교 축 | 음성 인식 (ASR / STT) | 나노포어 베이스콜링 (Basecalling) |
+|:---|:---|:---|
+| **입력 파형** | 음향 오디오 신호 (Acoustic Wave) | 이온 전류 시계열 (pA Current) |
+| **특징 세그먼트** | 멜 스펙트로그램 프레임 | 윈도우 단위 전류 파형 벡터 |
+| **출력 단위** | 음소(Phoneme) / 텍스트 토큰 | 염기 토큰 $\{A, C, G, T\}$ |
+| **속도 편차** | 화자의 발화 속도 변화 | 모터 단백질의 이동 속도 편차 |
+| **문맥 의존성** | 조음 결합 (Co-articulation) | 수축부 k-mer 컨텍스트 효과 |
+
+---
+
+## 딥러닝 관점의 수식화 및 접근 파이프라인
+
+$$\max_{\theta} P(\mathbf{Y} \mid \mathbf{X}; \theta) \quad (\mathbf{X} \in \mathbb{R}^T, \; \mathbf{Y} \in \{A, C, G, T\}^U, \; U \ll T)$$
+
+::: {.columns}
+::: {.column width="33%"}
+### 1. Feature Extraction
+- **1D-CNN 프론트엔드**
+- 고주파 노이즈 제거
+- 국소 파형 추출 및 타임스텝 다운샘플링
+:::
+
+::: {.column width="33%"}
+### 2. Context Modeling
+- **BiLSTM / Conformer**
+- 장기 의존성(Long-range) 포착
+- k-mer 상호작용 및 전후 문맥 벡터화
+:::
+
+::: {.column width="33%"}
+### 3. Decoding & Align
+- **CTC / CRF + Search**
+- 미정렬 시계열 자가 정렬
+- Greedy / Beam / Viterbi 탐색으로 최적 서열 복원
+:::
+:::
+
+
+
+# 2. 베이스콜러 아키텍처의 세대별 진화
+
+## 2. 베이스콜러 아키텍처의 세대별 진화 {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 진화의 두 축
+베이스콜러의 발전사는 **정확도 향상(Raw Read Accuracy)**과 **실시간 처리 속도(Throughput)** 사이의 균형점을 찾는 여정이다.
+:::
+
+- **패러다임 전환:** 통계적 상태 전이(HMM) $\to$ 순환 신경망(RNN) $\to$ 합성곱 병렬화(TCN) $\to$ 어텐션 결합(Conformer)
+- **STT 생태계 동기화:** 자연어·음성 인식 딥러닝 아키텍처의 발전 흐름을 그대로 흡수하며 진화
+
+---
+
+## 세대별 아키텍처 한눈에 보기
+
+| 세대 | 대표 모델 | 핵심 구조 | 정확도 (Q-Score) | 특징 및 한계 |
+|:---:|:---|:---|:---:|:---|
+| **1세대** | 초기 전용 엔진 | **HMM** (통계 모델) | 70 ~ 80% | 물리적 노이즈 및 동적 속도 변화 대응 불가 |
+| **2세대** | Albacore, 초기 Guppy | **1D-CNN + BiLSTM** | 85 ~ 92% | 시계열 문맥 반영 성공 / 순차 연산 병목 |
+| **3세대** | 후기 Guppy | **TCN + CRF** | 97 ~ 98% (Q15~18) | 완전 병렬화로 실시간화 / 전이 확률 제약 |
+| **4세대** | **Dorado** (현 표준) | **Conformer** | **99%+ (Q20+)** | 로컬 파형(CNN) + 글로벌 문맥(Attention) |
+
+---
+
+## 1세대: 통계적 접근 (HMM, Hidden Markov Model)
+
+::: {.columns}
+::: {.column width="50%"}
+### ⚙️ 동작 메커니즘
+- **사전 구축 테이블:** 통과 가능한 모든 k-mer(1,024~4,096종)의 평균·분산 측정
+- **Gaussian Emission:** 전류 분포를 정규분포로 가정
+- **Viterbi 탐색:** 관측 전류에 부합하는 최적 상태 경로 추적
+:::
+
+::: {.column width="50%"}
+### ⚠️️ 치명적 한계
+- **표현력 부족:** 동적 전기 노이즈와 속도 변동성을 수식으로 포용 불가
+- **호모폴리머 실패:** 연속 동일 염기 구간 판별력 전무
+- **결과:** 정확도 70~80%대에 정체 $\to$ 딥러닝 전환의 계기
+:::
+:::
+
+---
+
+## 2세대: 순환 신경망 도입 (Albacore / 초기 Guppy)
+
+::: {.columns}
+::: {.column width="50%"}
+### 🧩 구조: 1D-CNN + BiLSTM
+- **1D-CNN (Front-end):**  
+  고주파 원시 신호 국소 특징 추출 및 타임스텝 다운샘플링
+- **BiLSTM (Back-end):**  
+  과거·미래 신호 문맥을 양방향으로 참조하여 k-mer 효과 해석
+:::
+
+::: {.column width="50%"}
+### 📈 성과와 병목
+- **성과:** 단일 염기 정확도를 80% 후반~90% 초반으로 도약
+- **병목 (Sequential Bottleneck):**  
+  타임스텝 간 순차 의존성으로 GPU 병렬화 불가  
+  $\to$ 대용량 장비(PromethION)의 실시간 스트리밍 처리 불가
+:::
+:::
+
+---
+
+## 3세대: 속도와 제약의 조화 (TCN + CRF)
+
+::: {.columns}
+::: {.column width="50%"}
+### ⚡ TCN (속도 혁신)
+- **순환 레이어(RNN) 완전 제거**
+- **Dilated Causal Conv:** 넓은 Receptive Field 유지하며 시간 축 완전 병렬 연산
+- **GPU 활용 극대화:** Throughput 수 배 향상, 소형 장비(MinION) 실시간 처리 달성
+:::
+
+::: {.column width="50%"}
+### 🎯 CRF (구조적 디코딩)
+- **출력단에 CRF 레이어 결합**
+- **Transition Matrix 동시 학습:** 비정상적 염기 전이 패턴을 디코딩 단계에서 억제
+- **호모폴리머 분별력 향상:** 정확도 **Q15~Q18(97~98%)** 진입
+:::
+:::
+
+---
+
+## 4세대: 현대 표준 아키텍처 (Conformer 기반 Dorado)
+
+::: {.callout-note appearance="simple"}
+### STT 최신 백본의 완벽한 이식
+ONT의 차세대 엔진 **Dorado**는 음성 인식(STT) 최신 SOTA 구조인 **Conformer(Convolution + Transformer)**를 채택해 이전 세대의 장점을 하나로 통합했다.
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### 🔍 Local Feature (Depthwise CNN)
+- **국소 파형 포착:** 초당 수천 번 요동치는 고주파 전류의 미세 피크와 엣지 패턴 학습
+- **상보적 역할:** Transformer가 놓치기 쉬운 인접 k-mer 간의 세밀한 변화 보완
+:::
+
+::: {.column width="50%"}
+### 🌐 Global Context (Self-Attention)
+- **광역 의존성 학습:** 수천 타임스텝에 걸친 신호의 전체 전후 문맥을 일괄 반영
+- **동적 가중치:** 모터 단백질 속도 편차로 인한 시간 왜곡(Time-warping) 완벽 대응
+:::
+:::
+
+> **단일 리드 정확도 Q20 (99%+) 돌파**  
+> Macaron FFN 구조 기반 결합으로 롱리드 시퀀싱을 쇼트리드 수준의 신뢰도로 도약시킴
+
+---
+
+
+## 아키텍처 진화 요약: 패러다임의 도약
+
+
+```
+
+[1세대 HMM]        통계적 k-mer 룩업 테이블 (정확도 70~~80% 한계)
+
+[2세대 RNN]        1D-CNN + BiLSTM (문맥 반영 성공, 그러나 직렬 연산 병목)
+
+[3세대 TCN+CRF]    합성곱 완전 병렬화 + 전이 행렬 제약 (실시간화 & Q15~~18)
+
+[4세대 Conformer]  Local CNN + Global Attention (현대 SOTA, 정확도 Q20+ 돌파)
+
+
+```
+
+::: {.callout-note appearance="simple"}
+**핵심 요약:** 단순 물리 매핑에서 출발해 **'시간 축 병렬화'**를 거쳐 **'어텐션 기반 시퀀스 생성'**으로 완성되었다.
+:::
+
+
+# 3. 핵심 알고리즘 3선
+
+
+
+## 3. 핵심 알고리즘 3선 {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 모델 백본을 완성하는 3대 알고리즘 축
+신경망 구조만큼이나 실제 베이스콜러의 **정확도·속도·기능 확장**을 결정짓는 핵심 알고리즘 3가지
+:::
+
+| 축 | 핵심 알고리즘 | 해결하는 핵심 엔지니어링 문제 |
+|:---|:---|:---|
+| **1. 손실 함수** | **CTC Loss** | 입력 신호($T$)와 출력 염기($U$)의 비동기 미정렬 학습 ($T \gg U$) |
+| **2. 디코딩** | **Beam Search & Viterbi** | 출력 확률 행렬(Logits)에서 전역 최적 서열 경로 복원 |
+| **3. 다중 라벨링** | **Modified Base Detection** | 화학 처리 없는 원시 신호 기반 후성유전체(5mC 등) 직접 분류 |
+
+---
+
+## 3-1. CTC Loss: 미정렬 시계열의 수학적 해법
+
+::: {.callout-warning appearance="minimal"}
+### 문제 상황: $T \gg U$ & 사전 정렬 부재
+체류 시간(Dwell time)이 가변적이어서 신호의 어느 지점이 어떤 염기인지 정답 위치(Alignment)를 알 수 없다.
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### 💡 공백 토큰($\epsilon$)의 도입
+- 라벨 세트에 공백($\epsilon$) 추가: $\{A, C, G, T, \epsilon\}$
+- 매 타임스텝마다 5개 클래스의 사후 확률 분포 출력
+- 동일 염기 연속과 단순 체류 시간 지연을 구분
+:::
+
+::: {.column width="50%"}
+### 🔄 Collapse 함수 매핑
+
+```
+
+신호 예측열: [A,  A,  ε,  A,  C,  C]
+중복 압축:   [  A,    ε,  A,    C   ]
+공백 제거:    A   A   C
+
+```
+> 중복 토큰 단일화 및 공백($\epsilon$) 제거로 원본 서열 복원
+:::
+:::
+
+---
+
+## 3-1. CTC Loss: Forward-Backward 학습 메커니즘
+
+$$\mathcal{L}_{\text{CTC}} = - \ln P(\mathbf{Y} \mid \mathbf{X}) = - \ln \sum_{\pi \in \mathcal{B}^{-1}(\mathbf{Y})} P(\pi \mid \mathbf{X})$$
+
+::: {.columns}
+::: {.column width="55%"}
+### 🔀 모든 유효 경로의 합
+- 타겟 서열이 `AC`일 때 가능한 경로 집합 $\mathcal{B}^{-1}(\mathbf{Y})$:
+  - $(\epsilon, A, C)$, $(A, A, C)$, $(A, \epsilon, C)$, $(A, C, C)$ ...
+- 모든 유효 경로 확률의 **합을 최대화**하도록 신경망 훈련
+:::
+
+::: {.column width="45%"}
+### ⚡ 동적 계획법 (DP)
+- 지수적으로 폭증하는 경로 수
+- **Forward-Backward 격자 계산**으로 복잡도를 $\mathcal{O}(T \times U)$로 단축
+- 모델 스스로 신호-염기 간 최적 정렬을 **자가 학습**
+:::
+:::
+
+---
+
+## 3-2. 디코딩: 신경망 출력에서 서열 복원하기
+
+::: {.columns}
+::: {.column width="50%"}
+### ❌ Greedy Decoding의 함정
+- **방식:** 각 스텝마다 단순히 최대 확률 토큰 $\arg\max P(y_t)$ 선택
+- **문제점:**
+  - 지역 최적해(Local optima)에 매몰
+  - 전체 시퀀스 확률 기준의 전역 최적해를 놓침
+  - 앞뒤 문맥에 따른 누적 확률 왜곡
+:::
+
+::: {.column width="50%"}
+### ✅ 전역 최적 탐색의 필요성
+- 신경망 출력 행렬: $T \times K$ Logits
+- **목표:** $\mathbf{Y}^* = \arg\max_{\mathbf{Y}} P(\mathbf{Y} \mid \mathbf{X})$
+- 정확도와 실시간 연산량 사이의 최적 트레이드오프 탐색 전략 필수
+:::
+:::
+
+---
+
+## 3-2. 빔 서치(Beam Search) vs 비터비(Viterbi)
+
+| 구분 | 빔 서치 (Beam Search) | 비터비 디코딩 (Viterbi) |
+|:---|:---|:---|
+| **기반 모델** | CTC 기반 아키텍처 (Dorado/Bonito) | CRF 기반 아키텍처 (Guppy) |
+| **작동 방식** | 매 타임스텝 상위 $N$개(Beam width) 경로 유지 | 상태 전이 행렬($K \times K$) 기반 동적 계획법 전역 최적화 |
+| **장점** | 빔 폭 조절을 통해 연산량-정확도 튜닝 용이 | 연속 염기 간 물리적 전이 제약 완벽 반영 |
+| **GPU 가속** | 커스텀 프루닝(Pruning) 커널 활용 | 커스텀 CUDA 기반 전이 행렬 고속 병렬 연산 |
+
+> **실시간 처리 핵심:** 대규모 스트리밍 환경을 위해 디코더 단계의 커스텀 CUDA 가속 탑재
+
+---
+
+## 3-3. 변형 염기(Modified Base) 직접 검출
+
+::: {.columns}
+::: {.column width="48%"}
+### 🔬 기존 NGS (Bisulfite 방식)
+- 가혹한 화학 처리로 시토신 변환 유도
+- **치명적 단점:** DNA 단편화 손상, 판독 길이 극단적 단축, 높은 실험 비용
+:::
+
+::: {.column width="52%"}
+### ⚡ 나노포어 네이티브 시퀀싱
+- 천연(Native) DNA/RNA 분자를 **화학 변형 없이 직접 통과**
+- 메틸기($-\text{CH}_3$)의 물리적 크기로 인한 고유 전류 왜곡 패턴 감지
+- 딥러닝이 특징 공간에서 $5\text{mC}$, $5\text{hmC}$, $6\text{mA}$를 직접 분리
+:::
+:::
+
+::: {.callout-tip appearance="minimal"}
+**엔지니어링 가치:** 추가 라이브러리 제작 없이 일반 시퀀싱 실행(Run)에서 **염기서열 + 후성유전체 데이터 동시 획득**
+:::
+
+---
+
+## 3-3. 변형 염기 다중 분류 모델링 전략
+
+::: {.columns}
+::: {.column width="50%"}
+### Option A. 원패스 통합 분류 (One-pass)
+- 출력 레이블 자체를 다중 클래스로 확장
+- 토큰 세트: $\{A, C, 5\text{mC}, G, T\}$
+- **장점:** 단 한 번의 추론으로 서열과 메틸레이션 동시 종결
+- **단점:** 클래스 불균형 학습 난이도 증가
+:::
+
+::: {.column width="50%"}
+### Option B. 2단계 정밀 분류 (Two-pass)
+- 1차 표준 베이스콜링($\{A, C, G, T\}$) 완료
+- CpG 아일랜드 등 특정 모티프 신호만 크롭
+- 전용 서브네트워크로 정밀 재분류
+- **장점:** 매우 높은 분류 정밀도 달성
+:::
+:::
+
+> **학습 데이터:** 합성 DNA 및 완전 메틸화/비메틸화 대조군(Control)을 통한 정밀 지도학습
+
+
+# 4. 하드웨어 가속 및 시스템 엔지니어링
+
+## 4. 하드웨어 가속 및 시스템 엔지니어링 {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 극한의 실시간 추론(Real-time Inference)
+초당 수 GB의 미가공 신호가 쏟아지는 환경에서, **시퀀싱 종료와 동시에 베이스콜링이 끝나야** 장비 유휴 시간(Bottleneck)이 발생하지 않는다.
+:::
+
+- **핵심 과제:** 모델 아키텍처 개선을 넘어선 고성능 컴퓨팅(HPC) 파이프라인 구축
+- **엔지니어링 4대 축:** C++ 엔진 재작성, 저정밀도 양자화, 컬럼형 I/O, 제로 카피 스트리밍
+
+---
+
+## 엔지니어링 아키텍처 스택 한눈에 보기
+
+| 계층 (Layer) | 레거시 병목 (Legacy) | 최신 최적화 스택 (Dorado/Modern) | 개선 효과 |
+|:---|:---|:---|:---|
+| **런타임** | Python / PyTorch 프로토타입 | **C++ / LibTorch + TensorRT** | 오버헤드 최소화, Layer Fusion |
+| **연산 정밀도** | FP32 (Single Precision) | **FP16 / INT8 (Tensor Core)** | 처리량 2배↑, VRAM 50% 절감 |
+| **파일 I/O** | `.fast5` (HDF5 계층 구조) | **`.pod5` (Apache Arrow / IPC)** | 랜덤 I/O 해소, VBZ 고속 압축 |
+| **메모리 파이프라인** | 동기식 복사 (Host $\leftrightarrow$ Device) | **Ring Buffer + Zero-Copy Streams** | 전송-연산 완전 오버랩 (Overlap) |
+
+---
+
+## 텐서 코어 가속 및 프레임워크 최적화
+
+::: {.columns}
+::: {.column width="50%"}
+### ⚙️ LibTorch & TensorRT
+- **엔진 전면 재작성:** PyTorch 프로토타입을 프로덕션용 C++ 환경으로 포팅
+- **계산 그래프 최적화:**  
+  NVIDIA TensorRT 엔진을 통한 타겟 하드웨어별 최적 경로 생성
+:::
+
+::: {.column width="50%"}
+### 🚀 레이어 융합 (Layer Fusion)
+
+```
+
+[Conv1D] ──> [BatchNorm] ──> [GELU]
+└──────── 단일 CUDA Kernel 병합 ────────┘
+
+```
+- 연속된 연산을 하나의 커널로 통합
+- VRAM 왕복 대역폭 낭비 차단
+- Tensor Core의 GEMM 연산 효율 극대화
+:::
+:::
+
+---
+
+## 저정밀도 양자화(Quantization): FP16 및 INT8
+
+::: {.callout-warning appearance="minimal"}
+### 연산 병목의 실체: Memory Bandwidth Bound
+현대 대형 모델의 추론 속도는 GPU 연산 유닛보다 **메모리 대역폭(Memory Bandwidth)**에 의해 제한된다.
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### 📉 FP16 (Half Precision)
+- **속도 2배 이상 향상:** 텐서 코어 전용 파이프라인 가동
+- **VRAM 50% 절감:** 대규모 배치(Batch) 구성 가능
+- 표준 SOTA 정확도 손실 없이 즉시 적용
+:::
+
+::: {.column width="50%"}
+### ⚡ INT8 / FP8 & QAT
+- **QAT (양자화 인식 학습):**  
+  가중치 절삭 오차를 사전 보정
+- **Q20(99%+) 임계선 사수:**  
+  염기 판독 신뢰도를 유지하며 극단적 처리량 달성
+:::
+:::
+
+---
+
+## I/O 패러다임 전환: .fast5에서 .pod5로
+
+::: {.columns}
+::: {.column width="48%"}
+### ❌ 레거시 `.fast5` (HDF5)
+- 복잡한 트리 메타데이터 구조
+- 수백만 개 단일 파일 생성
+- OS 파일 시스템 레벨의 랜덤 I/O 병목
+- 디스크 읽기 속도가 GPU 연산 발목을 잡음
+:::
+
+::: {.column width="52%"}
+### ✅ 최신 `.pod5` (Apache Arrow)
+- **IPC 기반 컬럼형 바이너리** 포맷
+- **VBZ 압축:** zstd 기반 고속 신호 압축
+- **멀티스레드 비동기 읽기:**  
+  디스크 $\to$ 호스트 메모리 병목 완전 해소
+:::
+:::
+
+::: {.callout-tip appearance="simple"}
+### I/O 최적화의 결과
+스토리지 대역폭 요구량을 대폭 낮추어, 초고출력 환경에서도 디스크 버퍼 오버플로우 방지
+:::
+
+---
+
+## 실시간 스트리밍: 제로 카피(Zero-Copy) 파이프라인
+
+
+```
+
+[Flowcell Channels] ──> [Ring Buffer] ──> [Pinned Memory] ──> [CUDA Streams] ──> [Tensor Core]
+신호 수집           비동기 큐          Page-locked         연산/전송 Overlap      추론 완료
+
+```
+
+::: {.columns}
+::: {.column width="50%"}
+### 🔄 링 버퍼 (Ring Buffer)
+- 플로우셀 수집과 신경망 추론 프로세스 분리
+- 신호 유실 없는 비동기 생산자-소비자 큐 구축
+:::
+
+::: {.column width="50%"}
+### ⚡ 제로 카피 & 스트림 오버랩
+- Pinned Host Memory로 DMA 전송 최적화
+- 데이터 전송 중에 직전 배치 커널 동시 실행
+- **GPU 유휴 시간(Idle time) 0% 유지**
+:::
+:::
+
+---
+
+## 스케일아웃: GridION vs PromethION
+
+| 비교 항목 | GridION (워크스테이션급) | PromethION (데이터센터급) |
+|:---|:---|:---|
+| **플로우셀 구동** | 최대 5개 동시 구동 | 최대 48개 동시 구동 |
+| **데이터 스루풋** | 수백 GB 단위 | 수십 TB 단위의 울트라 하이 스루풋 |
+| **컴퓨팅 구성** | 단일 내장 GPU 맞춤 경량화 | **Multi-GPU 분산 추론 + NVLink 인터커넥트** |
+| **운영 프로파일** | Fast / High-Accuracy (HAC) | **Super-Accuracy (SUP) 실시간 풀가동** |
+
+> **최종 목표:** 소형 랩톱(MinION)부터 대규모 유전체 센터(PromethION)까지 **온디바이스(Edge) 실시간 분석 완결**
+
+
+# 5. 실습 및 오픈소스 분석 리소스
+
+## 5. 실습 및 오픈소스 분석 리소스 {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 연구 프로토타입에서 프로덕션 엔진까지
+ONT 공식 오픈소스 생태계는 **PyTorch 기반의 아키텍처 연구(Bonito)**와 **C++/CUDA 기반 초고속 프로덕션 서빙(Dorado)**으로 완벽히 분리되어 운영된다.
+:::
+
+| 프로젝트 / 자원 | 기반 환경 | 역할 및 분석 포인트 |
+|:---:|:---:|:----------:|
+| **ONT Dorado** | C++ / LibTorch | 프로덕션 추론 엔진, CUDA 디코더, `.pod5` 스트리밍 |
+| **ONT Bonito** | Python / PyTorch | 최신 Conformer 아키텍처 학습, CTC/CRF Loss 구현체 |
+| **ONT Taiyaki** | Python / PyTorch | 레거시 TCN+CRF, 물리 신호-딥러닝 정렬 원형 코드 |
+| **표준 벤치마크** | `.pod5` Dataset | GIAB(인간 게놈), Zymo(미생물), 합성 메틸화 제어군 |
+
+---
+
+## 5-1. ONT Dorado: 프로덕션 레벨 C++ 추론 엔진
+
+::: {.callout-tip appearance="minimal"}
+### GitHub: `nanoporetech/dorado`
+컴퓨터공학 관점에서 **초고속 딥러닝 서빙 최적화의 엔드투엔드(End-to-End)**를 분석할 수 있는 핵심 저장소
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### ⚡ C++ / LibTorch 런타임
+- **Direct GPU Serving:** LibTorch 프론트엔드로 신경망 가중치 직접 적재
+- **메모리 파이프라인:** `.pod5` 고속 파서, 멀티스레드 스트리밍 큐, 제로 카피 텐서 패킹
+:::
+
+::: {.column width="50%"}
+### 🛠 커스텀 CUDA 가속
+- **Native 디코더:** C++/CUDA로 작성된 GPU 가속 Viterbi & Beam Search
+- **Layer Fusion:** TensorRT 및 ONNX 기반 그래프 최적화 내장
+:::
+:::
+
+---
+
+## 5-2. ONT Bonito: PyTorch 기반 학습 프레임워크
+
+::: {.callout-note appearance="simple"}
+### GitHub: `nanoporetech/bonito`
+최신 SOTA 모델 구조를 실험하고, 나만의 커스텀 베이스콜러를 훈련·파인튜닝할 수 있는 표준 연구 플랫폼
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+### 🧠 모듈형 아키텍처
+- **백본 블록:** 1D-CNN 다운샘플러 및 Conformer/Transformer 레이어
+- **명료한 수식 구현:** CTC Loss 및 CRF Loss의 순전파·역전파 계산식 제공
+:::
+
+::: {.column width="50%"}
+### 🔄 데이터 파이프라인
+- **신호 전처리:** 원시 전류 정규화(Normalization), 윈도잉, 세그멘테이션
+- **Data Augmentation:** 체류 시간 노이즈 및 진폭 스케일링 증강
+:::
+:::
+
+---
+
+## 5-3. ONT Taiyaki: 레거시 학습 파이프라인과 기초 이론
+
+::: {.columns}
+::: {.column width="45%"}
+### 🏛️ 역사적 가치
+- **GitHub:** `nanoporetech/taiyaki`
+- Guppy 중후반 세대 핵심 백본인 **TCN + CRF 구조의 원형**
+- 최신 Conformer 이전 과도기적 최적화 계보 추적에 적합
+:::
+
+::: {.column width="55%"}
+### 🔬 신호-서열 정렬 기초
+- **k-mer 물리 상태 전이:** 이온 전류 물리 모델과 딥러닝의 결합 방식 보존
+- **Forward-Backward 로직:** CTC/CRF 얼라인먼트의 수학적 베이스를 교육용으로 이해하기 용이
+:::
+:::
+
+---
+
+## 5-4. 모델 검증용 공개 데이터셋 및 벤치마크
+
+| 데이터셋 구분 | 사용 표준 데이터 | 평가 및 검증 목적 |
+|:---|:---|:------|
+| **원시 신호(학습용)** | **ONT Open Data (pod5)** | R10.4.1 원시 전류 파형을 이용한 Bonito 훈련 및 추론 입력 |
+| **인간 표준 게놈** | **GIAB HG002** | 단일 염기 정확도(Q-score) 및 인델(Indel) 오류 벤치마크 |
+| **임상 타깃 실증** | **NCBI SRA (Amplicon)** | **HLA/타깃 유전자 실데이터(FASTQ)를 통한 allele 타이핑 일치도 검증** |
+| **후성유전체 표준** | **Synthetic / PCR Control** | 비메틸화 대조군 대비 5mC/5hmC 분류율 평가 |
+
+> **데이터 파이프라인 팁:** 원시 전류(`.pod5`) 추론 결과로 생성된 FASTQ를 **NCBI SRA의 공인 런 데이터(SRR)**와 상호 교차 검증(Cross-validation) 가능
+
+
+---
+
+## 5-5. 학습 및 프로젝트 확장 로드맵
+
+```
+[1단계: 데이터 획득]       ONT Open Data(.pod5) 및 NCBI SRA 타깃 데이터셋 확보
+                                ↓
+[2단계: Toy Model 학습]   Bonito 기반 소규모 데이터로 1D-CNN + CTC/CRF 모델 훈련
+                                ↓
+[3단계: 디코더 & 서빙]     PyTorch Logits 기반 디코더 구현 → Dorado C++/CUDA 추론 벤치마크
+                                ↓
+[4단계: 다운스트림 실증]   직접 베이스콜링한 FASTQ를 NCBI SRA 검증 세트와 비교 및 HLA 타이핑
+```
+
+::: {.callout-tip appearance="simple"}
+**확장성:** 음성 인식(STT)과 시계열 딥러닝 엔지니어링 역량을 **유전체 빅데이터 및 바이오인포매틱스 고성능 컴퓨팅 도메인으로 즉시 확장** 가능
+:::
+
+
+
+# 6. 결론 및 향후 전망
+
+## 6. 결론 및 향후 전망 {background-color="#191919"}
+
+::: {.callout-note appearance="simple"}
+### 바이오와 딥러닝 시스템의 융합
+나노포어 베이스콜링은 생물학 연구를 넘어 **시계열 신호 처리, STT 아키텍처, HPC 분산 서빙 최적화가 집약된 컴퓨터공학의 결정체**다.
+:::
+
+- **핵심 가치 요약:** 비정형 아날로그 시계열에서 고정밀 디지털 서열로의 엔드투엔드 변환
+- **기술적 시사점:** 딥러닝 모델 고도화와 저지연 하드웨어 가속이 맞물린 실시간 분석 파이프라인
+- **다음 단계:** 서열 해독을 넘어 실시간 타깃 제어(Adaptive Sampling) 및 분자 변형 전주기 해석
+
+---
+
+
+## 4개 축으로 정리하는 핵심 아키텍처 요약
+
+::: {.columns}
+
+::: {.column width="50%"}
+
+### 1. 문제의 본질 (STT 대칭)
+- $p\text{A}$ 전류 파형 $\to$ 이산 염기 토큰 변환
+- 음성 인식의 프론트엔드/백본 구조 완벽 투영
+- 슬라이딩 윈도우 k-mer 비선형 문맥 해석
+
+:::
+
+::: {.column width="50%"}
+
+### 2. 세대별 진화 (SOTA 백본)
+- HMM(통계) $\to$ RNN $\to$ TCN $\to$ Conformer
+- Local Depthwise CNN + Global Self-Attention
+- 단일 리드 정확도 **Q20 (99%+)** 돌파
+
+:::
+
+:::
+
+
+::: {.columns}
+
+::: {.column width="100%"}
+
+:::
+
+:::
+
+
+
+::: {.columns}
+
+::: {.column width="50%"}
+
+### 3. 핵심 알고리즘 (비동기 정렬)
+- **CTC Loss:** 공백($\epsilon$) 토큰 기반 자가 정렬 학습
+- **Beam Search & Viterbi:** 최적 시퀀스 디코딩
+- **Modified Base:** 네이티브 $5\text{mC}$ 직접 분류
+
+:::
+
+
+::: {.column width="50%"}
+
+### 4. 시스템 가속 (실시간 서빙)
+- **C++ / LibTorch & TensorRT** 엔진 재작성
+- **FP16 / INT8 QAT** 및 Layer Fusion 적용
+- **`.pod5` + Zero-Copy DMA** 스트리밍 구현
+
+:::
+
+:::
+
+---
+
+## 기술 진화의 평행이론: STT vs 베이스콜링 {background-color="#191919"}
+
+<!--
+::: {.callout-note appearance="simple"}
+### 아키텍처 수렴 현상 (Convergence)
+두 분야는 **"연속 아날로그 파형 $\to$ 이산 토큰 시퀀스 복원"**이라는 동일한 수학적 본질을 공유하며, **약 3~5년의 시차**를 두고 동일한 아키텍처 도약을 겪었다.
+:::
+-->
+
+| 진화 단계 | 음성 인식 (ASR / STT) | 나노포어 베이스콜링 (Basecalling) | 모델링 패러다임의 변화 |
+|:---:|:--------|:--------|:--------|
+| **1세대** | **HMM-GMM** (1990s~2000s) | **HMM Table** (2014~2016, 초기 MinION) | 음향/물리 사전 통계 모델링 $\to$ 동적 잡음 한계 |
+| **2세대** | **DeepSpeech, LSTM + CTC** | **Albacore / 초기 Guppy (BiLSTM)** | 순환 신경망 도입 $\to$ 직렬 연산에 따른 GPU 병목 |
+| **3세대** | **Conformer / Jasper (CNN+Attn)** | **후기 Guppy (TCN) $\to$ Dorado (Conformer)** | 시간 축 완전 병렬화 $\to$ 실시간 스트리밍 달성 |
+| **4세대** | **wav2vec 2.0 / Whisper (SSL)** | **신호 기반 SSL 파운데이션 모델 (진행 중)** | 무라벨 원시 신호 사전학습 $\to$ 멀티태스크/제로샷 |
+
+> **동기화 속도의 가속:** 초기 10년 이상 벌어졌던 기술 격차는 오픈소스(PyTorch)와 엔지니어링 표준화 덕분에 **실시간 수렴** 단계로 좁혀짐
+
+
+---
+
+## 차세대 확장: Basecalling을 넘어선 기술적 지평
+
+::: {.columns}
+::: {.column width="30%"}
+### 🎯 Adaptive Sampling
+- **Read Until (실시간 판단):**
+  - 시퀀싱 중 신호 첫 수백 염기를 실시간 디코딩
+  - 비타깃 분자 발견 시 포어 전압을 역전시켜 물리적 방출(Eject)
+- **컴퓨팅 요구:** 극한의 초저지연 온디바이스 인퍼런스 필수
+:::
+
+::: {.column width="30%"}
+### 🧬 Direct RNA Direct Calling
+- 역전사(cDNA) 과정 없는 순수 RNA 분자 직접 해독
+- 3' $\to$ 5' 역방향 통과 특성 처리
+- $m^6\text{A}$ 등 전사체(Epitranscriptome) 변형 동시 감지
+:::
+
+::: {.column width="30%"}
+### ⚡ Foundation Models
+- 단일 염기 분류를 넘어선 원시 신호 기반 자기지도학습(SSL)
+- 대규모 사전학습 파운데이션 모델 도입 시도
+- 포어 변형 및 신규 케미스트리(R10.4.1+) 제로샷 대응
+:::
+:::
+
+---
+
+## 왜 음성 모델의 진화 궤적을 그대로 답습했을까?
+
+::: {.columns}
+::: {.column width="48%"}
+### 🔄 Conformer 수렴의 필연성
+- **국소 고주파 파형 (CNN 영역):**  
+  음소의 찰나 변화 = 나노포어 수축부 5~6개 k-mer 저항 신호
+- **장거리 문맥 의존성 (Attention 영역):**  
+  발화 억양/문맥 = 모터 단백질 속도 편차(Time-warping) 보정
+- **결과:** 독립 구조 대신 **Macaron Conformer 블록이 양 분야의 표준(SOTA)**으로 안착
+:::
+
+::: {.column width="48%"}
+### ⚡ 차세대 파운데이션 모델(SSL)로의 전이
+- **라벨링 비용 극복:**  
+  정제된 서열 정답 없이도 쏟아지는 **테라바이트급 미가공 전류(Squiggle)** 자체를 마스킹 사전학습
+- **단일 백본 멀티태스킹:**  
+  Whisper가 번역/STT/화자분리를 하듯, **하나의 신호 백본으로 염기 해독 + 변형 염기(5mC) + RNA 직접 해독**을 동시 완결
+:::
+:::
+
+::: {.callout-tip appearance="minimal"}
+**시사점:** 베이스콜링 엔지니어링은 생물학적 특수성을 음성 신호 처리의 일반화된 수식 체계로 치환해 온 역사다.
+:::
+
+---
+
+## Q&A & Thank you {background-color="#191919"}
+
+<br>
+
+### 경청해 주셔서 감사합니다
+
+<br>
+
+**나노포어 베이스콜링: 딥러닝 기반 신호 처리에서 생성까지**
+
+<br>
+
+::: {.callout-note appearance="minimal"}
+질문이나 논의하고 싶은 주제가 있다면 편하게 말씀해 주세요.
+:::
+
+- **Presenter:** Sihwan Kim
+- **GitHub Reference:** `nanoporetech/dorado`, `nanoporetech/bonito`
+  - 링크: <a href="https://github.com/nanoporetech/dorado"> dorado </a>, 
+    <a href="https://github.com/nanoporetech/bonito"> bonito </a>
+
+---
+
+
+## 토론 아젠다 (Discussion & Deep Dive)
+
+| 분류 | 심층 논의 주제 | 핵심 엔지니어링 질문 |
+|:---|:------|:---------|
+| **신호 전처리** | **오디오 vs 이온 전류의 특성 차** | 발화 속도 변화와 모터 단백질 Stalling/Slipping 현상의 노이즈 모델링 차이는 무엇인가? |
+| **디코딩 최적화** | **Streaming Beam Search vs Viterbi** | 멀티 GPU 프로덕션 서빙에서 커스텀 CUDA 디코더의 처리량 병목 지점은 어디인가? |
+| **다중 클래스 학습** | **후성유전체(Methylation) 불균형** | 희귀 변형 염기(5hmC 등) 검출 시 Low-support 클래스 문제를 어떻게 해결할 것인가? |
+| **파이프라인 구축** | **Bonito 학습에서 Dorado 서빙까지** | 연구 단계의 PyTorch 체크포인트를 프로덕션 C++ 런타임 텐서 엔진으로 전환하는 실무 전략은? |
