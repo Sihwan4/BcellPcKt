@@ -1,30 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연구 보고서 목록</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container { width: 100%; max-width: 860px; }
+        header { margin-bottom: 24px; }
+        h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .subtitle { color: var(--text-muted); font-size: 0.95rem; }
+        
+        .search-box {
+            margin-bottom: 24px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .card-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .card-item { display: flex; }
+        .card-link {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+        }
+        .card-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            word-break: break-word;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+        .desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .no-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>연구 보고서 목록</h1>
-    <ul>
-        <li><a href="M1-macrophage-claude/">M1-macrophage-claude Report Summary</a></li>
-        <li><a href="M1-macrophage-gemini/">M1-macrophage-gemini Report Summary</a></li>
-        <li><a href="Peripheral-MDSC-T/">Peripheral-MDSC-T Report Summary</a></li>
-        <li><a href="TCMR-RNA/">TCMR-RNA Report Summary</a></li>
-        <li><a href="bmem-1/">bmem-1 Report Summary</a></li>
-        <li><a href="bmem-pc-1/">bmem-pc-1 Report Summary</a></li>
-        <li><a href="bmem-pc-2/">bmem-pc-2 Report Summary</a></li>
-        <li><a href="bmem-pc-3/">bmem-pc-3 Report Summary</a></li>
-        <li><a href="bmem-pc-4/">bmem-pc-4 Report Summary</a></li>
-        <li><a href="car-treg/">car-treg Report Summary</a></li>
-        <li><a href="il-6review/">il-6review Report Summary</a></li>
-        <li><a href="nanopore-basecalling/">nanopore-basecalling Report Summary</a></li>
-        <li><a href="nk1/">nk1 Report Summary</a></li>
-        <li><a href="pT8-ABMR/">pT8-ABMR Report Summary</a></li>
-        <li><a href="pc1/">pc1 Report Summary</a></li>
-        <li><a href="population-genetics-1/">population-genetics-1 Report Summary</a></li>
-        <li><a href="tfh-b-abmr/">tfh-b-abmr Report Summary</a></li>
-        <li><a href="tlo/">tlo Report Summary</a></li>
+    <div class="container">
+        <header>
+            <h1>🔬 연구 보고서 목록</h1>
+            <p class="subtitle">BcellPcKt 연구 레포지토리 아카이브</p>
+        </header>
 
-    </ul>
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="보고서 이름 검색 (예: macrophage, bmem, treg)..." autocomplete="off">
+        </div>
+
+        <ul class="card-list" id="reportList">
+        <li class="card-item"><a href="M1-macrophage-claude/" class="card-link"><div class="title">M1-macrophage-claude</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="M1-macrophage-gemini/" class="card-link"><div class="title">M1-macrophage-gemini</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="Peripheral-MDSC-T/" class="card-link"><div class="title">Peripheral-MDSC-T</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="TCMR-RNA/" class="card-link"><div class="title">TCMR-RNA</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="bmem-1/" class="card-link"><div class="title">bmem-1</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="bmem-pc-1/" class="card-link"><div class="title">bmem-pc-1</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="bmem-pc-2/" class="card-link"><div class="title">bmem-pc-2</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="bmem-pc-3/" class="card-link"><div class="title">bmem-pc-3</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="bmem-pc-4/" class="card-link"><div class="title">bmem-pc-4</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="car-treg/" class="card-link"><div class="title">car-treg</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="il-6review/" class="card-link"><div class="title">il-6review</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="nanopore-basecalling/" class="card-link"><div class="title">nanopore-basecalling</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="nk1/" class="card-link"><div class="title">nk1</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="pT8-ABMR/" class="card-link"><div class="title">pT8-ABMR</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="pc1/" class="card-link"><div class="title">pc1</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="population-genetics-1/" class="card-link"><div class="title">population-genetics-1</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="tfh-b-abmr/" class="card-link"><div class="title">tfh-b-abmr</div><div class="desc">Report Summary</div></a></li>
+        <li class="card-item"><a href="tlo/" class="card-link"><div class="title">tlo</div><div class="desc">Report Summary</div></a></li>
+
+            <li id="noResult" class="no-result">일치하는 보고서가 없습니다.</li>
+        </ul>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const list = document.getElementById('reportList');
+        const items = list.querySelectorAll('.card-item');
+        const noResult = document.getElementById('noResult');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const title = item.querySelector('.title').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>
