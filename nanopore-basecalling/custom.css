@@ -1,0 +1,120 @@
+/* Quarto revealjs 전체 영역 및 슬라이드 본문에 이모지 Fallback 적용 */
+.reveal, 
+.reveal .slides, 
+.reveal .slides section {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+               "Noto Color Emoji", sans-serif !important;
+}
+
+/* Callout 내부 아이콘/텍스트에도 폰트 상속 보장 */
+.reveal .callout,
+.reveal .callout .callout-title,
+.reveal .callout .callout-content {
+  font-family: inherit;
+}
+
+
+/* 제목 크기 및 여백 조정 */
+.reveal h2 {
+  font-size: 1.6em;
+  margin-bottom: 0.8em;
+  word-break: keep-all; /* 한글 단어 단위 줄바꿈 */
+}
+
+
+/* 슬라이드 직계 첫 번째 ul에만 폰트 적용 (중첩 배수 누적 차단) */
+.reveal .slides > section > ul,
+.reveal .slides > section > div > ul {
+  font-size: 1.25em;
+  line-height: 1.5;
+}
+
+/* 모든 li 공통 적용 */
+.reveal li {
+  margin-bottom: 0.5em;
+  word-break: keep-all;
+}
+
+/* 하위 중첩 ul의 크기 리셋 (또는 살짝 작게 조절) */
+.reveal ul ul {
+  font-size: 0.95em;       /* 부모 대비 90% 수준으로 단정하게 유지 */
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+
+/* 1. Callout 컨테이너 전체 크기 및 여백 확대 */
+.reveal .callout {
+  width: 100% !important;
+  font-size: 1.0em !important;          /* 본문 대비 살짝 큼직하고 안정적인 크기 */
+  border-radius: 10px;
+  margin: 1.8rem 0;
+  padding: 1rem 1.4rem;
+  box-sizing: border-box;
+}
+
+/* appearance="simple" 테마 배경 및 좌측 강조선 */
+.reveal .callout.callout-style-simple {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-left: 6px solid #3b82f6 !important; /* 포인트 바 두께 확대 */
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* 2. Callout 제목 (Title) 최적화 */
+.reveal .callout .callout-title {
+  font-size: 1.0em !important;         /* 제목 강조를 위해 본문보다 키움 */
+  font-weight: 700;
+  color: #60a5fa;                       /* 다크 테마에서 가독성 좋은 밝은 블루 */
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 아이콘 크기 및 정렬 */
+.reveal .callout .callout-icon-container i.callout-icon {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+/* 3. Callout 본문 내용 (Content) 최적화 */
+.reveal .callout .callout-content p {
+  font-size: 0.95em !important;         /* 읽기 편안한 크기 */
+  line-height: 1.6 !important;          /* 여유로운 행간 */
+  color: #f1f5f9;                       /* 선명한 오프화이트 컬러 */
+  margin: 0 !important;
+  word-break: keep-all;                 /* 단어 단위 줄바꿈으로 가독성 향상 */
+}
+
+
+
+
+/* 1. 슬라이드 내 pre 블록 외형 및 레이아웃 정리 */
+.reveal pre {
+  width: 100% !important;                  
+  max-height: none !important;             /* 핵심: 기본 최대 높이 제한 해제 */
+  overflow: visible !important;            /* 스크롤바 강제 제거 */
+  box-shadow: none !important;             
+  background: rgba(255, 255, 255, 0.05);   
+  border: 1px solid rgba(255, 255, 255, 0.12); 
+  border-left: 5px solid #3b82f6;          
+  border-radius: 8px;                      
+  padding: 1.2rem 1.5rem;
+  margin: 1.2rem auto;
+  box-sizing: border-box !important;
+}
+
+/* 2. code 텍스트 크기, 폰트 및 줄바꿈 처리 */
+.reveal pre code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 1.25em !important;             
+  line-height: 1.5 !important;             
+  color: #e2e8f0;                          
+  white-space: pre !important;             
+  max-height: none !important;             /* 핵심: Reveal.js 기본 400px max-height 해제 */
+  overflow: hidden !important;             /* 가로/세로 불필요한 스크롤바 완전 차단 */
+  padding: 0 !important;                  /* pre 내부 이중 패딩 방지 */
+}
