@@ -1,13 +1,20 @@
-name: Auto Update Index HTML  # 워크플로 이름
+name: Auto Update Index HTML
 
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시가 발생할 때 실행
-      
+      - main
+    paths-ignore:
+      - 'index.html'   # index.html 자체 수정 커밋으로는 워크플로가 다시 돌지 않음
+
+# 여러 커밋이 연달아 들어올 때 이전 작업은 취소하고 항상 최신 커밋 기준으로만 빌드
+concurrency:
+  group: generate-index-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
-  contents: write # 리포지토리 파일에 대한 쓰기 권한을 부여
-  
+  contents: write
+
 jobs:
   generate_index:
     runs-on: ubuntu-latest
@@ -15,47 +22,172 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Generate and Update index.html
         id: generate
         run: |
-          # 리포지토리의 최상위 디렉토리를 탐색하여 폴더 목록을 자동으로 생성합니다.
-          # '.'는 현재 디렉토리를 의미하며, type d (디렉토리)인 항목만 찾습니다.
-          # .git과 .github 폴더는 제외합니다.
-          
-          # 폴더 목록을 배열에 저장 (정렬 후)
-          DIRS=($(find . -maxdepth 1 -type d -not -name "." -not -name ".git" -not -name ".github" | sort))
-          
+          # 1. 대상 디렉터리 목록 수집 (루트, .git, .github 제외)
           LIST_ITEMS=""
-          for DIR_PATH in "${DIRS[@]}"; do
-            DIR_NAME=$(basename "$DIR_PATH") # './b' -> 'b'
-            # 링크 텍스트는 폴더 이름을 사용합니다.
-            LIST_ITEMS="${LIST_ITEMS}        <li><a href=\"${DIR_NAME}/\">${DIR_NAME} Report Summary</a></li>\n"
-          done
+          while IFS= read -r DIR_PATH; do
+            [ -z "$DIR_PATH" ] && continue
+            DIR_NAME=$(basename "$DIR_PATH")
+            # 내부에 index.html이 있는 폴더만 링크하고 싶다면 조건을 추가할 수도 있음
+            LIST_ITEMS="${LIST_ITEMS}        <li class=\"card-item\"><a href=\"${DIR_NAME}/\" class=\"card-link\"><div class=\"title\">${DIR_NAME}</div><div class=\"desc\">Report Summary</div></a></li>\n"
+          done < <(find . -maxdepth 1 -mindepth 1 -type d ! -name ".*" | sort)
 
-          # 2. 새로운 index.html 파일 내용 생성
-          NEW_INDEX=$(cat <<EOF
+          # 2. 검색창 + 반응형 카드 스타일이 적용된 index.html 생성
+          cat << 'EOF' > index.html.new
           <!DOCTYPE html>
-          <html>
+          <html lang="ko">
           <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>연구 보고서 목록</title>
+              <style>
+                  :root {
+                      --bg: #f8fafc;
+                      --card-bg: #ffffff;
+                      --text: #0f172a;
+                      --text-muted: #64748b;
+                      --border: #e2e8f0;
+                      --primary: #2563eb;
+                      --primary-hover: #1d4ed8;
+                  }
+                  * { box-sizing: border-box; margin: 0; padding: 0; }
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                      background-color: var(--bg);
+                      color: var(--text);
+                      padding: 40px 20px;
+                      display: flex;
+                      justify-content: center;
+                  }
+                  .container { width: 100%; max-width: 860px; }
+                  header { margin-bottom: 24px; }
+                  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+                  .subtitle { color: var(--text-muted); font-size: 0.95rem; }
+                  
+                  .search-box {
+                      margin-bottom: 24px;
+                  }
+                  .search-input {
+                      width: 100%;
+                      padding: 12px 16px;
+                      font-size: 1rem;
+                      border: 1px solid var(--border);
+                      border-radius: 8px;
+                      outline: none;
+                      transition: border-color 0.2s, box-shadow 0.2s;
+                  }
+                  .search-input:focus {
+                      border-color: var(--primary);
+                      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+                  }
+
+                  .card-list {
+                      list-style: none;
+                      display: grid;
+                      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                      gap: 16px;
+                  }
+                  .card-item { display: flex; }
+                  .card-link {
+                      flex: 1;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-between;
+                      padding: 16px;
+                      background: var(--card-bg);
+                      border: 1px solid var(--border);
+                      border-radius: 10px;
+                      text-decoration: none;
+                      color: inherit;
+                      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+                  }
+                  .card-link:hover {
+                      transform: translateY(-2px);
+                      border-color: var(--primary);
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                  }
+                  .title {
+                      font-weight: 600;
+                      font-size: 1.05rem;
+                      word-break: break-word;
+                      color: var(--primary);
+                      margin-bottom: 6px;
+                  }
+                  .desc {
+                      font-size: 0.85rem;
+                      color: var(--text-muted);
+                  }
+                  .no-result {
+                      grid-column: 1 / -1;
+                      text-align: center;
+                      padding: 32px;
+                      color: var(--text-muted);
+                      display: none;
+                  }
+              </style>
           </head>
           <body>
-              <h1>연구 보고서 목록</h1>
-              <ul>
-          ${LIST_ITEMS}
-              </ul>
+              <div class="container">
+                  <header>
+                      <h1>🔬 연구 보고서 목록</h1>
+                      <p class="subtitle">BcellPcKt 연구 레포지토리 아카이브</p>
+                  </header>
+
+                  <div class="search-box">
+                      <input type="text" id="searchInput" class="search-input" placeholder="보고서 이름 검색 (예: macrophage, bmem, treg)..." autocomplete="off">
+                  </div>
+
+                  <ul class="card-list" id="reportList">
+          EOF
+
+          # 리스트 아이템 삽입
+          echo -e "$LIST_ITEMS" >> index.html.new
+
+          # 하단 자바스크립트 및 닫는 태그
+          cat << 'EOF' >> index.html.new
+                      <li id="noResult" class="no-result">일치하는 보고서가 없습니다.</li>
+                  </ul>
+              </div>
+
+              <script>
+                  const searchInput = document.getElementById('searchInput');
+                  const list = document.getElementById('reportList');
+                  const items = list.querySelectorAll('.card-item');
+                  const noResult = document.getElementById('noResult');
+
+                  searchInput.addEventListener('input', (e) => {
+                      const query = e.target.value.toLowerCase().trim();
+                      let visibleCount = 0;
+
+                      items.forEach(item => {
+                          const title = item.querySelector('.title').textContent.toLowerCase();
+                          if (title.includes(query)) {
+                              item.style.display = 'flex';
+                              visibleCount++;
+                          } else {
+                              item.style.display = 'none';
+                          }
+                      });
+
+                      noResult.style.display = (visibleCount === 0) ? 'block' : 'none';
+                  });
+              </script>
           </body>
           </html>
           EOF
-          )
-          
-          # 3. 변경 사항이 있는지 확인하고 index.html에 작성
-          if [ ! -f index.html ] || [ "$(cat index.html)" != "$NEW_INDEX" ]; then
-            echo -e "$NEW_INDEX" > index.html
-            echo "changed=true" >> $GITHUB_OUTPUT
+
+          # 3. 변경 사항이 있을 때만 파일 덮어쓰기
+          if [ ! -f index.html ] || ! cmp -s index.html index.html.new; then
+            mv index.html.new index.html
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            rm index.html.new
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Commit and Push changes
