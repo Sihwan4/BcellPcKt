@@ -1,158 +1,681 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NK 세포 신장 이식 연구 상세 설명</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고차원 NK 세포 분석을 통한 항체 비의존적 이식편 기능 부전 규명</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            },
+            accent: {
+              50: '#fdf4ff',
+              100: '#fae8ff',
+              600: '#c026d3',
+              700: '#a21caf',
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', 'Noto Sans KR', 'sans-serif'],
+          }
         }
-        .icon {
-            width: 24px;
-            height: 24px;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        .section-header {
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-        }
-        .content-box {
-            background-color: #fefcbf; /* Light yellow background for emphasis */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border-left: 4px solid #f59e0b; /* Amber accent */
-        }
-    </style>
+      }
+    }
+  </script>
+  <!-- Google Fonts & Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .gradient-header {
+      background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0d9488 100%);
+    }
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
 </head>
-<body class="p-4 sm:p-8">
-    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl p-6 md:p-10">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-        <!-- Header (Slide 1) -->
-        <header class="text-center mb-10">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-800 mb-2">
-                신장 이식 NK 세포 고차원 분석: Ksp37의 병원성 역할
-            </h1>
-            <p class="text-xl text-gray-600">
-                고차원 분석으로 항체 비의존적 이식편 손상의 새로운 기전 규명
-            </p>
-        </header>
-
-        <!-- Section 1: 서론 및 연구 개요 (Slides 2-4) -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 section-header flex items-center">
-                <svg class="icon text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-                1. 서론: 문제 제기 및 목표
-            </h2>
-            <div class="space-y-4 text-gray-700">
-                <p>
-                    NK 세포는 암과 감염 조절에 중요하지만, 고형 장기 이식에서의 역할은 복잡합니다. 기존 연구들은 DSA와 무관하게 HLA/KIR 불일치가 신장 이식 결과와 연관됨을 시사했지만, 그 메커니즘은 불분명했습니다.
-                </p>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>**문제:** 항체 비의존적 이식편 기능 상실에 기여하는 NK 세포의 특정 아형 및 분자 메커니즘을 규명해야 합니다.</li>
-                    <li>**목표:** CyTOF를 이용해 수혜자 NK 세포의 이질성을 프로파일링하고, 공여자 반응성 아형을 식별하며, 장기 이식 결과와 관련된 바이오마커를 발굴하는 것입니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Section 2: 연구 방법론 (Slide 5) -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 section-header flex items-center">
-                <svg class="icon text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 2 2 0 0 1-1 3.46 2 2 0 0 1-3.46 0 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1-3.46-1 2 2 0 0 1 0-3.46 1.65 1.65 0 0 0 .33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33 2 2 0 0 1 1-3.46 2 2 0 0 1 3.46 0 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0 .33 1.82 2 2 0 0 1 3.46 1 2 2 0 0 1 0 3.46z"></path></svg>
-                2. 연구 코호트 및 방법
-            </h2>
-            <div class="text-gray-700">
-                <p>
-                    두 개의 임상 시험 코호트(Test set 및 Validation set)에서 신장 이식 수혜자의 말초 혈액 NK 세포를 분석했습니다.
-                </p>
-                <ul class="list-disc pl-5 space-y-2 mt-2">
-                    <li>**핵심 기술:** CyTOF (Cytometry by Time-Of-Flight)를 사용하여 NK 세포의 표현형 및 기능적 특성을 고차원으로 동시에 분석했습니다. </li>
-                    <li>**기능 분석:** 공여자 PBMC를 이용한 체외(In vitro) 자극을 통해 NK 세포의 동종 반응성 및 이펙터 분자 방출을 측정했습니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Section 3: 주요 결과 (Slides 6-14) -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 section-header flex items-center">
-                <svg class="icon text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.2"></path></svg>
-                3. 주요 결과: NK 세포 아형과 Ksp37
-            </h2>
-
-            <h3 class="text-xl font-semibold text-gray-800 mb-3 mt-6">3.1. NK 세포 이질성 및 NKG2A+KIR+ 반응성 (Slides 6-9)</h3>
-            <div class="text-gray-700 space-y-3">
-                <p>
-                    CyTOF 분석 결과, 수혜자 NK 세포의 아형 구성과 KIR, NKG2A 같은 기능적 수용체의 발현은 개인마다 매우 다양했습니다.
-                </p>
-                <div class="content-box">
-                    <p class="font-bold text-lg text-amber-700 mb-2">하이퍼 반응성 아형: NKG2A+KIR+ NK 세포</p>
-                    <ul class="list-disc pl-5">
-                        <li>**NKG2A+KIR+ NK 세포**는 공여자 자극에 대해 CD107a 및 IFN-γ와 같은 세포독성 및 사이토카인 반응을 가장 강력하게 보였습니다.</li>
-                        <li>이러한 강화된 동종 반응성은 NK 세포 교육의 효과를 반영하며, 이식 후 표준 **면역억제 요법**을 받는 상황에서도 **그대로 유지**되었습니다.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3 class="text-xl font-semibold text-gray-800 mb-3 mt-6">3.2. Ksp37 (FGFBP2)의 병원성 역할 (Slides 10-14)</h3>
-            <div class="text-gray-700 space-y-3">
-                <p>
-                    본 연구는 NK 세포에서 분비되는 새로운 분자인 Ksp37 (FGFBP2)의 병원성 역할을 발견했습니다.
-                </p>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>**예측 인자:** Test 세트 및 **Validation 세트** 모두에서 **이식 전** NKG2A+ NK 세포에 의해 공여자 유도된 **Ksp37 방출량**이 장기 이식편 기능 지표(eGFR) 감소와 유의미하게 상관관계가 있었습니다.</li>
-                    <li>**항체 비의존성 기여:** 조직학적 거부 반응 소견이 없는 이식편 생검에서 FGFBP2 유전자 발현이 **사망 비례 이식편 상실(death-censored graft loss)**과 연관되었습니다. 이는 NK 세포가 DSA 및 조직학적 거부 반응과 독립적으로 이식편 손상에 기여함을 시사합니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Section 4: 고찰 및 기전 제언 (Slides 15-17) -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 section-header flex items-center">
-                <svg class="icon text-purple-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 11.2L6 15.4l1.4 1.4 4.2-4.2"></path><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path><path d="M12 12V4"></path><path d="M15 15l-3 3-3-3"></path></svg>
-                4. 고찰 및 제안된 기전
-            </h2>
-            <div class="text-gray-700 space-y-3">
-                <p>
-                    이 결과는 NK 세포가 항체 비의존적 기전, 즉 HLA/KIR 불일치로 인한 **"Missing-self"** 자극을 통해 이식편 손상을 유발한다는 가설을 강력하게 뒷받침합니다.
-                </p>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>**NK 교육의 중요성:** NK 세포 교육의 효과가 이식 후에도 지속되어, NKG2A+KIR+ 세포의 높은 동종 반응성이 유지됩니다.</li>
-                    <li>**잠재적 치료 표적:** NKG2D 및 DNAM-1 같은 활성화 수용체의 발현이 높으며, 이들을 차단하면 NK 세포 매개 손상을 줄이는 새로운 치료 전략이 될 수 있습니다.</li>
-                    <li>**Ksp37 기전:** Ksp37은 FGF-2 (FGF-binding protein 2)의 리간드 결합을 돕는 FGF 결합 단백질로, NK 세포 활성화와 염증의 지표로 작용합니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Section 5: 결론 및 임상적 의의 (Slides 18-20) -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 section-header flex items-center">
-                <svg class="icon text-yellow-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18h14V7l-4-4H5zm4 0v4h6V3"></path><path d="M17 21v-4M17 17l-3-3-3 3-3-3"></path></svg>
-                5. 결론 및 임상적 의의
-            </h2>
-            <div class="content-box text-gray-700">
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>**핵심 결론:** NK 세포는 DSA와 독립적으로 이식편 손상에 기여하며, 특히 **NKG2A+ NK 세포 유래 Ksp37 방출**이 장기 예후를 예측하는 강력한 인자입니다.</li>
-                    <li>**임상적 의의:** 이식 전 NK 세포의 공여자 반응성, 특히 Ksp37 분비 분석은 환자의 **이식 위험도를 평가**하는 새로운 바이오마커로 활용될 수 있습니다.</li>
-                    <li>**향후 제언:** NK 세포의 활성화 수용체나 Ksp37 분비 경로를 표적화하는 새로운 면역억제 전략의 개발이 필요합니다.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Citation -->
-        <footer class="mt-12 p-4 bg-gray-100 rounded-lg">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">참고문헌</h3>
-            <p class="text-sm text-gray-600">
-                High-dimensional analysis of NK cells in kidney transplantation uncovers subsets associated with antibody-independent graft dysfunction. <br>
-                Ruan et al. JCI Insight. 2024;9(21):e185687.
-            </p>
-        </footer>
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-600 text-white shadow-md">
+          <i class="fa-solid fa-dna text-lg"></i>
+        </span>
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-sky-600">JCI Insight (2024) 논문 리뷰</span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate max-w-xs sm:max-w-md md:max-w-lg">
+            신장이식과 항체 비의존적 NK 세포 기능 부전
+          </h1>
+        </div>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
+        <a href="#summary" class="hover:text-sky-600 transition">연구 개요</a>
+        <a href="#key-findings" class="hover:text-sky-600 transition">주요 발견</a>
+        <a href="#mechanism" class="hover:text-sky-600 transition">면역학적 기전</a>
+        <a href="#evidence" class="hover:text-sky-600 transition">실험적 근거</a>
+        <a href="#implications" class="hover:text-sky-600 transition">임상적 가치</a>
+      </nav>
+      <div class="flex items-center space-x-2">
+        <a href="https://doi.org/10.1172/jci.insight.185687" target="_blank" rel="noopener noreferrer" 
+           class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 transition">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>원문 DOI 보기</span>
+        </a>
+      </div>
     </div>
+  </header>
+
+  <main class="flex-grow">
+    <section class="gradient-header text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-5xl mx-auto space-y-4 relative z-10">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/15 text-sky-100 text-xs tracking-wide">
+          <i class="fa-solid fa-award"></i>
+          <span>JCI Insight. 2024 Nov 8;9(21):e185687 (PMID: 39388279)</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-snug">
+          신장이식 후 항체와 무관하게 이식편 손상을 일으키는<br class="hidden sm:inline">
+          새로운 NK 세포 아형과 Ksp37 바이오마커 규명
+        </h2>
+        <p class="text-sky-100 text-sm sm:text-base max-w-3xl leading-relaxed">
+          자연살해세포(NK cell)는 항체(DSA)가 존재하지 않는 상황에서도 어떻게 신장이식편 손상을 일으킬 수 있는가에 대한 해답을 질량세포분석(CyTOF) 기법을 통해 명확히 제시한 핵심 논문입니다. 이식 전 환자의 특정 NK 세포 아형 반응성을 통해 장기적인 이식 신장 수명을 조기에 예측할 수 있는 새로운 지평을 열었습니다.
+        </p>
+        <div class="pt-2 flex flex-wrap gap-4 text-xs text-sky-200 border-t border-white/10">
+          <div><strong class="text-white">교신저자:</strong> Amir Horowitz 박사 (Icahn School of Medicine at Mount Sinai)</div>
+          <div><strong class="text-white">제1저자:</strong> Dan Fu Ruan 박사 외 다수</div>
+          <div><strong class="text-white">분야:</strong> 이식면역학 (Transplantation Immunology), 면역치료</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto -mt-6 px-4 sm:px-6 relative z-20">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl p-4 card-shadow border border-slate-100 flex items-start space-x-3">
+          <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+            <i class="fa-solid fa-microscope text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">연구 방법론</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">CyTOF 고차원 질량세포분석</div>
+            <p class="text-xs text-slate-600 mt-1">31개 표지자 단일세포 수준 정밀 분석</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-4 card-shadow border border-slate-100 flex items-start space-x-3">
+          <div class="p-2.5 bg-purple-50 text-purple-600 rounded-lg shrink-0">
+            <i class="fa-solid fa-shield-virus text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">핵심 관찰</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">면역억제제 저항성 활성</div>
+            <p class="text-xs text-slate-600 mt-1">이식 후 약제 투여에도 18개월간 반응 유지</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-4 card-shadow border border-slate-100 flex items-start space-x-3">
+          <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg shrink-0">
+            <i class="fa-solid fa-flask-vial text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">예후 바이오마커</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">Ksp37 (FGFBP2) 방출</div>
+            <p class="text-xs text-slate-600 mt-1">이식 전 탈과립 수치와 5년 eGFR 반비례</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-4 card-shadow border border-slate-100 flex items-start space-x-3">
+          <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg shrink-0">
+            <i class="fa-solid fa-chart-line text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">독립적 임상 검증</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">조직 생검 3개 코호트 검증</div>
+            <p class="text-xs text-slate-600 mt-1">비거부반응 환자군에서도 신장 상실 예측</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+      <div class="border-b border-slate-200 pb-4">
+        <span class="text-xs font-bold text-sky-600 tracking-wider uppercase">Executive Summary</span>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1">연구의 핵심 요약 및 학술적 배경</h3>
+      </div>
+
+      <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-4 text-base">
+        <p class="bg-slate-100/80 p-5 rounded-xl border-l-4 border-sky-600 italic text-slate-800">
+          "본 연구는 신장이식 환자에서 공여자 특이 항체(DSA)가 없는 상태에서도 왜 만성적인 이식편 기능 저하가 발생하는지에 대한 오랜 의문을 해결하고자 수행되었습니다. 연구진은 고차원 CyTOF 분석을 통해 수혜자의 특정 NK 세포 아형이 공여자 세포와 반응하여 독성 매개물질인 <strong>Ksp37</strong>을 방출하며, 이것이 장기적인 신기능 저하와 직결된다는 사실을 입증하였습니다."
+        </p>
+        
+        <p>
+          전통적으로 고형장기 이식에서 거부반응은 주로 수혜자의 T 세포에 의한 세포 매개성 거부반응(TCMR) 또는 공여자 특이 항체(DSA)에 의해 유발되는 항체 매개성 거부반응(ABMR)으로 분류되어 왔습니다. 특히 NK 세포는 항체의 Fc 수용체(CD16)에 결합하여 항체 의존성 세포독성(ADCC)을 일으키는 조연으로만 인식되는 경향이 있었습니다.
+        </p>
+
+        <p>
+          그러나 임상 현장에서는 공여자 특이 항체가 검출되지 않는 환자에서도 미세혈관 염증(MVI)이나 원인 불명의 만성 이식신 기능 상실이 빈번히 관찰되었습니다. 본 연구진은 NK 세포의 세포 표면 수용체인 <strong>NKG2A</strong>와 <strong>KIR (Killer cell immunoglobulin-like receptor)</strong>의 자가 면역 교육(education) 상태 및 동종 항원 인식 메커니즘에 주목하여 연구를 설계하였습니다.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 sm:p-8 card-shadow border border-slate-200/80">
+        <h4 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+          <i class="fa-solid fa-users-viewfinder text-sky-600"></i>
+          <span>연구 코호트 및 실험 설계 (Experimental Design)</span>
+        </h4>
+        <p class="text-sm text-slate-600 mt-2">
+          본 연구는 엄격하게 수집된 다기관 임상시험 환자 검체를 활용하여 발견 코호트와 독립 검증 코호트의 이중 구조로 진행되었습니다.
+        </p>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-sky-50/50 rounded-xl p-5 border border-sky-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-sky-700 bg-sky-200/60 px-2.5 py-0.5 rounded-full">발견 코호트</span>
+              <span class="text-xs text-slate-500 font-medium">생체 공여자 중심 (70%)</span>
+            </div>
+            <h5 class="text-base font-bold text-slate-900 mt-3">CTOT01 코호트</h5>
+            <ul class="text-xs text-slate-700 mt-2 space-y-1.5 list-disc list-inside">
+              <li>신장이식 수혜자 <strong>n = 70명</strong></li>
+              <li>건강 대조군 <strong>n = 20명</strong> 동시 프로파일링</li>
+              <li>이식 전 및 이식 후(6, 12, 18개월) PBMC 종단 추적</li>
+              <li>공여자 유래 B 세포와 6시간 동종 자극 공배양</li>
+            </ul>
+          </div>
+
+          <div class="bg-purple-50/50 rounded-xl p-5 border border-purple-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-700 bg-purple-200/60 px-2.5 py-0.5 rounded-full">독립 검증 코호트</span>
+              <span class="text-xs text-slate-500 font-medium">뇌사자 공여자 중심</span>
+            </div>
+            <h5 class="text-base font-bold text-slate-900 mt-3">CTOT19 코호트</h5>
+            <ul class="text-xs text-slate-700 mt-2 space-y-1.5 list-disc list-inside">
+              <li>신장이식 수혜자 <strong>n = 25명</strong> 독립적 검증</li>
+              <li>이식 6개월 및 2년 추적 eGFR 데이터 분석</li>
+              <li>CTOT01에서 도출된 핵심 아형 상관관계 재현 검증</li>
+              <li>지연성 이식편 기능(DGF) 등 변수 통제 분석 수행</li>
+            </ul>
+          </div>
+
+          <div class="bg-emerald-50/50 rounded-xl p-5 border border-emerald-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-200/60 px-2.5 py-0.5 rounded-full">조직 생검 코호트</span>
+              <span class="text-xs text-slate-500 font-medium">3개 글로벌 데이터셋</span>
+            </div>
+            <h5 class="text-base font-bold text-slate-900 mt-3">GEO 생검 마이크로어레이</h5>
+            <ul class="text-xs text-slate-700 mt-2 space-y-1.5 list-disc list-inside">
+              <li><strong>GSE21374</strong> (비거부반응 포함 31년 추적)</li>
+              <li><strong>GSE36059</strong> (TCMR, ABMR, 혼합 거부반응)</li>
+              <li><strong>GSE50058</strong> (급성 거부반응 환자군)</li>
+              <li>이식편 내 <span class="font-semibold text-emerald-700">FGFBP2(Ksp37)</span> 유전자 발현 정량</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="key-findings" class="bg-slate-100/70 py-12 border-y border-slate-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+        <div>
+          <span class="text-xs font-bold text-sky-600 tracking-wider uppercase">Scientific Insights</span>
+          <h3 class="text-2xl font-bold text-slate-900 mt-1">논문이 밝혀낸 5대 핵심 과학적 발견</h3>
+          <p class="text-sm text-slate-600 mt-1">
+            연구진이 고차원 CyTOF 데이터 분석과 다변량 회귀분석을 통해 입증한 핵심 사실들입니다.
+          </p>
+        </div>
+
+        <!-- Finding 1 -->
+        <div class="bg-white rounded-2xl p-6 sm:p-7 card-shadow border border-slate-200 transition-all hover:border-sky-300">
+          <div class="flex items-start space-x-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700 font-bold text-lg">
+              1
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-lg font-bold text-slate-900">
+                수혜자 말초혈액 NK 세포는 극도의 이질성을 보이며 16개의 고유 클러스터로 구분됩니다
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                비자극 상태의 PBMC를 31개 항체 패널로 분석한 결과, 건강인과 이식 대기 환자 모두에서 NK 세포의 발달 4단계(CD56<sup>bright</sup> 미성숙), 5단계(CD56<sup>dim</sup> 성숙), 6단계(CD57<sup>+</sup> 종말 분화)를 아우르는 16개 아형이 관찰되었습니다. 불리언 게이팅(Boolean gating) 분석에서 다양성 지수인 inverse Simpson 점수가 매우 높게 나타나 환자 개개인마다 NK 세포의 구성 레퍼토리가 현저히 다름이 확인되었습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Finding 2 -->
+        <div class="bg-white rounded-2xl p-6 sm:p-7 card-shadow border border-slate-200 transition-all hover:border-sky-300">
+          <div class="flex items-start space-x-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700 font-bold text-lg">
+              2
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-lg font-bold text-slate-900">
+                NKG2A<sup>+</sup>KIR<sup>+</sup> 아형이 가장 강력하게 동종 반응하며, 면역억제제 투약에도 이 활성이 유지됩니다
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                공여자 B 세포로 6시간 동안 자극했을 때 탈과립 마커인 <strong>CD107a</strong>, 사이토카인 <strong>IFN-γ</strong>, <strong>XCL1</strong>, 활성화 수용체 <strong>CD137</strong>이 크게 증가하였습니다. 특히 저해성 수용체를 지닌 NKG2A<sup>+</sup> 또는 KIR<sup>+</sup> 성숙 NK 세포가 음성(KIR<sup>-</sup>NKG2A<sup>-</sup>) 아형보다 월등히 높은 반응성을 나타냈습니다. 놀랍게도 이식 후 6개월, 12~18개월 시점에 유지 면역억제제를 복용하고 있음에도 불구하고 이러한 동종 반응 활성도는 전혀 감소하지 않고 일정하게 유지되었습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Finding 3 -->
+        <div class="bg-white rounded-2xl p-6 sm:p-7 card-shadow border border-slate-200 transition-all hover:border-sky-300">
+          <div class="flex items-start space-x-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700 font-bold text-lg">
+              3
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-lg font-bold text-slate-900">
+                세포독성 전달물질인 Ksp37(FGFBP2) 방출만이 장기 신기능(eGFR) 저하와 유의한 역상관관계를 보입니다
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                일반적인 마커인 CD107a나 IFN-γ, 퍼포린, 그랜자임 B 등은 장기 eGFR과 통계적 유의성을 보이지 못했습니다. 반면, 공여자 자극에 반응하여 세포 내 과립에서 분비되는 <strong>Ksp37의 방출량(탈과립)</strong>은 이식 후 1년, 2년, 5년 추적 추정 사구체 여과율(eGFR)과 강력한 역상관관계를 형성하였습니다 (Ksp37 방출량이 많을수록 장기 신기능이 악화됨). 특히 <strong>CD57<sup>-</sup>NKG2A<sup>+</sup>KIR<sup>-</sup></strong> 아형에서의 Ksp37 방출이 가장 핵심적인 예측 인자였습니다.
+              </p>
+              <div class="bg-rose-50 rounded-lg p-3 text-xs text-rose-900 border border-rose-200">
+                <strong>다변량 회귀분석 통제:</strong> 항흉선세포글로불린(ATG) 유도 요법, 급성 거부반응 여부, 생체/뇌사 기증 여부, HLA 불일치 정도, 공여자/수혜자 연령 및 성별을 모두 보정한 후에도 2년 및 5년 eGFR과의 유의성이 견고하게 유지되었습니다 (P &lt; 0.05).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Finding 4 -->
+        <div class="bg-white rounded-2xl p-6 sm:p-7 card-shadow border border-slate-200 transition-all hover:border-sky-300">
+          <div class="flex items-start space-x-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700 font-bold text-lg">
+              4
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-lg font-bold text-slate-900">
+                독립적인 뇌사자 이식 코호트(CTOT19)에서도 완벽하게 재현 검증되었습니다
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                생체 기증자 중심의 CTOT01에서 도출된 결론을 뇌사자 기증자 중심의 CTOT19 코호트(n=25)에 적용하였을 때에도 동일한 결과가 도출되었습니다. CD57<sup>-</sup>NKG2A<sup>+</sup>KIR<sup>-</sup> NK 세포의 Ksp37 탈과립률은 6개월 및 2년 시점의 eGFR과 뚜렷한 역상관관계를 보였으며, 이는 지연성 이식편 기능(DGF), 수혜자 성별, 급성 거부반응 유무와 무관하게 독립적이었습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Finding 5 -->
+        <div class="bg-white rounded-2xl p-6 sm:p-7 card-shadow border border-slate-200 transition-all hover:border-sky-300">
+          <div class="flex items-start space-x-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 font-bold text-lg">
+              5
+            </div>
+            <div class="space-y-2">
+              <h4 class="text-lg font-bold text-slate-900">
+                이식편 생검에서 거부반응이 없는 환자라도 FGFBP2(Ksp37)가 높으면 신장 상실 위험이 치명적으로 증가합니다
+              </h4>
+              <p class="text-sm text-slate-700 leading-relaxed">
+                NCBI GEO에 등록된 공공 이식신 생검 마이크로어레이(GSE21374)를 재분석한 결과, 조직검사상 세포 매개성(TCMR) 또는 항체 매개성(ABMR) 거부반응 기준을 만족하지 않는 무거부반응 환자군에서조차 이식편 내 <strong>FGFBP2 발현이 높았던 환자들은 31년 추적 기간 동안 이식신 소실(Death-censored graft failure) 위험이 유의미하게 급증</strong>하였습니다 (Log-rank P &lt; 0.05). 이는 기존 임상 병리학적 진단이 놓치는 항체 비의존적 미세 침습 손상의 주범이 NK 세포임을 뒷받침합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mechanism" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+      <div>
+        <span class="text-xs font-bold text-sky-600 tracking-wider uppercase">Immunological Pathway</span>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1">NK 세포의 항체 비의존적 이식편 손상 기전</h3>
+        <p class="text-sm text-slate-600 mt-1">
+          자가 면역 교육(NK cell education), 동종 자극 인식, Ksp37 분비, 사구체 손상으로 이어지는 메커니즘 흐름도입니다.
+        </p>
+      </div>
+
+      <!-- Interactive SVG Scheme & Explanation -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 card-shadow border border-slate-200 space-y-6">
+        <div class="w-full overflow-x-auto pb-4">
+          <svg class="w-full min-w-[700px] h-64 text-slate-800" viewBox="0 0 800 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Step 1 Box -->
+            <rect x="20" y="30" width="160" height="180" rx="14" fill="#F0F7FF" stroke="#0284C7" stroke-width="2"/>
+            <text x="100" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#0369A1">1. 교육 및 성숙</text>
+            <text x="100" y="85" text-anchor="middle" font-size="11" fill="#475569">NKG2A (HLA-E)</text>
+            <text x="100" y="105" text-anchor="middle" font-size="11" fill="#475569">KIR (HLA-A/B/C)</text>
+            <circle cx="100" cy="140" r="26" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+            <text x="100" y="144" text-anchor="middle" font-size="10" font-weight="600" fill="#0C4A6E">NK 세포</text>
+            <text x="100" y="195" text-anchor="middle" font-size="10" fill="#64748B">살상 역량 사전 획득</text>
+
+            <!-- Arrow 1 to 2 -->
+            <path d="M190 120 H220" stroke="#0284C7" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Step 2 Box -->
+            <rect x="230" y="30" width="160" height="180" rx="14" fill="#FAF5FF" stroke="#9333EA" stroke-width="2"/>
+            <text x="310" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#7E22CE">2. 동종 항원 인식</text>
+            <text x="310" y="85" text-anchor="middle" font-size="11" fill="#475569">Missing-Self 현상</text>
+            <text x="310" y="105" text-anchor="middle" font-size="10" fill="#6B21A8">(리간드 결손 불일치)</text>
+            <rect x="275" y="125" width="70" height="35" rx="6" fill="#E9D5FF" stroke="#9333EA" stroke-width="1.5"/>
+            <text x="310" y="147" text-anchor="middle" font-size="10" font-weight="600" fill="#581C87">공여자 동종세포</text>
+            <text x="310" y="195" text-anchor="middle" font-size="10" fill="#64748B">저해 신호 부재 촉발</text>
+
+            <!-- Arrow 2 to 3 -->
+            <path d="M400 120 H430" stroke="#9333EA" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Step 3 Box -->
+            <rect x="440" y="30" width="160" height="180" rx="14" fill="#FFF1F2" stroke="#E11D48" stroke-width="2"/>
+            <text x="520" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#BE123C">3. Ksp37 분비 (탈과립)</text>
+            <text x="520" y="85" text-anchor="middle" font-size="11" fill="#475569">FGFBP2 유전자 발현</text>
+            <circle cx="500" cy="130" r="7" fill="#FB7185"/>
+            <circle cx="520" cy="140" r="8" fill="#E11D48"/>
+            <circle cx="540" cy="130" r="6" fill="#FB7185"/>
+            <text x="520" y="165" text-anchor="middle" font-size="10" font-weight="700" fill="#9F1239">Ksp37 세포외 분비</text>
+            <text x="520" y="195" text-anchor="middle" font-size="10" fill="#64748B">세포독성 전달 매개</text>
+
+            <!-- Arrow 3 to 4 -->
+            <path d="M610 120 H640" stroke="#E11D48" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+            <!-- Step 4 Box -->
+            <rect x="650" y="30" width="130" height="180" rx="14" fill="#FEF2F2" stroke="#DC2626" stroke-width="2"/>
+            <text x="715" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#991B1B">4. 이식편 손상</text>
+            <text x="715" y="85" text-anchor="middle" font-size="11" fill="#475569">미세혈관 내피 파괴</text>
+            <text x="715" y="105" text-anchor="middle" font-size="11" fill="#475569">DSA 무관 조직 염증</text>
+            <rect x="670" y="125" width="90" height="30" rx="6" fill="#FCA5A5" stroke="#DC2626" stroke-width="1.5"/>
+            <text x="715" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="#7F1D1D">eGFR 지속 감소</text>
+            <text x="715" y="195" text-anchor="middle" font-size="10" fill="#991B1B">만성 이식신 상실</text>
+
+            <defs>
+              <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#64748B" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-sm text-slate-700">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+            <h5 class="font-bold text-slate-900 mb-1 flex items-center space-x-1.5">
+              <i class="fa-solid fa-graduation-cap text-sky-600"></i>
+              <span>NK 세포 교육 (Education)의 역설</span>
+            </h5>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              본래 자가 HLA와 결합하는 저해성 수용체(NKG2A, KIR)를 발현하는 NK 세포만이 성숙 과정에서 기능적 자격을 부여(licensing)받습니다. 이로 인해 교육을 잘 받은 <strong>NKG2A<sup>+</sup>KIR<sup>+</sup> 아형이 비교육 NK 세포보다 훨씬 강력한 살상 무기를 비축</strong>하게 되며, 이식 후 공여자 세포에서 리간드가 결손(Missing-self)될 경우 억제 고삐가 풀려 가장 파괴적인 동종 면역 공격자로 돌변하게 됩니다.
+            </p>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+            <h5 class="font-bold text-slate-900 mb-1 flex items-center space-x-1.5">
+              <i class="fa-solid fa-capsules text-purple-600"></i>
+              <span>기존 면역억제제의 한계</span>
+            </h5>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              현재 표준 임상 치료에서 사용되는 칼시뉴린 억제제(타크로리무스 등) 및 항대사물질(MMF)은 주로 T 세포 수용체 신호전달과 증식을 차단하는 데 최적화되어 있습니다. 본 논문은 <strong>이러한 표준 면역억제요법 하에서도 NK 세포의 동종 반응성 및 탈과립 능력이 18개월 이상 저해되지 않고 그대로 유지</strong>된다는 점을 실증하여, 새로운 표적 치료의 필요성을 보여줍니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence" class="bg-white py-12 border-t border-slate-200">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-6">
+        <div>
+          <span class="text-xs font-bold text-sky-600 tracking-wider uppercase">Data & Proofs</span>
+          <h3 class="text-2xl font-bold text-slate-900 mt-1">심층 분석: 논문 데이터의 세부 검토</h3>
+          <p class="text-sm text-slate-600 mt-1">
+            실험별 결과와 통계적 근거를 탭을 선택하여 열람하실 수 있습니다.
+          </p>
+        </div>
+
+        <!-- Interactive Tab Navigation -->
+        <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3" id="tabNav">
+          <button onclick="switchTab('tab-phenotype')" id="btn-phenotype" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-sky-600 text-white transition">
+            1. CyTOF 표현형 및 다양성
+          </button>
+          <button onclick="switchTab('tab-ksp37')" id="btn-ksp37" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            2. Ksp37 분비와 eGFR 상관성
+          </button>
+          <button onclick="switchTab('tab-killing')" id="btn-killing" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            3. 세포 살상능 및 유세포 검증
+          </button>
+          <button onclick="switchTab('tab-biopsy')" id="btn-biopsy" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">
+            4. GEO 이식편 생검 전사체 분석
+          </button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="tab-phenotype" class="tab-pane space-y-4">
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-sm text-slate-700 leading-relaxed space-y-3">
+            <h4 class="font-bold text-base text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-chart-pie text-sky-600"></i>
+              <span>단일세포 CyTOF 표현형 클러스터링 (Figure 2)</span>
+            </h4>
+            <p>
+              비자극 상태의 동결 PBMC(건강인 20명, CTOT01 이식환자 70명)를 CyTOF로 프로파일링하였습니다. CD3<sup>-</sup>CD14<sup>-</sup>CD19<sup>-</sup>HLA-DR<sup>dim/-</sup>CD56<sup>+</sup>CD16<sup>+</sup>로 게이팅된 세포를 비지도 학습 알고리즘인 RPhenograph로 클러스터링하여 16개의 하위 집단을 도출하였습니다.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="font-bold text-sky-800">Stage 4 (CD56<sup>bright</sup>)</span>
+                <p class="text-slate-600 mt-1">미성숙 아형. 세포독성 단백질 함량 낮으나 사이토카인 생성능 보유.</p>
+              </div>
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="font-bold text-indigo-800">Stage 5 (CD56<sup>dim</sup>)</span>
+                <p class="text-slate-600 mt-1">대다수 NK 세포 차지. KIR 및 NKG2A 획득, 퍼포린/그랜자임B 다량 축적.</p>
+              </div>
+              <div class="bg-white p-3 rounded-lg border border-slate-200">
+                <span class="font-bold text-emerald-800">Stage 6 (CD57<sup>+</sup>)</span>
+                <p class="text-slate-600 mt-1">종말 분화 상태. 항체 의존성 세포독성 및 높은 Ksp37 발현 특징.</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 pt-1">
+              ※ Boolean 게이팅 분석 결과, CD56 발현의 inverse Simpson 다양성 점수는 평균 6,334에 달하여 대상자 간의 NK 레퍼토리 이질성이 극도로 높음을 증명하였습니다.
+            </p>
+          </div>
+        </div>
+
+        <div id="tab-ksp37" class="tab-pane hidden space-y-4">
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-sm text-slate-700 leading-relaxed space-y-3">
+            <h4 class="font-bold text-base text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-heart-pulse text-rose-600"></i>
+              <span>Ksp37 탈과립과 1년, 2년, 5년 eGFR의 역상관관계 (Figure 4)</span>
+            </h4>
+            <p>
+              동종 공여자 B 세포 자극 전후의 이펙터 분자(CD107a, IFN-γ, CD137, XCL1, 퍼포린, 그랜자임 B, Ksp37) 변화율을 추적 eGFR과 비교 분석하였습니다.
+            </p>
+            <div class="p-4 bg-white rounded-xl border border-rose-200 space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-rose-700">
+                <span>핵심 표적 세포군: CD57<sup>-</sup>NKG2A<sup>+</sup>KIR<sup>-</sup> 아형</span>
+                <span>통계적 유의성 확인</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                공여자 세포 자극 시 세포 내 Ksp37 형광 강도가 감소(탈과립 분비를 의미)하는 현상은 수술 후 2년(n=47) 및 5년(n=40) 시점의 eGFR(CKD-EPI 공식)과 유의한 음의 상관관계(Pearson r &lt; 0, P &lt; 0.05)를 나타냈습니다.
+              </p>
+              <div class="text-xs bg-slate-50 p-2.5 rounded border border-slate-200 text-slate-700">
+                <strong>CTOT19 검증 코호트(n=25):</strong> 뇌사 기증자 이식군에서도 동일 아형의 Ksp37 분비가 6개월(P=0.016) 및 2년(P=0.038) eGFR과 정확히 일치하는 역상관관계를 보여 결과의 신뢰도를 입증하였습니다.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-killing" class="tab-pane hidden space-y-4">
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-sm text-slate-700 leading-relaxed space-y-3">
+            <h4 class="font-bold text-base text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-bullseye text-purple-600"></i>
+              <span>FACS Sorting 분리 아형의 직접 살상능 및 Ksp37 방출 (Figure 5)</span>
+            </h4>
+            <p>
+              연구진은 관찰된 통계적 상관성이 실제 세포독성 능력에 기인하는지 규명하기 위해 건강인 3명의 PBMC로부터 형광활성화세포분리(FACS)를 통해 4가지 NK 아형을 순수 분리하여 기능 실험을 수행하였습니다.
+            </p>
+            <ul class="text-xs space-y-2 list-disc list-inside bg-white p-4 rounded-xl border border-slate-200">
+              <li><strong>표적 세포:</strong> K562 백혈병 세포주 및 동종 자극 B 세포 (E:T 비율 1:1, 5시간 공배양)</li>
+              <li><strong>결과 1:</strong> 교육 수용체를 보유한 NKG2A<sup>+</sup> 및 KIR<sup>+</sup> NK 아형이 저해 수용체가 결핍된 비성숙 아형(NKG2A<sup>-</sup>KIR<sup>-</sup>)에 비해 표적 세포 사멸률이 월등히 높았습니다 (P &lt; 0.01).</li>
+              <li><strong>결과 2:</strong> 표적 세포 사멸률(Cell Death %)의 증가는 NK 세포 내 Ksp37 소실(분비 방출) 및 표면 CD107a 발현 증가와 정밀하게 비례하였습니다.</li>
+            </ul>
+            <p class="text-xs text-slate-600">
+              이를 통해 Ksp37 분비 감소량이 단순한 상관 표지자가 아니라 실제 NK 세포의 직접적인 동종 살상 활성도를 반영하는 고감도 기능적 지표임이 증명되었습니다.
+            </p>
+          </div>
+        </div>
+
+        <div id="tab-biopsy" class="tab-pane hidden space-y-4">
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-sm text-slate-700 leading-relaxed space-y-3">
+            <h4 class="font-bold text-base text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-dna text-emerald-600"></i>
+              <span>독립 조직 생검 마이크로어레이(GEO) 데이터 검증 (Figure 6)</span>
+            </h4>
+            <p>
+              연구팀은 임상 시험 혈액 데이터에 국한하지 않고, NCBI GEO 공개 이식신 생검 마이크로어레이 데이터셋 3개(GSE21374, GSE36059, GSE50058)를 활용하여 조직 내 유전자 발현을 전향적으로 재분석하였습니다.
+            </p>
+            <div class="space-y-3 text-xs">
+              <div class="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200">
+                <span class="font-bold text-emerald-900 text-sm">GSE21374: 병리학적 비거부반응 환자군에서의 생존 분석</span>
+                <p class="mt-1 text-slate-700 leading-relaxed">
+                  조직학적으로 거부반응 기준을 충족하지 못한 환자군(n=206)에서 StepMiner 알고리즘으로 <strong>FGFBP2(Ksp37 코딩 유전자)</strong> 발현 고/저 군을 분류한 결과, 고발현군(n=30)의 장기 이식편 소실(Graft Loss) 확률이 저발현군(n=176) 대비 통계적으로 유의미하게 높았습니다 (Kaplan-Meier Log-rank test P &lt; 0.05).
+                </p>
+                <p class="mt-1 text-emerald-800 font-semibold">
+                  ※ 동일 조건에서 IFNG(인터페론 감마) 및 LAMP1(CD107a) 유전자 발현은 신장 상실과 무관하였으며, Cox 회귀분석에서도 FGFBP2의 위험 예측력은 독립적이었습니다.
+                </p>
+              </div>
+
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                <span class="font-bold text-slate-800">거부반응 조직에서의 일관된 FGFBP2 과발현:</span>
+                <span class="text-slate-600">
+                  GSE36059 및 GSE50058 코호트 분석 결과, TCMR(T세포 매개), ABMR(항체 매개), 혼합 거부반응 등 모든 조직학적 거부반응 검체에서 비거부반응 대조군 대비 FGFBP2 유전자 발현이 유의하게 상승되어 있었습니다 (Wilcoxon test with Bonferroni correction P &lt; 0.001).
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="implications" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+      <div>
+        <span class="text-xs font-bold text-sky-600 tracking-wider uppercase">Clinical Applications</span>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1">임상적 가치와 차세대 이식 정밀의학으로의 도약</h3>
+        <p class="text-sm text-slate-600 mt-1">
+          본 연구가 임상 진료 현장 및 차세대 신장이식 치료 전략에 제시하는 핵심 시사점입니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-200 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2 text-sky-600 font-bold text-base">
+              <i class="fa-solid fa-clipboard-check"></i>
+              <span>이식 전 선별 검사 바이오마커로의 활용</span>
+            </div>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              신장이식 수술을 시행하기 전, 수혜자의 PBMC와 기증자의 세포를 이용해 간이 체외 검사(Ex vivo assay)를 수행함으로써 <strong>CD57<sup>-</sup>NKG2A<sup>+</sup>KIR<sup>-</sup> NK 세포의 Ksp37 탈과립 반응 강도</strong>를 측정할 수 있습니다. 이를 통해 고위험군 환자를 수술 전에 조기 식별하고 선제적 위험도 계층화를 이룰 수 있습니다.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-sky-700 font-medium">
+            → FDA 가속 승인 평가 모델(iBox 등)과의 결합 가능성 시사
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-200 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2 text-purple-600 font-bold text-base">
+              <i class="fa-solid fa-syringe"></i>
+              <span>NK 세포 특이적 표적 면역억제요법 개발 촉진</span>
+            </div>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              기존의 칼시뉴린 억제제 기반 요법으로는 억제되지 않는 동종 반응성 NK 세포를 차단하기 위해, 공여자 HLA 결손에 반응하는 <strong>NKG2D / DNAM-1 활성화 수용체 차단 항체</strong>나 <strong>Ksp37 분비 신호전달 억제제</strong>와 같은 신규 계열의 이식 면역억제제 개발 필요성을 강력히 지지합니다.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-purple-700 font-medium">
+            → 체액성 항체(DSA) 음성 환자의 원인 불명 이식신 부전 억제 대안
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-100/80 rounded-2xl p-6 border border-slate-200">
+        <h4 class="font-bold text-base text-slate-900 mb-4 flex items-center space-x-2">
+          <i class="fa-solid fa-book-bookmark text-slate-600"></i>
+          <span>주요 면역학 용어 사전</span>
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-sky-700 block text-sm">CyTOF</strong>
+            <span class="text-slate-600">질량세포분석(Cytometry by Time-of-Flight). 형광 대신 희토류 금속 동위원소를 태그로 사용하여 수십 가지 단백질을 겹침 없이 동시 분석하는 최첨단 단일세포 기법입니다.</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-purple-700 block text-sm">Ksp37 (FGFBP2)</strong>
+            <span class="text-slate-600">Killer-specific secretory protein 37 kDa. 활성화된 세포독성 림프구(NK, CD8+ T)의 세포질 과립에 저장되어 방출되는 분비성 독성 매개 단백질입니다.</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-emerald-700 block text-sm">Missing-Self</strong>
+            <span class="text-slate-600">공여자 조직에 수혜자의 저해성 수용체(KIR, NKG2A)와 결합하는 자가 HLA 분자가 결손되어 있을 때, NK 세포가 억제 신호를 받지 못하고 살상 모드로 작동하는 현상입니다.</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-amber-700 block text-sm">eGFR</strong>
+            <span class="text-slate-600">추정 사구체 여과율(Estimated Glomerular Filtration Rate). 신장이 1분 동안 혈액을 여과하는 능력을 나타내는 지표로, 신장이식 환자의 장기 예후를 평가하는 표준 기준입니다.</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-rose-700 block text-sm">NKG2A / HLA-E</strong>
+            <span class="text-slate-600">비고전적 HLA 분자인 HLA-E와 결합하여 NK 세포에 저해 신호를 전달하는 핵심 렉틴 유사 수용체로, NK 세포의 기능적 성숙 및 동종 반응에 중추적 역할을 수행합니다.</span>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+            <strong class="text-indigo-700 block text-sm">DSA</strong>
+            <span class="text-slate-600">공여자 특이 항체(Donor-Specific Antibody). 공여자의 HLA 분자를 공격하는 혈청 항체로, 전통적으로 항체 매개성 거부반응(ABMR)의 필수 주범으로 평가되어 왔습니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-book-medical text-sky-400"></i>
+        <span>원저작물: JCI Insight (2024 Nov 8; 9(21): e185687) Ruan et al.</span>
+      </div>
+      <div>
+        본 페이지는 최신 학술 논문의 세부 내용을 연구자 및 의료진이 알기 쉽게 이해할 수 있도록 정갈한 서술형 경어체로 재구성한 설명 문서입니다.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(tabId) {
+      // Hide all panes
+      const panes = document.querySelectorAll('.tab-pane');
+      panes.forEach(pane => pane.classList.add('hidden'));
+
+      // Show selected pane
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) {
+        targetPane.classList.remove('hidden');
+      }
+
+      // Reset button styles
+      const buttons = document.querySelectorAll('#tabNav button');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-sky-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-600');
+      });
+
+      // Highlight active button
+      const activeBtnId = tabId.replace('tab-', 'btn-');
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+        activeBtn.classList.add('bg-sky-600', 'text-white');
+      }
+    }
+  </script>
 </body>
 </html>
