@@ -52,10 +52,60 @@
                 </div>
             </div>
             <div class="relative">
+                <!-- 배경 은은한 블러 조명 -->
                 <div class="absolute -top-10 -right-10 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse"></div>
-                <div class="bg-blue-50 p-10 rounded-3xl border border-blue-100 shadow-inner">
-                                    </div>
+            
+                <!-- 메인 카드 본문 -->
+                <div class="relative bg-white/80 backdrop-blur-md p-8 rounded-3xl border border-blue-100 shadow-xl space-y-6">
+                    <!-- 상단 헤더 -->
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-600 animate-ping"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Clinical Highlights</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">2024–2025 Meta</span>
+                    </div>
+            
+                    <!-- 핵심 지표 2열 카드 -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-blue-50/70 p-4 rounded-2xl border border-blue-100/60">
+                            <span class="text-xs text-slate-500 font-medium">염증 수치 (hs-CRP)</span>
+                            <div class="text-2xl font-black text-blue-600 mt-1">▼ 92%</div>
+                            <span class="text-[11px] text-slate-500">투석 환자군 최대 감소치</span>
+                        </div>
+                        <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100/60">
+                            <span class="text-xs text-slate-500 font-medium">공격 항체 (DSA)</span>
+                            <div class="text-2xl font-black text-emerald-600 mt-1">음성 전환</div>
+                            <span class="text-[11px] text-slate-500">다라투무맙 병용 치료군</span>
+                        </div>
+                    </div>
+            
+                    <!-- 명과 암 대비 밸런스 바 -->
+                    <div class="space-y-2 pt-1">
+                        <div class="flex justify-between items-center text-xs font-semibold">
+                            <span class="text-blue-700 flex items-center gap-1">
+                                <i class="fas fa-shield-alt text-xs"></i> 이점: 신기능 보존 & 심혈관 보호
+                            </span>
+                            <span class="text-amber-600 flex items-center gap-1">
+                                <i class="fas fa-exclamation-triangle text-xs"></i> 과제: 감염 위험 & 3상 한계
+                            </span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
+                            <div class="bg-blue-600 h-full w-[65%]"></div>
+                            <div class="bg-amber-400 h-full w-[35%]"></div>
+                        </div>
+                    </div>
+            
+                    <!-- 하단 키 메시지 인용 -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 flex items-start space-x-3">
+                        <i class="fas fa-stethoscope text-blue-500 text-sm mt-0.5"></i>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            단순 억제를 넘어 <strong>‘적기 투입과 정밀 타깃’</strong>이 신장 생존율을 가르는 핵심입니다.
+                        </p>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </header>
 
